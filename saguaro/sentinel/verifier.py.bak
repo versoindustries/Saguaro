@@ -1,0 +1,76 @@
+"""
+SAGUARO Sentinel Verifier
+Enforces rules against files.
+"""
+
+import os
+import glob
+import logging
+from typing import List, Dict, Any
+from .rules import RuleLoader, Rule
+import fnmatch
+
+logger = logging.getLogger(__name__)
+
+class SentinelVerifier:
+    def __init__(self, repo_path: str):
+        self.repo_path = os.path.abspath(repo_path)
+        self.rules = RuleLoader.load(self.repo_path)
+        
+    def verify_file(self, file_path: str) -> List[Dict[str, Any]]:
+        """
+        Verifies a single file against loaded rules.
+        """
+        rel_path = os.path.relpath(file_path, self.repo_path)
+        violations = []
+        
+        # Filter rules by scope (stub)
+        active_rules = [r for r in self.rules if fnmatch.fnmatch(rel_path, r.scope)]
+        
+        if not active_rules:
+            return []
+            
+        try:
+            with open(file_path, 'r', encoding='utf-8', errors='ignore') as f:
+                content = f.read()
+                
+            for rule in active_rules:
+                matches = rule.check(content)
+                for line_num, line_content in matches:
+                    violations.append({
+                        "file": rel_path,
+                        "line": line_num,
+                        "rule_id": rule.id,
+                        "message": rule.message,
+                        "severity": rule.severity,
+                        "context": line_content
+                    })
+        except Exception as e:
+            logger.error(f"Failed to verify {rel_path}: {e}")
+            
+        return violations
+
+    def verify_all(self, path_arg: str = ".") -> List[Dict[str, Any]]:
+        """
+        Verifies all files in path.
+        """
+        target_abs = os.path.abspath(os.path.join(self.repo_path, path_arg))
+        all_violations = []
+        
+        if os.path.isfile(target_abs):
+            return self.verify_file(target_abs)
+            
+        # Recursive walk
+        for root, dirs, files in os.walk(target_abs):
+            # Skip hidden
+            dirs[:] = [d for d in dirs if not d.startswith('.')]
+            
+            for file in files:
+                if file.startswith('.'): continue
+                # Skip pyc etc
+                if file.endswith('.pyc') or file.endswith('.so') or file.endswith('.o'): continue
+                
+                full_path = os.path.join(root, file)
+                all_violations.extend(self.verify_file(full_path))
+                
+        return all_violations

@@ -1,0 +1,52 @@
+# Python
+__pycache__/
+*.py[cod]
+*$py.class
+.Python
+build/
+develop-eggs/
+dist/
+downloads/
+eggs/
+.eggs/
+lib/
+lib64/
+parts/
+sdist/
+var/
+wheels/
+share/python-wheels/
+*.egg-info/
+.installed.cfg
+*.egg
+MANIFEST
+
+# Virtual Env
+venv/
+env/
+ENV/
+
+# Sheriff
+.saguaro/
+.sheriff/
+.sheriff_test_parallel/
+.sheriff.rules
+.sheriff.rules.draft
+
+# C++ Source (Exclude all source)
+*.c
+*.cc
+*.cpp
+*.cxx
+*.h
+*.hpp
+*.hxx
+src/
+include/
+
+# IDE
+.idea/
+.vscode/
+
+# Exception: Keep the binary we want to distribute
+!saguaro/ops/_saguaro_core.so

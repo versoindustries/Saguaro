@@ -1,0 +1,30 @@
+name: 'SAGUARO Sentinel'
+description: 'Enforce codebase rules and compliance using SAGUARO Sentinel'
+branding:
+  icon: 'shield'
+  color: 'blue'
+
+inputs:
+  path:
+    description: 'Path to repository root'
+    required: true
+    default: '.'
+  version:
+    description: 'SAGUARO version to use'
+    default: 'latest'
+
+runs:
+  using: "composite"
+  steps:
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.10'
+        
+    - name: Install SAGUARO
+      run: pip install saguaro-core
+      shell: bash
+      
+    - name: Run Sentinel Verify
+      run: saguaro verify ${{ inputs.path }}
+      shell: bash

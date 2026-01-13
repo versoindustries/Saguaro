@@ -1,0 +1,111 @@
+[
+    {
+        "name": "saguaro_skeleton",
+        "description": "Get high-level structure of a file (classes, functions, signatures) without implementation details to save tokens.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "file_path": {
+                    "type": "STRING",
+                    "description": "Path of the file to scan"
+                }
+            },
+            "required": [
+                "file_path"
+            ]
+        }
+    },
+    {
+        "name": "saguaro_slice",
+        "description": "Get a dependency-aware context slice for a specific symbol, including its code and signatures of its dependencies.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "symbol": {
+                    "type": "STRING",
+                    "description": "Fully qualified symbol name (e.g. MyClass.method)"
+                },
+                "depth": {
+                    "type": "INTEGER",
+                    "description": "Graph depth to traverse"
+                }
+            },
+            "required": [
+                "symbol"
+            ]
+        }
+    },
+    {
+        "name": "saguaro_patch",
+        "description": "Apply a semantic patch to the codebase in a sandboxed environment.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "target_file": {
+                    "type": "STRING",
+                    "description": "File to modify"
+                },
+                "operations": {
+                    "type": "ARRAY",
+                    "description": "List of operations",
+                    "items": {
+                        "type": "OBJECT",
+                        "properties": {
+                            "op": {
+                                "type": "STRING",
+                                "enum": [
+                                    "replace",
+                                    "insert"
+                                ]
+                            },
+                            "symbol": {
+                                "type": "STRING",
+                                "description": "Target symbol to replace"
+                            },
+                            "content": {
+                                "type": "STRING",
+                                "description": "New code"
+                            }
+                        }
+                    }
+                }
+            },
+            "required": [
+                "target_file",
+                "operations"
+            ]
+        }
+    },
+    {
+        "name": "saguaro_verify",
+        "description": "Verify a sandbox state against linters and tests.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "sandbox_id": {
+                    "type": "STRING",
+                    "description": "ID returned by saguaro_patch"
+                }
+            },
+            "required": [
+                "sandbox_id"
+            ]
+        }
+    },
+    {
+        "name": "saguaro_commit",
+        "description": "Commit a verified sandbox to disk.",
+        "parameters": {
+            "type": "OBJECT",
+            "properties": {
+                "sandbox_id": {
+                    "type": "STRING",
+                    "description": "ID returned by saguaro_patch"
+                }
+            },
+            "required": [
+                "sandbox_id"
+            ]
+        }
+    }
+]

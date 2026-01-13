@@ -1,0 +1,18 @@
+Scanning for runtime entry points...
+Found 16 entry points:
+ - [main_block] N/A (saguaro/cli.py:1231)
+ - [main_block] N/A (saguaro/mcp/server.py:264)
+ - [main_block] N/A (saguaro/dni/server.py:215)
+ - [main_block] N/A (saguaro/tokenization/train_baseline.py:119)
+ - [main_block] N/A (tests/test_benchmark.py:31)
+ - [main_block] N/A (tests/test_mcp_auth.py:68)
+ - [main_block] N/A (tests/test_sentinel.py:51)
+ - [main_block] N/A (tests/test_agent_flow.py:66)
+ - [main_block] N/A (tests/test_core_ops.py:30)
+ - [main_block] N/A (tests/test_constellation.py:56)
+ - [main_block] N/A (build/lib/saguaro/cli.py:1215)
+ - [main_block] N/A (build/lib/saguaro/mcp/server.py:264)
+ - [main_block] N/A (build/lib/saguaro/dni/server.py:215)
+ - [main_block] N/A (scripts/verify_hybrid.py:32)
+ - [main_block] N/A (scripts/train_adapter.py:129)
+ - [main_block] N/A (scripts/codex_bridge.py:66)

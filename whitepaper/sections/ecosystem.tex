@@ -1,0 +1,14 @@
+SAGUARO extends beyond individual agent actions to manage the lifecycle of the codebase itself.
+
+\subsection{The Chronicle: Semantic History}
+Traditional Git history tracks line changes. SAGUARO's \textbf{Chronicle} tracks semantic evolution. By taking \texttt{saguaro chronicle snapshot}s, the system records the "meaning" of the codebase at points in time. The \texttt{diff} command calculates "Semantic Drift," quantifying how much a change has altered the system's intent. This allows for automated, meaningful changelog generation.
+
+\subsection{The Legislator: Automated Governance}
+As agents work, they establish patterns. \textbf{The Legislator} observes these patterns and suggests formal rules.
+\begin{verbatim}
+saguaro legislation --draft
+\end{verbatim}
+This turns ad-hoc decisions (e.g., "always use `pydantic.BaseModel` for schemas") into codified rules in `.saguaro.rules.draft`, which can be promoted to law. This "Living Technical Roadmap" ensures that governance evolves at the speed of AI development.
+
+\subsection{Worksets}
+To manage context focus, SAGUARO introduces \textbf{Worksets}. Agents can "lease" a subset of files (`saguaro workset create`), locking them for exclusive modification to prevent collisions in multi-agent environments.

@@ -1,0 +1,10 @@
+{
+    "type": "patch",
+    "target_file": "saguaro/storage/vector_store.py",
+    "operations": [
+        {
+            "op": "replace",
+            "content": "# Patched\n"
+        }
+    ]
+}

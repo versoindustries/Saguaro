@@ -1,0 +1,6 @@
+version: 1.0-draft
+generated_by: SAGUARO Auto-Legislator
+rules:
+- scope: '**/*'
+  rule: Filenames must be snake_case
+  evidence: Found in 81746/89768 files

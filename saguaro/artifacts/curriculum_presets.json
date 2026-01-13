@@ -1,0 +1,97 @@
+{
+    "version": "2.0.0",
+    "description": "Saguaro Curriculum Presets (Ported from HighNoon)",
+    "presets": {
+        "verso-baseline": {
+            "name": "Saguaro Core (Code, Quantum & Chat)",
+            "description": "Optimized curriculum for Saguaro. Focuses on high-quality Code (Stack v2), Quantum Computing (Quanta), Advanced Physics/Math, and Reasoning.",
+            "version": "4.2.0",
+            "stages": [
+                {
+                    "name": "Code Core (Multilingual)",
+                    "description": "Foundational programming languages, syntax, and logic (Includes Qiskit, Cirq, Scipy).",
+                    "hf_datasets": [
+                        "bigcode/the-stack-v2-dedup",
+                        "nampdn-ai/tiny-codes",
+                        "deepmind/code_contests",
+                        "code-search-net/code_search_net"
+                    ]
+                },
+                {
+                    "name": "Quantum Computing & Mechanics",
+                    "description": "Deep dive into Quantum Algorithms, Circuit Papers, and Mechanics (Hamiltonians, VQE, Error Correction).",
+                    "hf_datasets": [
+                        "migtissera/Quanta",
+                        "BoltzmannEntropy/QuantumLLMInstruct",
+                        "racineai/VDR_Quantum_Circuit_Papers",
+                        "camel-ai/physics",
+                        "ArtifactAI/arxiv-physics-qa"
+                    ]
+                },
+                {
+                    "name": "Advanced Math & Science",
+                    "description": "Specialized tokenization for LaTeX, Math methodology, and Physics reasoning.",
+                    "hf_datasets": [
+                        "lighteval/MATH",
+                        "meta-math/MetaMathQA",
+                        "zhibei1204/PhysReason",
+                        "camel-ai/chemistry",
+                        "microsoft/orca-math-word-problems-200k",
+                        "TIGER-Lab/MathInstruct",
+                        "math-ai/StackMathQA"
+                    ]
+                },
+                {
+                    "name": "Reasoning & Logic",
+                    "description": "Chain-of-thought, logical deduction, and complex reasoning patterns.",
+                    "hf_datasets": [
+                        "open-r1/Math-Verify",
+                        "HuggingFaceH4/ultrafeedback_binarized",
+                        "Salesforce/xlam-function-calling-60k"
+                    ]
+                },
+                {
+                    "name": "Chat & Instruction",
+                    "description": "Human-AI dialogue and educational explanations.",
+                    "hf_datasets": [
+                        "HuggingFaceFW/fineweb-edu",
+                        "HuggingFaceH4/ultrachat_200k",
+                        "OpenAssistant/oasst_top1_2023-08-25"
+                    ]
+                }
+            ],
+            "hf_datasets": [
+                "bigcode/the-stack-v2-dedup",
+                "nampdn-ai/tiny-codes",
+                "google/code_contests",
+                "code-search-net/code_search_net",
+                "migtissera/Quanta",
+                "BoltzmannEntropy/QuantumLLMInstruct",
+                "racineai/VDR_Quantum_Circuit_Papers",
+                "camel-ai/physics",
+                "ArtifactAI/arxiv-physics-qa",
+                "lighteval/MATH",
+                "meta-math/MetaMathQA",
+                "zhibei1204/PhysReason",
+                "camel-ai/chemistry",
+                "microsoft/orca-math-word-problems-200k",
+                "TIGER-Lab/MathInstruct",
+                "math-ai/StackMathQA",
+                "open-r1/Math-Verify",
+                "HuggingFaceH4/ultrafeedback_binarized",
+                "Salesforce/xlam-function-calling-60k",
+                "HuggingFaceFW/fineweb-edu",
+                "HuggingFaceH4/ultrachat_200k",
+                "OpenAssistant/oasst_top1_2023-08-25"
+            ]
+        },
+        "minimal": {
+            "name": "Minimal Baseline",
+            "description": "Small subset for testing.",
+            "hf_datasets": [
+                "HuggingFaceFW/fineweb-edu",
+                "bigcode/the-stack-v2"
+            ]
+        }
+    }
+}

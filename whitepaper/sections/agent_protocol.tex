@@ -1,0 +1,28 @@
+SAGUARO defines the \textbf{Native Agent Protocol (NAP)}, a Standard Operating Procedure (SOP) for how agents should interact with a repository to ensure safety and correctness.
+
+\subsection{The Loop: Query, Act, Verify}
+The protocol enforces a strict loop for autonomous actions:
+
+\begin{enumerate}
+    \item \textbf{Context Retrieval (Query)}: Before generating code, the agent MUST query the Quantum Index.
+    \begin{verbatim}
+    saguaro query "logic for user authentication" --k 5
+    \end{verbatim}
+    This prevents "hallucinated" context and grounds the agent in the actual implementation.
+
+    \item \textbf{Action}: The agent performs the coding task (edits files).
+
+    \item \textbf{Safety Verification (Verify)}: Before marking a task complete, the agent runs the Sentinel.
+    \begin{verbatim}
+    saguaro verify . --engines native,ruff,semantic
+    \end{verbatim}
+    This multi-engine verification checks for:
+    \begin{itemize}
+        \item \textbf{Native}: Regex patterns, secret leaks, header conventions.
+        \item \textbf{Ruff}: Standard PEP-8 and linter rules.
+        \item \textbf{Semantic}: Quantum state checking for unintended architectural drift.
+    \end{itemize}
+\end{enumerate}
+
+\subsection{Self-Correction}
+If verification fails, SAGUARO empowers the agent to auto-correct using `saguaro verify --fix`. This autonomy reduces the "human-in-the-loop" burden for trivial compliance issues, allowing the human reviewer to focus on high-level logic.

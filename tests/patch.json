@@ -1,0 +1,10 @@
+{
+    "type": "patch",
+    "target_file": "tests/test_sandbox_dummy.py",
+    "operations": [
+        {
+            "op": "replace",
+            "content": "def test_dummy():\n    assert True\n"
+        }
+    ]
+}

@@ -1,0 +1,86 @@
+[
+    {
+        "name": "saguaro_skeleton",
+        "description": "Get high-level structure of a file (classes, functions, signatures) without implementation details.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "file_path": {
+                    "type": "string",
+                    "description": "Path of the file to scan"
+                }
+            },
+            "required": [
+                "file_path"
+            ]
+        }
+    },
+    {
+        "name": "saguaro_slice",
+        "description": "Get a dependency-aware context slice for a specific symbol.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "symbol": {
+                    "type": "string",
+                    "description": "Fully qualified symbol name"
+                },
+                "depth": {
+                    "type": "integer",
+                    "description": "Graph depth"
+                }
+            },
+            "required": [
+                "symbol"
+            ]
+        }
+    },
+    {
+        "name": "saguaro_patch",
+        "description": "Apply a semantic patch in a sandbox.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "target_file": {
+                    "type": "string"
+                },
+                "operations": {
+                    "type": "array",
+                    "items": {
+                        "type": "object",
+                        "properties": {
+                            "op": {
+                                "type": "string"
+                            },
+                            "symbol": {
+                                "type": "string"
+                            },
+                            "content": {
+                                "type": "string"
+                            }
+                        }
+                    }
+                }
+            },
+            "required": [
+                "target_file",
+                "operations"
+            ]
+        }
+    },
+    {
+        "name": "saguaro_verify",
+        "description": "Verify sandbox state.",
+        "input_schema": {
+            "type": "object",
+            "properties": {
+                "sandbox_id": {
+                    "type": "string"
+                }
+            },
+            "required": [
+                "sandbox_id"
+            ]
+        }
+    }
+]

@@ -1,0 +1,16 @@
+Ingesting build graph...
+Discovered 11 targets:
+ - [lib] py:saguaro-core (defined in setup.py)
+    Deps: saguaro
+ - [lib] py:unknown_python (defined in venv/lib/python3.12/site-packages/tensorflow/tools/pip_package/setup.py)
+    Deps: protobuf, install-dir, libtpu
+ - [lib] py:array_record (defined in venv/lib/python3.12/site-packages/array_record/setup.py)
+    Deps: tensorflow, google-cloud-storage
+ - [lib] py:pandas (defined in venv/lib/python3.12/site-packages/pandas/pyproject.toml)
+ - [lib] py:my-test-package (defined in venv/lib/python3.12/site-packages/pkg_resources/tests/data/my-test-package-source/setup.py)
+ - [lib] cmake:saguaro_core (defined in CMakeLists.txt)
+ - [lib] cmake:tf_xla_runtime_objects (defined in venv/lib/python3.12/site-packages/tensorflow/xla_aot_runtime_src/CMakeLists.txt)
+ - [lib] cmake:tf_xla_runtime (defined in venv/lib/python3.12/site-packages/tensorflow/xla_aot_runtime_src/CMakeLists.txt)
+ - [lib] cmake:highnoon_core (defined in saguaro/native/CMakeLists.txt)
+ - [lib] cmake:hpo_main_lib (defined in saguaro/native/CMakeLists.txt)
+ - [bin] cmake:hpo_main (defined in saguaro/native/CMakeLists.txt)

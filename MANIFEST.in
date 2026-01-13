@@ -1,0 +1,9 @@
+include README.md
+recursive-include saguaro *.py
+recursive-include saguaro *.so
+exclude src/*
+exclude include/*
+global-exclude *.py[cod]
+global-exclude *.so
+include saguaro/ops/_saguaro_core.so
+recursive-include saguaro/artifacts *.json

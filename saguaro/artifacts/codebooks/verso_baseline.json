@@ -1,0 +1,12 @@
+{
+    "base_vocab_size": 362,
+    "config": {
+        "min_frequency": 10,
+        "max_vocab_size": 30000,
+        "min_ngram_size": 2,
+        "max_ngram_size": 5,
+        "byte_offset": 32
+    },
+    "superwords": [],
+    "next_id": 362
+}

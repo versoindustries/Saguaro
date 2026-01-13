@@ -1,0 +1,1 @@
+/usr/bin/c++ -fPIC -O3 -DNDEBUG -flto -L/home/mike/Documents/Github/HighNoon-Language-Framework/venv/lib/python3.12/site-packages/tensorflow -l:libtensorflow_framework.so.2 -shared -Wl,-soname,_hpo_main.so -o _hpo_main.so CMakeFiles/hpo_main_lib.dir/ops/hpo_main.cc.o 

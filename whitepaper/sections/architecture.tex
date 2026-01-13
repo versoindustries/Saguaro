@@ -1,0 +1,20 @@
+SAGUARO's core is built on a high-performance C++ backend (`libsaguaro`) that exposes TensorFlow Custom Operations to Python. This hybrid architecture ensures that while agents interact via high-level Python APIs, the heavy lifting of tensor manipulation is handled at native speeds.
+
+\subsection{Holographic Embeddings}
+At the heart of SAGUARO is the concept of \textbf{Holographic Embeddings}. Unlike traditional dense vectors (e.g., Word2Vec, BERT), holographic vectors distribute information across all dimensions (typically $d=8192$ or $d=16384$). This property, inspired by Hyperdimensional Computing, allows for:
+
+\begin{itemize}
+    \item \textbf{Superposition}: Multiple concepts can be added together into a single vector without destroying individual information (\texttt{SAGUAROHolographicBundle}).
+    \item \textbf{Robustness}: The representation is noise-tolerant; losing a fraction of dimensions does not result in catastrophic information loss.
+    \item \textbf{Constant-Memory Indexing}: Regardless of the repository size, the "Gist" of a module or workset can be compressed into a fixed-size signature.
+\end{itemize}
+
+\subsection{Quantum Operations}
+SAGUARO implements specific operators to manipulate these states:
+\begin{itemize}
+    \item \texttt{QuantumEmbeddingForward}: Projects tokenized code into the hyperdimensional space.
+    \item \texttt{HDTimeCrystalForward}: Encodes temporal sequences (lines of code) preserving order, allowing the model to distinguish between "A calls B" and "B calls A".
+    \item \texttt{CrystallizeMemory}: Consolidates the volatile working memory of an agent into a persistent long-term storage format.
+\end{itemize}
+
+These operations are exposed via the `saguaro.ops` module and are utilized by the `IndexEngine` to create the Quantum Index.
