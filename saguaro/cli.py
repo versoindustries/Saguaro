@@ -759,17 +759,22 @@ Example:
         print(f"  - Total Dimension (with Buffer): {stats['total_dim']}")
         print(f"  - Dark Space Ratio: {stats['dark_space_ratio']:.2f}")
 
-        print("\nConnecting to Quantum Core...")
-        from saguaro.indexing.engine import IndexEngine, process_batch_worker
+        print("\nConnecting to Quantum Core (Memory-Optimized)...")
+        
+        # Use memory-optimized engine
+        from saguaro.indexing.memory_optimized_engine import MemoryOptimizedIndexEngine
+        # CRITICAL: Import worker from native_worker (TF-free) to prevent 1.9GB TF load in workers
+        from saguaro.indexing.native_worker import process_batch_worker_memory_optimized
 
         # Initialize Engine (Main Process)
         saguaro_dir = os.path.join(os.getcwd(), ".saguaro")
-        engine = IndexEngine(target_path, saguaro_dir, stats)
+        engine = MemoryOptimizedIndexEngine(target_path, saguaro_dir, stats)
 
         # Load config for exclusions
         import yaml
         import multiprocessing
         import concurrent.futures
+        import gc
         from saguaro.utils.file_utils import get_code_files
 
         config_path = os.path.join(saguaro_dir, "config.yaml")
@@ -796,85 +801,155 @@ Example:
 
         # Calibrate Tokenizer (Main Process scans first to build vocab if needed)
         print("Calibrating Quantum Tokenizer (LOC-Aware)...")
-        engine.calibrate(
-            all_files
-        )  # TODO: Make this parallel too if slow, but usually fast
-
-        # Filter (Incremental)
-        if not args.force:
-            needed = engine.tracker.filter_needs_indexing(all_files)
-            if not needed:
-                print("No files modified since last index.")
-                sys.exit(0)
-            print(
-                f"Incrementally indexing {len(needed)} files ({total_files - len(needed)} skipped)."
-            )
-            files_to_process = needed
-        else:
-            files_to_process = all_files
-            engine.tracker.clear()
-
-        # Process in chunks
-        BATCH_SIZE = 64
-        file_chunks = [
-            files_to_process[i : i + BATCH_SIZE]
-            for i in range(0, len(files_to_process), BATCH_SIZE)
-        ]
+        engine.calibrate(all_files)
+        
+        # Release file list memory after calibration
+        del all_files
+        gc.collect()
 
         # Get Dynamic Vocab Size from Engine (post-calibration)
         vocab_size = engine.vocab_size
+        
+        # Create shared projection matrix BEFORE spawning workers
+        print(f"Creating shared projection ({vocab_size} × {stats['active_dim']})...")
+        engine.create_shared_projection()
+        
         print(
-            f"Starting Parallel Indexing with {num_workers} workers (vocab={vocab_size})..."
+            f"Starting Memory-Optimized Parallel Indexing with {num_workers} workers..."
         )
+        print("  Mode: Sequential batch processing (1 active batch per worker slot)")
 
         indexed_files = 0
         indexed_entities = 0
+        total_batches = 0
+        batches_completed = 0
 
-        # Use 'spawn' context to safer TF handling
+        # Use 'spawn' context for safer TF handling
         ctx = multiprocessing.get_context("spawn")
+        
+        # Streaming file discovery - yields batches as discovered
+        from saguaro.utils.file_utils import iter_code_files
+        
+        # MEMORY OPTIMIZATION: Limit concurrent futures to num_workers
+        # This ensures we only have num_workers batches in memory at once
+        MAX_CONCURRENT = num_workers  # One batch per worker - sequential processing
 
-        with concurrent.futures.ProcessPoolExecutor(
-            max_workers=num_workers, mp_context=ctx
-        ) as executor:
-            # Submit all batches
-            # Note: We pass primitive args (list of str, int, int, int) to avoid pickling the Engine
-            futures = {
-                executor.submit(
-                    process_batch_worker,
-                    chunk,
-                    stats["active_dim"],
-                    stats["total_dim"],
-                    vocab_size,
-                ): chunk
-                for chunk in file_chunks
-            }
-
-            for future in concurrent.futures.as_completed(futures):
-                _ = futures[future]
-                try:
-                    meta_list, vectors_np = future.result()
-
-                    # Ingest into Main
-                    f_cnt, e_cnt = engine.ingest_worker_result(meta_list, vectors_np)
-                    indexed_files += f_cnt
-                    indexed_entities += e_cnt
-
-                    # Update tracker for this chunk immediately
-                    # We can do this because we know they succeeded
-                    if f_cnt > 0:
-                        engine.tracker.update([m["file"] for m in meta_list])
-
-                    print(
-                        f"Processed batch ({f_cnt} files, {e_cnt} entities)", end="\r"
+        try:
+            with concurrent.futures.ProcessPoolExecutor(
+                max_workers=num_workers, mp_context=ctx
+            ) as executor:
+                futures = {}
+                
+                # Use smaller batch size for better memory control
+                batch_iter = iter_code_files(target_path, exclusions, batch_size=32)
+                
+                # Collect all batches first for filtering (streaming filter)
+                pending_batches = []
+                for batch in batch_iter:
+                    # Apply incremental filter to batch
+                    if not args.force:
+                        batch = engine.tracker.filter_needs_indexing(batch)
+                        if not batch:
+                            continue
+                    pending_batches.append(batch)
+                
+                if not pending_batches:
+                    print("No files modified since last index.")
+                    engine.cleanup_shared_projection()
+                    sys.exit(0)
+                
+                total_batches = len(pending_batches)
+                print(f"Processing {total_batches} batches...")
+                
+                batch_idx = 0
+                
+                # Submit initial batches (up to MAX_CONCURRENT)
+                while batch_idx < len(pending_batches) and len(futures) < MAX_CONCURRENT:
+                    batch = pending_batches[batch_idx]
+                    future = executor.submit(
+                        process_batch_worker_memory_optimized,
+                        batch,
+                        stats["active_dim"],
+                        stats["total_dim"],
+                        vocab_size,
                     )
+                    futures[future] = batch_idx
+                    batch_idx += 1
+                
+                # Process batches with sequential memory release
+                while futures:
+                    # Wait for ONE future to complete (sequential processing)
+                    done, _ = concurrent.futures.wait(
+                        futures.keys(), 
+                        return_when=concurrent.futures.FIRST_COMPLETED
+                    )
+                    
+                    # Process completed futures immediately
+                    for future in done:
+                        try:
+                            meta_list, vectors_np = future.result()
+                            
+                            if meta_list and vectors_np is not None:
+                                f_cnt, e_cnt = engine.ingest_worker_result(meta_list, vectors_np)
+                                indexed_files += f_cnt
+                                indexed_entities += e_cnt
+                                
+                                if f_cnt > 0:
+                                    engine.tracker.update([m["file"] for m in meta_list])
+                            
+                            # MEMORY: Explicitly release worker result memory
+                            del meta_list, vectors_np
+                            
+                        except Exception as e:
+                            print(f"\nBatch {futures[future]} failed: {e}")
+                        
+                        del futures[future]
+                        batches_completed += 1
+                        
+                        # Progress with memory stats
+                        mem_stats = engine.get_memory_stats()
+                        print(
+                            f"Progress: {batches_completed}/{total_batches} batches | "
+                            f"{indexed_files} files | {indexed_entities} entities | "
+                            f"Peak: {mem_stats['peak_rss_mb']:.0f}MB",
+                            end="\r"
+                        )
+                    
+                    # Submit next batch if available
+                    while batch_idx < len(pending_batches) and len(futures) < MAX_CONCURRENT:
+                        batch = pending_batches[batch_idx]
+                        future = executor.submit(
+                            process_batch_worker_memory_optimized,
+                            batch,
+                            stats["active_dim"],
+                            stats["total_dim"],
+                            vocab_size,
+                        )
+                        futures[future] = batch_idx
+                        batch_idx += 1
+                    
+                    # MEMORY: Aggressive GC after processing each batch
+                    gc.collect()
 
-                except Exception as e:
-                    print(f"\nBatch failed: {e}")
+        finally:
+            # CRITICAL: Clean up shared memory after all workers are done
+            engine.cleanup_shared_projection()
+            gc.collect()
 
         engine.commit()
-        print("\n\nIndexing Complete.")
-        print(f" - Files Processed: {indexed_files}")
-        print(f" - Entities Indexed: {indexed_entities}")
+        
+        # Final memory stats
+        mem_stats = engine.get_memory_stats()
+        print("\n\n" + "=" * 60)
+        print("INDEXING COMPLETE")
+        print("=" * 60)
+        print(f" - Files Processed:    {indexed_files}")
+        print(f" - Entities Indexed:   {indexed_entities}")
+        print(f" - Batches Processed:  {batches_completed}")
+        print(f" - Peak Memory:        {mem_stats['peak_rss_mb']:.1f} MB")
+        print(f" - GC Collections:     {mem_stats['gc_collections']}")
+        print(f" - Store Size:         {mem_stats['store_count']} vectors")
+        print("=" * 60)
 
         # Update config.yaml with scaling stats
         import yaml
@@ -886,6 +961,11 @@ Example:
                 existing_config = yaml.safe_load(f) or {}
 
         existing_config.update(stats)
+        existing_config["last_index"] = {
+            "files": indexed_files,
+            "entities": indexed_entities,
+            "peak_memory_mb": mem_stats["peak_rss_mb"],
+        }
 
         with open(config_path, "w") as f:
             yaml.dump(existing_config, f)

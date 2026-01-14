@@ -1,6 +1,6 @@
 import os
 import fnmatch
-from typing import List
+from typing import Generator, List
 
 
 def get_code_files(root_path: str, exclusions: List[str] = None) -> List[str]:
@@ -127,3 +127,78 @@ def get_code_files(root_path: str, exclusions: List[str] = None) -> List[str]:
                 all_files.append(full_path)
 
     return all_files
+
+
+# --- Streaming File Discovery (Memory Optimized) ---
+
+# Extension whitelist for streaming (same as above, but defined at module level)
+_EXT_WHITELIST = {
+    ".py", ".pyi", ".c", ".cc", ".cpp", ".cxx", ".h", ".hh", ".hpp", ".hxx",
+    ".js", ".mjs", ".jsx", ".ts", ".tsx", ".html", ".css", ".scss", ".less",
+    ".java", ".go", ".rs", ".rb", ".php", ".cs", ".kt", ".swift",
+    ".sh", ".bash", ".zsh", ".json", ".yaml", ".yml", ".toml", ".xml",
+    ".ini", ".md", ".rst", ".txt",
+}
+
+_HARD_EXCLUSIONS = {
+    ".saguaro", ".git", "venv", "__pycache__", "node_modules",
+    "build", "dist", ".idea", ".vscode",
+}
+
+
+def iter_code_files(
+    root_path: str,
+    exclusions: list = None,
+    batch_size: int = 64
+) -> Generator[list, None, None]:
+    """
+    Generator-based file discovery that yields batches of files.
+    
+    MEMORY OPTIMIZED: Does not hold all file paths in memory at once.
+    Files are discovered and yielded in batches for immediate processing.
+    
+    Args:
+        root_path: Directory to scan
+        exclusions: Additional patterns to exclude
+        batch_size: Number of files per batch
+        
+    Yields:
+        Lists of file paths, each containing up to batch_size files
+    """
+    import fnmatch
+    
+    if exclusions is None:
+        exclusions = []
+    
+    # Combine with hard defaults
+    all_exclusions = set(exclusions) | _HARD_EXCLUSIONS
+    
+    batch = []
+    
+    for root, dirs, files in os.walk(root_path):
+        # Prune directories in-place
+        dirs[:] = [
+            d for d in dirs 
+            if d not in all_exclusions 
+            and not d.startswith(".")
+            and not any(fnmatch.fnmatch(d, pat) for pat in all_exclusions)
+        ]
+        
+        # Process files
+        for file in files:
+            # Check exclusions
+            if any(fnmatch.fnmatch(file, pat) for pat in all_exclusions):
+                continue
+            
+            # Check extension
+            _, ext = os.path.splitext(file)
+            if ext in _EXT_WHITELIST or file in {"Dockerfile", "Makefile"}:
+                batch.append(os.path.join(root, file))
+                
+                if len(batch) >= batch_size:
+                    yield batch
+                    batch = []
+    
+    # Yield remaining files
+    if batch:
+        yield batch
