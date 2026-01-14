@@ -627,16 +627,17 @@ Example:
         print(f"  - Dark Space Ratio: {stats['dark_space_ratio']:.2f}")
         
         print("\nConnecting to Quantum Core...")
-        from saguaro.indexing.engine import IndexEngine
+        from saguaro.indexing.engine import IndexEngine, process_batch_worker
         
-        # Initialize Engine
+        # Initialize Engine (Main Process)
         saguaro_dir = os.path.join(os.getcwd(), ".saguaro")
         engine = IndexEngine(target_path, saguaro_dir, stats)
         
         # Load config for exclusions
         import yaml
-        import fnmatch
         import multiprocessing
+        import concurrent.futures
+        from saguaro.utils.file_utils import get_code_files
 
         config_path = os.path.join(saguaro_dir, "config.yaml")
         config = {}
@@ -645,61 +646,80 @@ Example:
                  config = yaml.safe_load(f) or {}
         
         exclusions = config.get('indexing', {}).get('exclude', [])
-        # Always include hard defaults if not present
-        hard_defaults = ['.saguaro', '.git', 'venv', '__pycache__', 'node_modules']
-        exclusions.extend([d for d in hard_defaults if d not in exclusions])
         
-        all_files = []
-        for root, dirs, files in os.walk(target_path):
-            # Prune directories based on exclusions
-            # Modify dirs in-place to skip walking them
-            # We check both exact match and glob patterns
-            dirs_to_remove = []
-            for d in dirs:
-                if d in exclusions:
-                    dirs_to_remove.append(d)
-                    continue
-                # check globs
-                for pat in exclusions:
-                     if fnmatch.fnmatch(d, pat):
-                         dirs_to_remove.append(d)
-                         break
-            
-            for d in dirs_to_remove:
-                if d in dirs:
-                    dirs.remove(d)
-            
-            for file in files:
-                # Also check file exclusions? For now just dirs for speed.
-                if file.endswith('.py') or file.endswith('.cc') or file.endswith('.h'):
-                    full_path = os.path.join(root, file)
-                    all_files.append(full_path)
-                    
+        # Robust File Discovery
+        all_files = get_code_files(target_path, exclusions)
+        
         total_files = len(all_files)
-        # Use max CPU cores
-        num_workers = multiprocessing.cpu_count()
-        print(f"Discovered {total_files} files. Using {num_workers} parallel workers.")
+        # Use max CPU cores but leave one for system/main
+        num_workers = max(1, multiprocessing.cpu_count() - 1)
         
-        # Calibrate Tokenizer
-        print("Calibrating Quantum Tokenizer (LOC-Aware)...")
-        engine.calibrate(all_files)
+        print(f"Discovered {total_files} files.")
+        if total_files == 0:
+            print("WARNING: No code files found. Check your path or .saguaro/config.yaml exclusions.")
+            sys.exit(0)
 
+        # Calibrate Tokenizer (Main Process scans first to build vocab if needed)
+        print("Calibrating Quantum Tokenizer (LOC-Aware)...")
+        engine.calibrate(all_files) # TODO: Make this parallel too if slow, but usually fast
+
+        # Filter (Incremental)
+        if not args.force:
+            needed = engine.tracker.filter_needs_indexing(all_files)
+            if not needed:
+                print("No files modified since last index.")
+                sys.exit(0)
+            print(f"Incrementally indexing {len(needed)} files ({total_files - len(needed)} skipped).")
+            files_to_process = needed
+        else:
+            files_to_process = all_files
+            engine.tracker.clear()
+            
         # Process in chunks
         BATCH_SIZE = 64
-        file_chunks = [all_files[i:i + BATCH_SIZE] for i in range(0, len(all_files), BATCH_SIZE)]
+        file_chunks = [files_to_process[i:i + BATCH_SIZE] for i in range(0, len(files_to_process), BATCH_SIZE)]
+        
+        # Get Dynamic Vocab Size from Engine (post-calibration)
+        vocab_size = engine.vocab_size
+        print(f"Starting Parallel Indexing with {num_workers} workers (vocab={vocab_size})...")
         
         indexed_files = 0
         indexed_entities = 0
         
-        for chunk in file_chunks:
-            f_count, e_count = engine.index_batch(chunk, force=args.force)
-            indexed_files += f_count
-            indexed_entities += e_count
-            print(f"Processed batch ({f_count} files, {e_count} entities)...")
+        # Use 'spawn' context to safer TF handling
+        ctx = multiprocessing.get_context('spawn')
+        
+        with concurrent.futures.ProcessPoolExecutor(max_workers=num_workers, mp_context=ctx) as executor:
+            # Submit all batches
+            # Note: We pass primitive args (list of str, int, int, int) to avoid pickling the Engine
+            futures = {
+                executor.submit(process_batch_worker, chunk, stats['active_dim'], stats['total_dim'], vocab_size): chunk 
+                for chunk in file_chunks
+            }
             
+            for future in concurrent.futures.as_completed(futures):
+                chunk = futures[future]
+                try:
+                    meta_list, vectors_np = future.result()
+                    
+                    # Ingest into Main
+                    f_cnt, e_cnt = engine.ingest_worker_result(meta_list, vectors_np)
+                    indexed_files += f_cnt
+                    indexed_entities += e_cnt
+                    
+                    # Update tracker for this chunk immediately
+                    # We can do this because we know they succeeded
+                    if f_cnt > 0:
+                         engine.tracker.update([m['file'] for m in meta_list])
+                         
+                    print(f"Processed batch ({f_cnt} files, {e_cnt} entities)", end='\r')
+                    
+                except Exception as e:
+                    print(f"\nBatch failed: {e}")
+                    
         engine.commit()
         print("\n\nIndexing Complete.")
-        print(f" - Files Processed: {indexed_files}/{total_files}")
+        print(f" - Files Processed: {indexed_files}")
         print(f" - Entities Indexed: {indexed_entities}")
         
         # Update config.yaml with scaling stats
@@ -710,7 +730,6 @@ Example:
              with open(config_path, 'r') as f:
                  existing_config = yaml.safe_load(f) or {}
         
-        # Merge stats
         existing_config.update(stats)
         
         with open(config_path, 'w') as f:

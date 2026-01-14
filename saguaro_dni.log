@@ -142,3 +142,7 @@ Registered kernels:
 2026-01-13 13:11:39,810 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (0 superwords, native_trie=False)
 2026-01-13 13:11:39,810 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 0 superwords, effective_vocab=362
 2026-01-13 13:11:42,422 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-13 19:48:38,057 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-13 19:48:38,057 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-13 19:48:38,058 - saguaro.tokenization.intelligent_controller - WARNING - [VocabController] Pre-trained codebook 'verso-baseline' not found at /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json. Using base vocabulary only.
+2026-01-13 19:48:38,079 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)

@@ -18,15 +18,10 @@ class DatasetLoader:
     # Format: "dataset_name": ["config1", "config2", ...] or "dataset_name": "single_config"
     DATASET_CONFIGS = {
         # The Stack v2 requires language subset - uses PascalCase config names
-        # See full list: https://huggingface.co/datasets/bigcode/the-stack-v2-dedup
+        # Reduced to core languages to avoid massive metadata resolution overhead (~15s -> ~2s)
         "bigcode/the-stack-v2-dedup": [
             "Python", "JavaScript", "TypeScript", "Go", "Rust", "Java",
-            "C", "C++", "C-Sharp",  # Core systems languages
-            "JSX", "TSX",  # React
-            "Shell", "Bash", "PowerShell",  # Shell scripting
-            "SQL", "PLSQL",  # Database
-            "Ruby", "PHP", "Scala", "Kotlin", "Swift",  # Other popular
-            "HTML", "CSS", "SCSS",  # Web fundamentals
+            "C", "C++", "SQL", "Bash",
         ],
         "bigcode/the-stack-v2": [
             "Python", "JavaScript", "TypeScript", "Go", "Rust", "Java",
@@ -179,8 +174,21 @@ class DatasetLoader:
             else:
                 expanded_streams.append((ds_name, None))
 
-        num_streams = len(expanded_streams)
-        logger.info(f"Parallel streaming from {num_streams} streams ({len(hf_datasets)} datasets) with {min(max_workers, num_streams)} workers...")
+        # Interleave Fast and Slow streams for fair sampling
+        # "Slow" = The Stack (high metadata latency)
+        # "Fast" = Everything else
+        fast_streams = [s for s in expanded_streams if "the-stack" not in s[0]]
+        slow_streams = [s for s in expanded_streams if "the-stack" in s[0]]
+        
+        # Interleave: Fast, Slow, Fast, Slow ...
+        import itertools
+        interleaved_streams = []
+        for f, s in itertools.zip_longest(fast_streams, slow_streams):
+            if f: interleaved_streams.append(f)
+            if s: interleaved_streams.append(s)
+
+        num_streams = len(interleaved_streams)
+        logger.info(f"Parallel streaming from {num_streams} interleaved streams ({len(hf_datasets)} datasets) with {min(max_workers, num_streams)} workers...")
         
         budget_per_stream = total_limit_bytes // max(num_streams, 1)
         
@@ -195,7 +203,7 @@ class DatasetLoader:
         with ThreadPoolExecutor(max_workers=min(max_workers, num_streams)) as executor:
             # Submit all stream tasks
             futures = []
-            for i, (ds_name, config) in enumerate(expanded_streams):
+            for i, (ds_name, config) in enumerate(interleaved_streams):
                 future = executor.submit(
                     self._stream_to_queue,
                     ds_name, config, budget_per_stream,

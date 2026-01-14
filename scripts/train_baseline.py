@@ -41,7 +41,7 @@ def train_baseline(corpus_path: str = None, curriculum_name: str = None, output_
     config = VocabControllerConfig(
         model_max_length=8192,
         min_ngram_freq=50,       # High frequency for baseline
-        sample_size=1_000_000,   # Large sample size
+        sample_size=20_000,      # Matched to HighNoon standards (was 1M)
         min_ngram_size=2,
         max_ngram_size=5
     )
@@ -50,23 +50,34 @@ def train_baseline(corpus_path: str = None, curriculum_name: str = None, output_
     samples = []
     
     # Limit logic
-    # Fast: 10MB, Full: 500MB (Local) or 1GB (Streaming)
-    max_bytes = 10 * 1024 * 1024 if fast else 1024 * 1024 * 1024 
+    # Fast: 10MB, Full: 256MB default
+    max_bytes = 10 * 1024 * 1024 if fast else 256 * 1024 * 1024 
     current_bytes = 0
+
+    try:
+        from tqdm import tqdm
+        has_tqdm = True
+    except ImportError:
+        has_tqdm = False
 
     # 1. Load Data
     if curriculum_name:
         logger.info(f"Loading Curriculum: {curriculum_name}")
         loader = DatasetLoader()
         
-        logger.info(f"Streaming samples (Limit: {max_bytes/1024/1024:.0f} MB)...")
-        for text in loader.stream_samples(curriculum_name, total_limit_bytes=max_bytes):
+        logger.info(f"Streaming samples (Limit: {config.sample_size} samples)...")
+        
+        stream_iter = loader.stream_samples(curriculum_name, total_limit_bytes=max_bytes)
+        if has_tqdm:
+            stream_iter = tqdm(stream_iter, total=config.sample_size, unit='seq', desc="Streaming Dataset")
+            
+        for text in stream_iter:
+             if len(samples) >= config.sample_size:
+                 break
              samples.append(text)
              current_bytes += len(text)
-             # Basic progress
-             if len(samples) % 1000 == 0:
-                 sys.stdout.write(f"  ...collected {len(samples)} samples ({current_bytes/1024/1024:.1f} MB)\r")
-                 sys.stdout.flush()
+             if has_tqdm:
+                 stream_iter.update(1)
                  
     elif corpus_path:
         files = []
@@ -85,6 +96,9 @@ def train_baseline(corpus_path: str = None, curriculum_name: str = None, output_
         random.shuffle(files)
         
         logger.info(f"Reading samples (Limit: {max_bytes/1024/1024:.0f} MB)...")
+        if has_tqdm:
+            pbar = tqdm(total=max_bytes, unit='B', unit_scale=True, desc="Reading Corpus")
+            
         for fpath in files:
             if current_bytes >= max_bytes:
                 break
@@ -93,9 +107,14 @@ def train_baseline(corpus_path: str = None, curriculum_name: str = None, output_
                     text = f.read()
                     if len(text) > 100:
                         samples.append(text)
-                        current_bytes += len(text)
+                        len_text = len(text)
+                        current_bytes += len_text
+                        if has_tqdm:
+                            pbar.update(len_text)
             except Exception:
                 pass
+        if has_tqdm:
+            pbar.close()
             
     logger.info(f"\nCollected {len(samples)} samples ({current_bytes/1024/1024:.2f} MB).")
     
@@ -105,7 +124,19 @@ def train_baseline(corpus_path: str = None, curriculum_name: str = None, output_
 
     # 3. Train
     logger.info("Starting training (this may take a while)...")
-    controller.train_codebook(samples, min_freq=config.min_ngram_freq)
+    
+    train_callback = None
+    if has_tqdm:
+        # We don't know total superwords exactly, but we know sample count
+        train_pbar = tqdm(total=len(samples), desc="Training Codebook", unit="seq")
+        def _cb(current, total):
+            train_pbar.update(current - train_pbar.n)
+        train_callback = _cb
+        
+    controller.train_codebook(samples, min_freq=config.min_ngram_freq, progress_callback=train_callback)
+    
+    if has_tqdm:
+        train_pbar.close()
     
     # 4. Save
     if not output_path:
