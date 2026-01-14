@@ -1,0 +1,1899 @@
+[
+  {
+    "name": "setup.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/setup.py",
+    "line": 1,
+    "end_line": 23
+  },
+  {
+    "name": "SAGUARO_INDEXING_FAILURE_REPORT.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/SAGUARO_INDEXING_FAILURE_REPORT.md",
+    "line": 1,
+    "end_line": 69
+  },
+  {
+    "name": "CMakeLists.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/CMakeLists.txt",
+    "line": 1,
+    "end_line": 122
+  },
+  {
+    "name": "encode_text_mock",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/perf_test.py",
+    "line": 6,
+    "end_line": 25
+  },
+  {
+    "name": "perf_test.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/perf_test.py",
+    "line": 1,
+    "end_line": 27
+  },
+  {
+    "name": "latest_report.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/latest_report.md",
+    "line": 1,
+    "end_line": 45
+  },
+  {
+    "name": "GEMINI.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/GEMINI.md",
+    "line": 1,
+    "end_line": 385
+  },
+  {
+    "name": "build_secure.sh",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/build_secure.sh",
+    "line": 1,
+    "end_line": 388
+  },
+  {
+    "name": "test_overflow",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/test_tokenizer_overflow.py",
+    "line": 6,
+    "end_line": 25
+  },
+  {
+    "name": "test_tokenizer_overflow.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/test_tokenizer_overflow.py",
+    "line": 1,
+    "end_line": 42
+  },
+  {
+    "name": "requirements.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/requirements.txt",
+    "line": 1,
+    "end_line": 51
+  },
+  {
+    "name": "README.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/README.md",
+    "line": 1,
+    "end_line": 73
+  },
+  {
+    "name": "raw_volatility.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/raw_volatility.txt",
+    "line": 1,
+    "end_line": 3
+  },
+  {
+    "name": "AI_MODEL_SAGUARO_ADOPTION.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/AI_MODEL_SAGUARO_ADOPTION.md",
+    "line": 1,
+    "end_line": 316
+  },
+  {
+    "name": "raw_plumbing.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/raw_plumbing.txt",
+    "line": 1,
+    "end_line": 16
+  },
+  {
+    "name": "configuration.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/configuration.md",
+    "line": 1,
+    "end_line": 69
+  },
+  {
+    "name": "raw_verify_native.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/raw_verify_native.txt",
+    "line": 1,
+    "end_line": 8
+  },
+  {
+    "name": "README.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/README.md",
+    "line": 1,
+    "end_line": 24
+  },
+  {
+    "name": "installation.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/installation.md",
+    "line": 1,
+    "end_line": 59
+  },
+  {
+    "name": "raw_analysis.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/raw_analysis.txt",
+    "line": 1,
+    "end_line": 1
+  },
+  {
+    "name": "architecture.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/architecture.md",
+    "line": 1,
+    "end_line": 50
+  },
+  {
+    "name": "usage_guide.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/usage_guide.md",
+    "line": 1,
+    "end_line": 94
+  },
+  {
+    "name": "benchmarks.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/benchmarks.md",
+    "line": 1,
+    "end_line": 46
+  },
+  {
+    "name": "raw_entrypoints.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/raw_entrypoints.txt",
+    "line": 1,
+    "end_line": 18
+  },
+  {
+    "name": "integration.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/integration.md",
+    "line": 1,
+    "end_line": 51
+  },
+  {
+    "name": "SAGUARO_NATIVE_PROTOCOL.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/model_handling/SAGUARO_NATIVE_PROTOCOL.md",
+    "line": 1,
+    "end_line": 114
+  },
+  {
+    "name": "ssai_action.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/specs/ssai_action.md",
+    "line": 1,
+    "end_line": 75
+  },
+  {
+    "name": "ssai_perception.md",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/docs/specs/ssai_perception.md",
+    "line": 1,
+    "end_line": 81
+  },
+  {
+    "name": "SOURCES.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro_core.egg-info/SOURCES.txt",
+    "line": 1,
+    "end_line": 198
+  },
+  {
+    "name": "dependency_links.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro_core.egg-info/dependency_links.txt",
+    "line": 1,
+    "end_line": 1
+  },
+  {
+    "name": "entry_points.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro_core.egg-info/entry_points.txt",
+    "line": 1,
+    "end_line": 2
+  },
+  {
+    "name": "top_level.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro_core.egg-info/top_level.txt",
+    "line": 1,
+    "end_line": 1
+  },
+  {
+    "name": "requires.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro_core.egg-info/requires.txt",
+    "line": 1,
+    "end_line": 5
+  },
+  {
+    "name": "WorksetConstraint",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 15,
+    "end_line": 34
+  },
+  {
+    "name": "Workset",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 20,
+    "end_line": 39
+  },
+  {
+    "name": "to_json",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 32,
+    "end_line": 51
+  },
+  {
+    "name": "from_json",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 36,
+    "end_line": 55
+  },
+  {
+    "name": "WorksetManager",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 42,
+    "end_line": 61
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 43,
+    "end_line": 62
+  },
+  {
+    "name": "_estimate_file_tokens",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 50,
+    "end_line": 69
+  },
+  {
+    "name": "create_workset",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 62,
+    "end_line": 81
+  },
+  {
+    "name": "expand_workset",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 106,
+    "end_line": 125
+  },
+  {
+    "name": "get_workset",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 142,
+    "end_line": 161
+  },
+  {
+    "name": "list_worksets",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 149,
+    "end_line": 168
+  },
+  {
+    "name": "_save",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 163,
+    "end_line": 182
+  },
+  {
+    "name": "check_conflicts",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 168,
+    "end_line": 187
+  },
+  {
+    "name": "acquire_lease",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 188,
+    "end_line": 207
+  },
+  {
+    "name": "release_lease",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 208,
+    "end_line": 213
+  },
+  {
+    "name": "workset.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/workset.py",
+    "line": 1,
+    "end_line": 213
+  },
+  {
+    "name": "ContextBudgetExceeded",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/governor.py",
+    "line": 7,
+    "end_line": 26
+  },
+  {
+    "name": "ContextGovernor",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/governor.py",
+    "line": 10,
+    "end_line": 29
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/governor.py",
+    "line": 15,
+    "end_line": 34
+  },
+  {
+    "name": "estimate_tokens",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/governor.py",
+    "line": 22,
+    "end_line": 41
+  },
+  {
+    "name": "check_budget",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/governor.py",
+    "line": 25,
+    "end_line": 44
+  },
+  {
+    "name": "optimize_bundle",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/governor.py",
+    "line": 48,
+    "end_line": 67
+  },
+  {
+    "name": "escalate",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/governor.py",
+    "line": 72,
+    "end_line": 82
+  },
+  {
+    "name": "governor.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/governor.py",
+    "line": 1,
+    "end_line": 82
+  },
+  {
+    "name": "HealthDashboard",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/health.py",
+    "line": 7,
+    "end_line": 26
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/health.py",
+    "line": 8,
+    "end_line": 27
+  },
+  {
+    "name": "generate_report",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/health.py",
+    "line": 13,
+    "end_line": 32
+  },
+  {
+    "name": "print_dashboard",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/health.py",
+    "line": 61,
+    "end_line": 80
+  },
+  {
+    "name": "health.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/health.py",
+    "line": 1,
+    "end_line": 93
+  },
+  {
+    "name": "Fact",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/knowledge_base.py",
+    "line": 17,
+    "end_line": 36
+  },
+  {
+    "name": "KnowledgeBase",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/knowledge_base.py",
+    "line": 25,
+    "end_line": 44
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/knowledge_base.py",
+    "line": 26,
+    "end_line": 45
+  },
+  {
+    "name": "add_fact",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/knowledge_base.py",
+    "line": 31,
+    "end_line": 50
+  },
+  {
+    "name": "get_facts",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/knowledge_base.py",
+    "line": 51,
+    "end_line": 70
+  },
+  {
+    "name": "search",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/knowledge_base.py",
+    "line": 56,
+    "end_line": 75
+  },
+  {
+    "name": "_load",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/knowledge_base.py",
+    "line": 64,
+    "end_line": 80
+  },
+  {
+    "name": "_save",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/knowledge_base.py",
+    "line": 74,
+    "end_line": 80
+  },
+  {
+    "name": "knowledge_base.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/knowledge_base.py",
+    "line": 1,
+    "end_line": 80
+  },
+  {
+    "name": "Legislator",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/legislator.py",
+    "line": 13,
+    "end_line": 32
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/legislator.py",
+    "line": 18,
+    "end_line": 37
+  },
+  {
+    "name": "draft_rules",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/legislator.py",
+    "line": 22,
+    "end_line": 41
+  },
+  {
+    "name": "_inspect_docstrings",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/legislator.py",
+    "line": 64,
+    "end_line": 83
+  },
+  {
+    "name": "_inspect_casing",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/legislator.py",
+    "line": 100,
+    "end_line": 116
+  },
+  {
+    "name": "legislator.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/legislator.py",
+    "line": 1,
+    "end_line": 116
+  },
+  {
+    "name": "FeedbackEntry",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/feedback.py",
+    "line": 12,
+    "end_line": 31
+  },
+  {
+    "name": "FeedbackSession",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/feedback.py",
+    "line": 20,
+    "end_line": 39
+  },
+  {
+    "name": "to_json",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/feedback.py",
+    "line": 25,
+    "end_line": 44
+  },
+  {
+    "name": "FeedbackStore",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/feedback.py",
+    "line": 28,
+    "end_line": 47
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/feedback.py",
+    "line": 29,
+    "end_line": 48
+  },
+  {
+    "name": "log_feedback",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/feedback.py",
+    "line": 33,
+    "end_line": 52
+  },
+  {
+    "name": "_save",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/feedback.py",
+    "line": 56,
+    "end_line": 75
+  },
+  {
+    "name": "get_stats",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/feedback.py",
+    "line": 61,
+    "end_line": 80
+  },
+  {
+    "name": "feedback.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/feedback.py",
+    "line": 1,
+    "end_line": 89
+  },
+  {
+    "name": "ContextAnchor",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/context.py",
+    "line": 11,
+    "end_line": 30
+  },
+  {
+    "name": "ContextItem",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/context.py",
+    "line": 19,
+    "end_line": 38
+  },
+  {
+    "name": "to_dict",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/context.py",
+    "line": 28,
+    "end_line": 47
+  },
+  {
+    "name": "ContextBundle",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/context.py",
+    "line": 32,
+    "end_line": 51
+  },
+  {
+    "name": "to_json",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/context.py",
+    "line": 45,
+    "end_line": 64
+  },
+  {
+    "name": "add_item",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/context.py",
+    "line": 48,
+    "end_line": 67
+  },
+  {
+    "name": "sort",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/context.py",
+    "line": 51,
+    "end_line": 70
+  },
+  {
+    "name": "ContextBuilder",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/context.py",
+    "line": 60,
+    "end_line": 79
+  },
+  {
+    "name": "build_from_results",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/context.py",
+    "line": 64,
+    "end_line": 83
+  },
+  {
+    "name": "context.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/context.py",
+    "line": 1,
+    "end_line": 135
+  },
+  {
+    "name": "Profiler",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/profiling.py",
+    "line": 9,
+    "end_line": 25
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/profiling.py",
+    "line": 10,
+    "end_line": 25
+  },
+  {
+    "name": "measure",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/profiling.py",
+    "line": 15,
+    "end_line": 25
+  },
+  {
+    "name": "profiling.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/profiling.py",
+    "line": 1,
+    "end_line": 25
+  },
+  {
+    "name": "AdaptiveEncoder",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/encoder.py",
+    "line": 24,
+    "end_line": 43
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/encoder.py",
+    "line": 29,
+    "end_line": 48
+  },
+  {
+    "name": "train_step",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/encoder.py",
+    "line": 37,
+    "end_line": 56
+  },
+  {
+    "name": "fine_tune_on_corpus",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/encoder.py",
+    "line": 85,
+    "end_line": 96
+  },
+  {
+    "name": "encoder.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/encoder.py",
+    "line": 1,
+    "end_line": 96
+  },
+  {
+    "name": "DependencyResolver",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/escalation.py",
+    "line": 10,
+    "end_line": 29
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/escalation.py",
+    "line": 14,
+    "end_line": 33
+  },
+  {
+    "name": "get_imports",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/escalation.py",
+    "line": 17,
+    "end_line": 36
+  },
+  {
+    "name": "_resolve_python_module",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/escalation.py",
+    "line": 62,
+    "end_line": 81
+  },
+  {
+    "name": "_resolve_cpp_include",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/escalation.py",
+    "line": 90,
+    "end_line": 109
+  },
+  {
+    "name": "EscalationLadder",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/escalation.py",
+    "line": 96,
+    "end_line": 115
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/escalation.py",
+    "line": 97,
+    "end_line": 116
+  },
+  {
+    "name": "search",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/escalation.py",
+    "line": 102,
+    "end_line": 121
+  },
+  {
+    "name": "escalation.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/escalation.py",
+    "line": 1,
+    "end_line": 156
+  },
+  {
+    "name": "CoverageReporter",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/coverage.py",
+    "line": 8,
+    "end_line": 27
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/coverage.py",
+    "line": 9,
+    "end_line": 28
+  },
+  {
+    "name": "generate_report",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/coverage.py",
+    "line": 111,
+    "end_line": 130
+  },
+  {
+    "name": "print_report",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/coverage.py",
+    "line": 179,
+    "end_line": 198
+  },
+  {
+    "name": "coverage.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/coverage.py",
+    "line": 1,
+    "end_line": 207
+  },
+  {
+    "name": "main",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/cli.py",
+    "line": 6,
+    "end_line": 25
+  },
+  {
+    "name": "cli.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/cli.py",
+    "line": 1,
+    "end_line": 1334
+  },
+  {
+    "name": "Watcher",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/watcher.py",
+    "line": 10,
+    "end_line": 29
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/watcher.py",
+    "line": 11,
+    "end_line": 30
+  },
+  {
+    "name": "scan_files",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/watcher.py",
+    "line": 17,
+    "end_line": 36
+  },
+  {
+    "name": "start",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/watcher.py",
+    "line": 33,
+    "end_line": 52
+  },
+  {
+    "name": "stop",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/watcher.py",
+    "line": 64,
+    "end_line": 65
+  },
+  {
+    "name": "watcher.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/watcher.py",
+    "line": 1,
+    "end_line": 65
+  },
+  {
+    "name": "QuickstartManager",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/quickstart.py",
+    "line": 6,
+    "end_line": 25
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/quickstart.py",
+    "line": 7,
+    "end_line": 26
+  },
+  {
+    "name": "run_command",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/quickstart.py",
+    "line": 11,
+    "end_line": 30
+  },
+  {
+    "name": "execute",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/quickstart.py",
+    "line": 20,
+    "end_line": 39
+  },
+  {
+    "name": "generate_configs",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/quickstart.py",
+    "line": 46,
+    "end_line": 65
+  },
+  {
+    "name": "quickstart.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/quickstart.py",
+    "line": 1,
+    "end_line": 77
+  },
+  {
+    "name": "__init__.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/__init__.py",
+    "line": 1,
+    "end_line": 2
+  },
+  {
+    "name": "get_default_yaml",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/defaults.py",
+    "line": 46,
+    "end_line": 47
+  },
+  {
+    "name": "defaults.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/defaults.py",
+    "line": 1,
+    "end_line": 47
+  },
+  {
+    "name": "SAGUAROClient",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/client.py",
+    "line": 15,
+    "end_line": 34
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/client.py",
+    "line": 16,
+    "end_line": 35
+  },
+  {
+    "name": "start",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/client.py",
+    "line": 25,
+    "end_line": 44
+  },
+  {
+    "name": "stop",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/client.py",
+    "line": 54,
+    "end_line": 73
+  },
+  {
+    "name": "_send_request",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/client.py",
+    "line": 60,
+    "end_line": 79
+  },
+  {
+    "name": "query",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/client.py",
+    "line": 100,
+    "end_line": 119
+  },
+  {
+    "name": "read_node",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/client.py",
+    "line": 107,
+    "end_line": 119
+  },
+  {
+    "name": "get_status",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/client.py",
+    "line": 118,
+    "end_line": 119
+  },
+  {
+    "name": "client.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/client.py",
+    "line": 1,
+    "end_line": 119
+  },
+  {
+    "name": "holographic_bundle",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/holographic.py",
+    "line": 9,
+    "end_line": 28
+  },
+  {
+    "name": "modern_hopfield_retrieve",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/holographic.py",
+    "line": 21,
+    "end_line": 40
+  },
+  {
+    "name": "crystallize_memory",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/holographic.py",
+    "line": 39,
+    "end_line": 55
+  },
+  {
+    "name": "holographic.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/holographic.py",
+    "line": 1,
+    "end_line": 55
+  },
+  {
+    "name": "load_saguaro_library",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/lib_loader.py",
+    "line": 9,
+    "end_line": 28
+  },
+  {
+    "name": "lib_loader.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/lib_loader.py",
+    "line": 1,
+    "end_line": 47
+  },
+  {
+    "name": "load_saguaro_core",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 34,
+    "end_line": 53
+  },
+  {
+    "name": "_get_empty_resource_handle",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 320,
+    "end_line": 339
+  },
+  {
+    "name": "init_holographic_store",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 334,
+    "end_line": 353
+  },
+  {
+    "name": "quantum_embedding",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 350,
+    "end_line": 369
+  },
+  {
+    "name": "_quantum_embedding_grad",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 411,
+    "end_line": 430
+  },
+  {
+    "name": "fused_qwt_tokenizer",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 445,
+    "end_line": 464
+  },
+  {
+    "name": "time_crystal_step",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 468,
+    "end_line": 487
+  },
+  {
+    "name": "fused_coconut_bfs",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 476,
+    "end_line": 495
+  },
+  {
+    "name": "fused_text_tokenize",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 484,
+    "end_line": 503
+  },
+  {
+    "name": "fused_text_tokenize_batch",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 501,
+    "end_line": 520
+  },
+  {
+    "name": "holographic_bundle",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 529,
+    "end_line": 548
+  },
+  {
+    "name": "crystallize_memory",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 533,
+    "end_line": 552
+  },
+  {
+    "name": "modern_hopfield_retrieve",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 543,
+    "end_line": 562
+  },
+  {
+    "name": "streaming_ngram_count_create",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 548,
+    "end_line": 567
+  },
+  {
+    "name": "streaming_ngram_count",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 558,
+    "end_line": 577
+  },
+  {
+    "name": "streaming_ngram_count_export",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 562,
+    "end_line": 581
+  },
+  {
+    "name": "superword_trie_insert",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 571,
+    "end_line": 584
+  },
+  {
+    "name": "superword_trie_build_from_table",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 575,
+    "end_line": 584
+  },
+  {
+    "name": "quantum_ops.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/quantum_ops.py",
+    "line": 1,
+    "end_line": 584
+  },
+  {
+    "name": "ops_available",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 49,
+    "end_line": 68
+  },
+  {
+    "name": "SuperwordTrieHandle",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 54,
+    "end_line": 73
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 57,
+    "end_line": 76
+  },
+  {
+    "name": "handle",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 67,
+    "end_line": 86
+  },
+  {
+    "name": "num_entries",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 72,
+    "end_line": 91
+  },
+  {
+    "name": "insert",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 76,
+    "end_line": 95
+  },
+  {
+    "name": "insert_batch",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 83,
+    "end_line": 102
+  },
+  {
+    "name": "clear",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 114,
+    "end_line": 133
+  },
+  {
+    "name": "StreamingNgramCounterHandle",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 121,
+    "end_line": 140
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 124,
+    "end_line": 143
+  },
+  {
+    "name": "handle",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 133,
+    "end_line": 152
+  },
+  {
+    "name": "count_batch",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 137,
+    "end_line": 156
+  },
+  {
+    "name": "get_top_k",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 153,
+    "end_line": 172
+  },
+  {
+    "name": "_get_empty_trie",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 169,
+    "end_line": 188
+  },
+  {
+    "name": "fused_text_tokenize",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 176,
+    "end_line": 195
+  },
+  {
+    "name": "fused_text_tokenize_batch",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 209,
+    "end_line": 228
+  },
+  {
+    "name": "trie_apply_merges",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 248,
+    "end_line": 267
+  },
+  {
+    "name": "create_trie_from_superword_table",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 286,
+    "end_line": 305
+  },
+  {
+    "name": "fused_text_tokenizer.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/fused_text_tokenizer.py",
+    "line": 1,
+    "end_line": 310
+  },
+  {
+    "name": "__init__.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/ops/__init__.py",
+    "line": 1,
+    "end_line": 17
+  },
+  {
+    "name": "VectorStore",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/storage/vector_store.py",
+    "line": 15,
+    "end_line": 34
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/storage/vector_store.py",
+    "line": 16,
+    "end_line": 35
+  },
+  {
+    "name": "_load",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/storage/vector_store.py",
+    "line": 29,
+    "end_line": 48
+  },
+  {
+    "name": "save",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/storage/vector_store.py",
+    "line": 84,
+    "end_line": 103
+  },
+  {
+    "name": "add",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/storage/vector_store.py",
+    "line": 91,
+    "end_line": 110
+  },
+  {
+    "name": "query",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/storage/vector_store.py",
+    "line": 106,
+    "end_line": 125
+  },
+  {
+    "name": "clear",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/storage/vector_store.py",
+    "line": 177,
+    "end_line": 180
+  },
+  {
+    "name": "vector_store.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/storage/vector_store.py",
+    "line": 1,
+    "end_line": 180
+  },
+  {
+    "name": "__init__.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/storage/__init__.py",
+    "line": 1,
+    "end_line": 4
+  },
+  {
+    "name": "get_code_files",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/utils/file_utils.py",
+    "line": 6,
+    "end_line": 25
+  },
+  {
+    "name": "file_utils.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/utils/file_utils.py",
+    "line": 1,
+    "end_line": 85
+  },
+  {
+    "name": "CMakeLists.txt",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/CMakeLists.txt",
+    "line": 1,
+    "end_line": 753
+  },
+  {
+    "name": "native_sparse_attention",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/fused_native_sparse_attention_op.py",
+    "line": 32,
+    "end_line": 51
+  },
+  {
+    "name": "_native_sparse_attention_grad",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/fused_native_sparse_attention_op.py",
+    "line": 93,
+    "end_line": 112
+  },
+  {
+    "name": "NativeSparseAttention",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/fused_native_sparse_attention_op.py",
+    "line": 115,
+    "end_line": 134
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/fused_native_sparse_attention_op.py",
+    "line": 141,
+    "end_line": 160
+  },
+  {
+    "name": "call",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/fused_native_sparse_attention_op.py",
+    "line": 159,
+    "end_line": 178
+  },
+  {
+    "name": "compute_output_shape",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/fused_native_sparse_attention_op.py",
+    "line": 189,
+    "end_line": 208
+  },
+  {
+    "name": "get_config",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/fused_native_sparse_attention_op.py",
+    "line": 193,
+    "end_line": 212
+  },
+  {
+    "name": "estimate_sparsity",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/fused_native_sparse_attention_op.py",
+    "line": 209,
+    "end_line": 228
+  },
+  {
+    "name": "fused_native_sparse_attention_op.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/fused_native_sparse_attention_op.py",
+    "line": 1,
+    "end_line": 236
+  },
+  {
+    "name": "_detect_edition",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 58,
+    "end_line": 77
+  },
+  {
+    "name": "get_edition",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 84,
+    "end_line": 103
+  },
+  {
+    "name": "get_edition_name",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 96,
+    "end_line": 115
+  },
+  {
+    "name": "get_edition_description",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 101,
+    "end_line": 120
+  },
+  {
+    "name": "is_unlimited",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 106,
+    "end_line": 125
+  },
+  {
+    "name": "is_lite",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 111,
+    "end_line": 130
+  },
+  {
+    "name": "is_pro",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 116,
+    "end_line": 135
+  },
+  {
+    "name": "is_enterprise",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 121,
+    "end_line": 140
+  },
+  {
+    "name": "LimitExceededError",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 131,
+    "end_line": 150
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 142,
+    "end_line": 161
+  },
+  {
+    "name": "LicenseError",
+    "type": "class",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 147,
+    "end_line": 166
+  },
+  {
+    "name": "__init__",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 157,
+    "end_line": 176
+  },
+  {
+    "name": "_get_limit",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 177,
+    "end_line": 196
+  },
+  {
+    "name": "get_effective_limit",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 193,
+    "end_line": 212
+  },
+  {
+    "name": "is_domain_unlocked",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 229,
+    "end_line": 248
+  },
+  {
+    "name": "validate_model_config",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 248,
+    "end_line": 267
+  },
+  {
+    "name": "warn_near_limits",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 307,
+    "end_line": 326
+  },
+  {
+    "name": "estimate_param_count",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 373,
+    "end_line": 392
+  },
+  {
+    "name": "validate_param_count",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 408,
+    "end_line": 427
+  },
+  {
+    "name": "check_enterprise_license",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 432,
+    "end_line": 451
+  },
+  {
+    "name": "require_enterprise",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 453,
+    "end_line": 472
+  },
+  {
+    "name": "get_limits",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 473,
+    "end_line": 490
+  },
+  {
+    "name": "_limits.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/_limits.py",
+    "line": 1,
+    "end_line": 490
+  },
+  {
+    "name": "build_secure.sh",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/build_secure.sh",
+    "line": 1,
+    "end_line": 615
+  },
+  {
+    "name": "_get_binary_path",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 78,
+    "end_line": 97
+  },
+  {
+    "name": "_find_core_binary",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 83,
+    "end_line": 102
+  },
+  {
+    "name": "_find_op_binary",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 102,
+    "end_line": 121
+  },
+  {
+    "name": "resolve_op_library",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 141,
+    "end_line": 160
+  },
+  {
+    "name": "_export_native_config_flags",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 158,
+    "end_line": 177
+  },
+  {
+    "name": "_load_consolidated_binary",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 184,
+    "end_line": 203
+  },
+  {
+    "name": "_load_op",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 237,
+    "end_line": 256
+  },
+  {
+    "name": "get_op",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 291,
+    "end_line": 310
+  },
+  {
+    "name": "list_available_ops",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 305,
+    "end_line": 324
+  },
+  {
+    "name": "is_native_available",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 361,
+    "end_line": 380
+  },
+  {
+    "name": "is_consolidated_available",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 370,
+    "end_line": 389
+  },
+  {
+    "name": "is_enterprise",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 379,
+    "end_line": 398
+  },
+  {
+    "name": "get_edition",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 390,
+    "end_line": 409
+  },
+  {
+    "name": "get_binary_info",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 399,
+    "end_line": 418
+  },
+  {
+    "name": "check_enterprise_license",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 423,
+    "end_line": 442
+  },
+  {
+    "name": "load_moe_dispatch",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 438,
+    "end_line": 457
+  },
+  {
+    "name": "load_superposition_moe",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 443,
+    "end_line": 462
+  },
+  {
+    "name": "load_reasoning_stack",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 448,
+    "end_line": 467
+  },
+  {
+    "name": "load_selective_scan",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 453,
+    "end_line": 472
+  },
+  {
+    "name": "load_qwt_tokenizer",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 458,
+    "end_line": 477
+  },
+  {
+    "name": "fused_qwt_tokenizer_op_path",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 463,
+    "end_line": 482
+  },
+  {
+    "name": "load_hnn_step",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 469,
+    "end_line": 488
+  },
+  {
+    "name": "load_hnn_sequence",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 474,
+    "end_line": 493
+  },
+  {
+    "name": "load_meta_controller",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 479,
+    "end_line": 498
+  },
+  {
+    "name": "load_linear_attention",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 484,
+    "end_line": 503
+  },
+  {
+    "name": "load_min_gru",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 489,
+    "end_line": 508
+  },
+  {
+    "name": "load_token_shift",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 494,
+    "end_line": 513
+  },
+  {
+    "name": "load_rg_lru",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 499,
+    "end_line": 518
+  },
+  {
+    "name": "load_ssd",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 504,
+    "end_line": 523
+  },
+  {
+    "name": "load_continuous_thought",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 509,
+    "end_line": 528
+  },
+  {
+    "name": "load_text_tokenizer",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 514,
+    "end_line": 533
+  },
+  {
+    "name": "load_saguaro_core",
+    "type": "function",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 519,
+    "end_line": 538
+  },
+  {
+    "name": "__init__.py",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/__init__.py",
+    "line": 1,
+    "end_line": 566
+  },
+  {
+    "name": "build_ops.sh",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/build_ops.sh",
+    "line": 1,
+    "end_line": 223
+  },
+  {
+    "name": "qsg_ops.h",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/ops/qsg_ops.h",
+    "line": 1,
+    "end_line": 652
+  },
+  {
+    "name": "born_rule_loss_op.h",
+    "type": "file",
+    "file": "/home/mike/Documents/Github/Saguaro/saguaro/native/ops/born_rule_loss_op.h",
+    "line": 1,
+    "end_line": 108
+  }
+]
