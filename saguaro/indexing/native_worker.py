@@ -160,13 +160,16 @@ def process_batch_worker_native(
             texts = [e.content[:2048] for e in entities]
             
             # Run C++ pipeline
+            # FORCE num_threads=1 to prevent nested parallelism explosion.
+            # We are already running in a process pool of 15+ workers.
+            # Spawning 16+ threads per worker would create ~240+ threads, causing contention and potential OOM/Stack issues.
             doc_vectors = _native_indexer.full_pipeline(
                 texts=texts,
                 projection=projection_np,
                 vocab_size=vocab_size,
                 max_length=512,
                 trie=trie,
-                num_threads=0
+                num_threads=1  # FIXED: Safe single-threaded C++ execution per worker
             )
             
             # Map back to entities

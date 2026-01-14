@@ -204,13 +204,16 @@ def process_batch_worker_memory_optimized(
             
             # Native full pipeline: texts -> document vectors
             # This calls SIMD-optimized C++ code via ctypes
+            # FORCE num_threads=1 because we are already running in a multiprocessing pool (15+ workers).
+            # Using num_threads=0 (auto) here causes thread explosion (15 workers * 64 cores = 960 threads)
+            # leading to 'munmap_chunk(): invalid pointer' crashes due to resource exhaustion.
             doc_vectors = native.full_pipeline(
                 texts=texts,
                 projection=projection_np,
                 vocab_size=vocab_size,
                 max_length=512,
                 trie=None,  # TODO: Support superword trie
-                num_threads=0  # Auto
+                num_threads=1  # FIXED: Prevent thread explosion
             )
             
             # Build metadata
