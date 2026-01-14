@@ -64,6 +64,8 @@ set(SAGUARO_SOURCES
     src/ops/hyperdimensional_embedding_op.cc
     src/ops/common/tensor_stream_pool.cc
     src/ops/saguaro_memory_ops.cc
+    # Native C API for Python ctypes (NO TensorFlow dependency in callers)
+    src/ops/native_indexer_api.cc
 )
 
 # =============================================================================
@@ -119,4 +121,42 @@ set_target_properties(saguaro_core PROPERTIES
     SUFFIX ".so"
     CXX_VISIBILITY_PRESET hidden
 )
+
+# =============================================================================
+# Build Native Library (NO TensorFlow Dependency)
+# =============================================================================
+add_library(saguaro_native SHARED 
+    src/ops/native_indexer_api.cc
+)
+
+target_include_directories(saguaro_native PRIVATE
+    ${CMAKE_CURRENT_SOURCE_DIR}/include
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/saguaro
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/saguaro/ops
+    ${CMAKE_CURRENT_SOURCE_DIR}/include/saguaro/ops/common
+)
+
+# Native compiler flags (AVX2/SIMD support)
+target_compile_options(saguaro_native PRIVATE 
+    -Wall 
+    -O3 
+    -march=native 
+    -fPIC
+    -fno-rtti
+)
+
+# No TensorFlow linking here!
+if(UNIX AND NOT APPLE)
+    target_link_options(saguaro_native PRIVATE "-Wl,--no-undefined")
+elseif(APPLE)
+    target_link_options(saguaro_native PRIVATE "-undefined" "error")
+endif()
+
+set_target_properties(saguaro_native PROPERTIES
+    OUTPUT_NAME "_saguaro_native"
+    PREFIX ""
+    SUFFIX ".so"
+    CXX_VISIBILITY_PRESET hidden
+)
+
 

@@ -1,6 +1,9 @@
 """
 SAGUARO Vector Store
 Simple storage backend for Hyperdimensional Vectors.
+
+NOTE: This module now re-exports from memmap_vector_store for new indexes.
+The original pickle-based class is renamed to LegacyVectorStore for backward compatibility.
 """
 
 import os
@@ -13,7 +16,7 @@ from typing import List, Dict, Any
 logger = logging.getLogger(__name__)
 
 
-class VectorStore:
+class LegacyVectorStore:
     def __init__(self, storage_path: str, dim: int, dark_space_ratio: float = 0.4):
         self.storage_path = storage_path
         self.dim = dim
@@ -187,3 +190,55 @@ class VectorStore:
         self.vectors = []
         self.metadata = []
         self.save()
+    
+    def __len__(self) -> int:
+        """Return number of stored vectors."""
+        return len(self.vectors)
+
+
+# =============================================================================
+# AUTO-DETECT FORMAT AND USE APPROPRIATE IMPLEMENTATION
+# =============================================================================
+
+def VectorStore(storage_path: str, dim: int, dark_space_ratio: float = 0.4, **kwargs):
+    """
+    Factory function that auto-detects the vector store format.
+    
+    - If index_meta.json exists with format='memmap', use MemoryMappedVectorStore
+    - If index.pkl exists (legacy), use LegacyVectorStore
+    - Otherwise, use MemoryMappedVectorStore (new default)
+    
+    Args:
+        storage_path: Directory containing the vector index
+        dim: Vector dimension
+        dark_space_ratio: Reserved space ratio (for compatibility)
+        
+    Returns:
+        Appropriate VectorStore implementation
+    """
+    from saguaro.storage.memmap_vector_store import MemoryMappedVectorStore
+    
+    index_meta_path = os.path.join(storage_path, "index_meta.json")
+    legacy_index_path = os.path.join(storage_path, "index.pkl")
+    
+    # Check for memmap format
+    if os.path.exists(index_meta_path):
+        try:
+            with open(index_meta_path, 'r') as f:
+                meta = json.load(f)
+            if meta.get('format') == 'memmap':
+                logger.debug(f"Using MemoryMappedVectorStore for {storage_path}")
+                return MemoryMappedVectorStore(
+                    storage_path, dim, dark_space_ratio, **kwargs
+                )
+        except Exception:
+            pass
+    
+    # Check for legacy pickle format
+    if os.path.exists(legacy_index_path):
+        logger.debug(f"Using LegacyVectorStore for {storage_path} (pickle format)")
+        return LegacyVectorStore(storage_path, dim, dark_space_ratio)
+    
+    # New index - use memmap by default
+    logger.debug(f"Creating new MemoryMappedVectorStore in {storage_path}")
+    return MemoryMappedVectorStore(storage_path, dim, dark_space_ratio, **kwargs)

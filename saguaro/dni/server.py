@@ -113,7 +113,7 @@ class DNIServer:
         return {
             "status": "ready",
             "repo": repo_path,
-            "vectors": len(self.store.vectors),
+            "vectors": len(self.store),
             "session": session_id if self.session else None,
         }
 
@@ -189,7 +189,7 @@ class DNIServer:
     def status(self, params):
         return {
             "state": "running",
-            "indexed_docs": len(self.store.vectors) if self.store else 0,
+            "indexed_docs": len(self.store) if self.store else 0,
             "session_active": bool(self.session),
         }
 

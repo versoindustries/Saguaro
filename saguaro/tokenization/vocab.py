@@ -242,3 +242,14 @@ class CoherenceManager:
 
         # E. Reload Controller
         self.controller.load_codebook(adapter_path)
+
+        # F. MEMORY OPTIMIZATION: Force cleanup of temporary training objects
+        # This prevents orphaned merger/tokenizer objects from accumulating
+        import gc
+        del repo_merger
+        del base_tokenizer
+        del tokenized_samples
+        del samples
+        del repo_tokens
+        gc.collect()
+        logger.debug("Calibration cleanup complete.")
