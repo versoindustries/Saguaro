@@ -1,4 +1,4 @@
-# highnoon/_native/ops/train_step.py
+# saguaro/_native/ops/train_step.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,7 @@ from copy import deepcopy
 
 import tensorflow as tf
 
-from highnoon._native.ops.lib_loader import resolve_op_library
+from saguaro._native.ops.lib_loader import resolve_op_library
 
 logger = logging.getLogger(__name__)
 
@@ -50,7 +50,7 @@ _train_step_diagnostics: dict[str, object] = {
 }
 
 try:
-    # lib_loader.resolve_op_library now returns _highnoon_core.so path
+    # lib_loader.resolve_op_library now returns _saguaro_core.so path
     _op_lib_path = resolve_op_library(__file__, "_train_step_op.so")
     _train_step_diagnostics["resolved_path"] = _op_lib_path
     _train_step_diagnostics["exists"] = os.path.exists(_op_lib_path)

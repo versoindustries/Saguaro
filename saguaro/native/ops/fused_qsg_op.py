@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_qsg_op.py
+# saguaro/_native/ops/fused_qsg_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ This module provides Python interfaces to the C++ QSG operations.
 Native C++ ops are REQUIRED - no Python fallbacks are provided.
 
 Example:
-    >>> from highnoon._native.ops.fused_qsg_op import entangled_coherence
+    >>> from saguaro._native.ops.fused_qsg_op import entangled_coherence
     >>> output = entangled_coherence(position_states, coherence_range=64)
 """
 
@@ -29,7 +29,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native.ops.lib_loader import get_highnoon_core_path
+from saguaro._native.ops.lib_loader import get_saguaro_core_path
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ def _get_native_ops():
         return _qsg_ops
 
     try:
-        lib_path = get_highnoon_core_path()
+        lib_path = get_saguaro_core_path()
         lib = tf.load_op_library(lib_path)
         _qsg_ops = lib
         logger.debug("QSG native ops loaded successfully from %s", lib_path)

@@ -1,4 +1,4 @@
-# highnoon/_native/ops/quantum_ops.py
+# saguaro/_native/ops/quantum_ops.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -31,7 +31,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native.ops.lib_loader import resolve_op_library
+from saguaro._native.ops.lib_loader import resolve_op_library
 
 logger = logging.getLogger(__name__)
 
@@ -48,9 +48,9 @@ def _load_quantum_ops():
         return _quantum_ops_available
 
     try:
-        lib_path = resolve_op_library(__file__, "_highnoon_core.so")
+        lib_path = resolve_op_library(__file__, "_saguaro_core.so")
         if lib_path is None:
-            raise RuntimeError("Could not find _highnoon_core.so")
+            raise RuntimeError("Could not find _saguaro_core.so")
 
         _quantum_ops_module = tf.load_op_library(lib_path)
         _quantum_ops_available = True

@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_quls_loss_op.py
+# saguaro/_native/ops/fused_quls_loss_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ Provides optimized C++ implementations of the Quantum Unified Loss System
 with automatic fallback to Python implementations when native ops are unavailable.
 
 Example:
-    >>> from highnoon._native.ops.fused_quls_loss_op import fused_quls_loss
+    >>> from saguaro._native.ops.fused_quls_loss_op import fused_quls_loss
     >>> total_loss, metrics = fused_quls_loss(logits, labels)
 """
 
@@ -40,7 +40,7 @@ _fused_quls_loss_backward = None
 _NATIVE_OPS_AVAILABLE = False
 
 try:
-    from highnoon._native.ops.lib_loader import load_op_library
+    from saguaro._native.ops.lib_loader import load_op_library
     
     _lib = load_op_library()
     if _lib is not None:

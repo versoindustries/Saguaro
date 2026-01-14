@@ -63,7 +63,7 @@
             "hf_datasets": [
                 "bigcode/the-stack-v2-dedup",
                 "nampdn-ai/tiny-codes",
-                "google/code_contests",
+                "deepmind/code_contests",
                 "code-search-net/code_search_net",
                 "migtissera/Quanta",
                 "BoltzmannEntropy/QuantumLLMInstruct",

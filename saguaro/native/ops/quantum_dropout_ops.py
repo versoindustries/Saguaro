@@ -1,4 +1,4 @@
-# highnoon/_native/ops/quantum_dropout_ops.py
+# saguaro/_native/ops/quantum_dropout_ops.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,8 +30,8 @@ import logging
 
 import tensorflow as tf
 
-from highnoon import config
-from highnoon._native.ops.lib_loader import resolve_op_library
+from saguaro import config
+from saguaro._native.ops.lib_loader import resolve_op_library
 
 logger = logging.getLogger(__name__)
 
@@ -46,9 +46,9 @@ def _load_ops():
         return _available
 
     try:
-        lib_path = resolve_op_library(__file__, "_highnoon_core.so")
+        lib_path = resolve_op_library(__file__, "_saguaro_core.so")
         if lib_path is None:
-            raise RuntimeError("Could not find _highnoon_core.so")
+            raise RuntimeError("Could not find _saguaro_core.so")
         _module = tf.load_op_library(lib_path)
         _available = True
         logger.info(f"Quantum Dropout ops loaded from {lib_path}")

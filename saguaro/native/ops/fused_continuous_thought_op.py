@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_continuous_thought_op.py
+# saguaro/_native/ops/fused_continuous_thought_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -28,7 +28,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native import get_op
+from saguaro._native import get_op
 
 logger = logging.getLogger(__name__)
 
@@ -109,7 +109,7 @@ def fused_continuous_thought(
     if _fused_continuous_thought_op is None:
         raise RuntimeError(
             "FusedContinuousThought C++ op not available. Build with: "
-            "cd highnoon/_native && ./build_ops.sh fused_continuous_thought"
+            "cd saguaro/_native && ./build_ops.sh fused_continuous_thought"
         )
 
     # Ensure float32
@@ -179,7 +179,7 @@ def fused_continuous_thought(
             if _fused_continuous_thought_grad_op is None:
                 raise RuntimeError(
                     "FusedContinuousThoughtGrad C++ op not available. Build with: "
-                    "cd highnoon/_native && ./build_ops.sh fused_continuous_thought"
+                    "cd saguaro/_native && ./build_ops.sh fused_continuous_thought"
                 )
 
             grads = _fused_continuous_thought_grad_op(

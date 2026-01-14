@@ -1,4 +1,4 @@
-# highnoon/_native/ops/lmwt_ops.py
+# saguaro/_native/ops/lmwt_ops.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -30,12 +30,12 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native.ops.lib_loader import get_highnoon_core_path
+from saguaro._native.ops.lib_loader import get_saguaro_core_path
 
 logger = logging.getLogger(__name__)
 
 # Load the native ops library
-_lib_path = get_highnoon_core_path()
+_lib_path = get_saguaro_core_path()
 _ops_lib = tf.load_op_library(_lib_path)
 
 # Track gradient warnings

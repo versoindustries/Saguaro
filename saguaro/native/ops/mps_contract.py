@@ -10,18 +10,18 @@ with SVD truncation, canonical forms, and entanglement entropy computation.
 
 import tensorflow as tf
 
-from highnoon._native import get_op
+from saguaro._native import get_op
 
 # Load native library
-_highnoon_core = get_op("highnoon_core")
-if _highnoon_core is None:
+_saguaro_core = get_op("saguaro_core")
+if _saguaro_core is None:
     # Fallback for individual builds or legacy structure
-    _highnoon_core = get_op("mps_contract")
+    _saguaro_core = get_op("mps_contract")
 
-if _highnoon_core is None:
-    raise ImportError("Could not load highnoon_core or mps_contract native op library.")
+if _saguaro_core is None:
+    raise ImportError("Could not load saguaro_core or mps_contract native op library.")
 
-_mps_contract_module = _highnoon_core
+_mps_contract_module = _saguaro_core
 _HAS_MPS_EXPECT = hasattr(_mps_contract_module, "mps_expect")
 _HAS_MPS_CANONICALIZE = hasattr(_mps_contract_module, "mps_canonicalize")
 

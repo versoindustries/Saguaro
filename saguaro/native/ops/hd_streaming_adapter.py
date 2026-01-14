@@ -1,4 +1,4 @@
-# highnoon/_native/ops/hd_streaming_adapter.py
+# saguaro/_native/ops/hd_streaming_adapter.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ This module provides the Python interface to the HD streaming projection ops.
 All computation is performed by the C++ kernel - no Python fallbacks.
 
 Usage:
-    >>> from highnoon._native.ops.hd_streaming_adapter import HDStreamingAdapter
+    >>> from saguaro._native.ops.hd_streaming_adapter import HDStreamingAdapter
     >>> adapter = HDStreamingAdapter(hidden_dim=256, hd_dim=1024)
     >>> output = adapter(hd_bundles)  # (batch, 1, hidden_dim)
 """
@@ -53,16 +53,16 @@ def _load_hd_streaming_ops():
         logger.debug("HDStreamingProject already registered in TensorFlow")
         return
 
-    # Load from the consolidated _highnoon_core.so library
-    from highnoon._native import resolve_op_library
+    # Load from the consolidated _saguaro_core.so library
+    from saguaro._native import resolve_op_library
 
-    consolidated_lib_path = resolve_op_library(__file__, "_highnoon_core.so")
+    consolidated_lib_path = resolve_op_library(__file__, "_saguaro_core.so")
     if os.path.exists(consolidated_lib_path):
         try:
             _hd_streaming_module = tf.load_op_library(consolidated_lib_path)
             hd_streaming_project_op = _hd_streaming_module.hd_streaming_project
             hd_streaming_project_grad_op = _hd_streaming_module.hd_streaming_project_grad
-            logger.info("Loaded HDStreamingProject from consolidated _highnoon_core.so")
+            logger.info("Loaded HDStreamingProject from consolidated _saguaro_core.so")
             return
         except (tf.errors.NotFoundError, OSError, AttributeError) as e:
             logger.error(f"Could not load HDStreamingProject from consolidated library: {e}")
@@ -139,7 +139,7 @@ def hd_streaming_project(
     if hd_streaming_project_op is None:
         raise NotImplementedError(
             "The C++ HDStreamingProject operator could not be loaded. "
-            "Please compile it: ./highnoon/_native/build_secure.sh"
+            "Please compile it: ./saguaro/_native/build_secure.sh"
         )
 
     return hd_streaming_project_op(
@@ -175,7 +175,7 @@ def hd_streaming_project_grad(
     if hd_streaming_project_grad_op is None:
         raise NotImplementedError(
             "The C++ HDStreamingProjectGrad operator could not be loaded. "
-            "Please compile it: ./highnoon/_native/build_secure.sh"
+            "Please compile it: ./saguaro/_native/build_secure.sh"
         )
 
     return hd_streaming_project_grad_op(

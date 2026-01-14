@@ -1,4 +1,4 @@
-# highnoon/_native/ops/lorentzian_feature_transform.py
+# saguaro/_native/ops/lorentzian_feature_transform.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native.ops.lib_loader import resolve_op_library
+from saguaro._native.ops.lib_loader import resolve_op_library
 
 logger = logging.getLogger(__name__)
 

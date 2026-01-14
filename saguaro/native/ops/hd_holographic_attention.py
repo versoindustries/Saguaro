@@ -1,4 +1,4 @@
-# highnoon/_native/ops/hd_holographic_attention.py
+# saguaro/_native/ops/hd_holographic_attention.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,9 +45,9 @@ def _load_native_ops():
         return _native_available
 
     try:
-        from highnoon._native.ops.lib_loader import get_highnoon_core_path
+        from saguaro._native.ops.lib_loader import get_saguaro_core_path
 
-        lib_path = get_highnoon_core_path()
+        lib_path = get_saguaro_core_path()
         _native_ops = tf.load_op_library(lib_path)
         _native_available = hasattr(_native_ops, "holographic_attention_scores") or hasattr(
             _native_ops, "HolographicAttentionScores"

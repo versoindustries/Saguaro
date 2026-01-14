@@ -1,4 +1,4 @@
-# highnoon/_native/ops/__init__.py
+# saguaro/_native/ops/__init__.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Native C++ TensorFlow operations for HighNoon Language Framework.
+"""Native C++ TensorFlow operations for Saguaro Language Framework.
 
 This module provides Python wrappers for compiled C++ TensorFlow ops.
 Each wrapper loads the corresponding .so file and exposes the op for use.
@@ -45,18 +45,18 @@ V2.0 Performance Optimizations (Phase P0):
 """
 
 # Phase 61: AlphaQubit Decoder
-from highnoon._native.ops.alphaqubit_ops import alphaqubit_decode, create_alphaqubit_weights
-from highnoon._native.ops.alphaqubit_ops import ops_available as alphaqubit_ops_available
+from saguaro._native.ops.alphaqubit_ops import alphaqubit_decode, create_alphaqubit_weights
+from saguaro._native.ops.alphaqubit_ops import ops_available as alphaqubit_ops_available
 
 # Phase 45: Entropy Regularization
-from highnoon._native.ops.entropy_regularization_ops import (
+from saguaro._native.ops.entropy_regularization_ops import (
     compute_activation_covariance,
     von_neumann_entropy_loss,
 )
-from highnoon._native.ops.entropy_regularization_ops import ops_available as entropy_ops_available
+from saguaro._native.ops.entropy_regularization_ops import ops_available as entropy_ops_available
 
 # QWT tokenizer operation
-from highnoon._native.ops.fused_qwt_tokenizer import (
+from saguaro._native.ops.fused_qwt_tokenizer import (
     fused_qwt_tokenizer,
     fused_qwt_tokenizer_available,
     fused_qwt_tokenizer_grad_available,
@@ -64,20 +64,20 @@ from highnoon._native.ops.fused_qwt_tokenizer import (
 )
 
 # Wavelet encoder operation
-from highnoon._native.ops.fused_wavelet_encoder import (
+from saguaro._native.ops.fused_wavelet_encoder import (
     fused_wavelet_encoder_available,
     fused_wavelet_encoder_chunk,
 )
 
 # Phase 200+: HD Streaming Adapter
-from highnoon._native.ops.hd_streaming_adapter import (
+from saguaro._native.ops.hd_streaming_adapter import (
     HDStreamingAdapter,
     hd_streaming_project,
     hd_streaming_project_grad,
 )
 
 # Phase 71: Intrinsic Plasticity
-from highnoon._native.ops.intrinsic_plasticity_ops import (
+from saguaro._native.ops.intrinsic_plasticity_ops import (
     cayley_parameterization,
     compute_plasticity_metric,
     enforce_unitary_constraint,
@@ -85,12 +85,12 @@ from highnoon._native.ops.intrinsic_plasticity_ops import (
     project_gradient_tangent,
     retract_to_manifold,
 )
-from highnoon._native.ops.intrinsic_plasticity_ops import ops_available as plasticity_ops_available
-from highnoon._native.ops.lib_loader import resolve_op_library
+from saguaro._native.ops.intrinsic_plasticity_ops import ops_available as plasticity_ops_available
+from saguaro._native.ops.lib_loader import resolve_op_library
 
 # TensorStreamPool zero-copy inter-kernel streaming (Phase 0)
 try:
-    from highnoon._native.ops.tensor_stream_pool import (
+    from saguaro._native.ops.tensor_stream_pool import (
         tensor_stream_acquire,
         tensor_stream_handoff,
         tensor_stream_release,
@@ -104,11 +104,11 @@ except ImportError:
     tensor_stream_pool_available = False
 
 # MPS operations
-from highnoon._native.ops.mps_contract import mps_contract
-from highnoon._native.ops.mps_temporal import mps_temporal_scan
+from saguaro._native.ops.mps_contract import mps_contract
+from saguaro._native.ops.mps_temporal import mps_temporal_scan
 
 # V2.0 Fused QULS Loss (Phase P0.2)
-from highnoon._native.ops.fused_quls_loss_op import (
+from saguaro._native.ops.fused_quls_loss_op import (
     fused_quls_loss,
     fused_quls_loss_with_gradient,
     fused_quls_loss_differentiable,
@@ -116,7 +116,7 @@ from highnoon._native.ops.fused_quls_loss_op import (
 )
 
 # Native optimizers (including Phase 46, 59, 60)
-from highnoon._native.ops.optimizers import (  # Phase 59: Adiabatic; Phase 60: Geodesic; Phase 46: SympFlow
+from saguaro._native.ops.optimizers import (  # Phase 59: Adiabatic; Phase 60: Geodesic; Phase 46: SympFlow
     adiabatic_optimizer_available,
     adiabatic_optimizer_step,
     geodesic_optimizer_available,
@@ -132,19 +132,19 @@ from highnoon._native.ops.optimizers import (  # Phase 59: Adiabatic; Phase 60: 
 )
 
 # Phases 73/79/80/84: Quantum Advanced Ops
-from highnoon._native.ops.quantum_advanced_ops import (
+from saguaro._native.ops.quantum_advanced_ops import (
     compute_coherence,
     nqs_decoder,
     qcot_reason,
     waveform_attention,
 )
-from highnoon._native.ops.quantum_advanced_ops import ops_available as advanced_ops_available
+from saguaro._native.ops.quantum_advanced_ops import ops_available as advanced_ops_available
 
 # Phase 76/127: Quantum Coherence Bus
-from highnoon._native.ops.quantum_coherence_bus_ops import (
+from saguaro._native.ops.quantum_coherence_bus_ops import (
     ops_available as coherence_bus_ops_available,
 )
-from highnoon._native.ops.quantum_coherence_bus_ops import (
+from saguaro._native.ops.quantum_coherence_bus_ops import (
     qcb_coherent_transfer,
     qcb_initialize,
     qcb_synchronize_phase,
@@ -155,24 +155,24 @@ from highnoon._native.ops.quantum_coherence_bus_ops import (
 )
 
 # Phase 65/83: Quantum Crystallization
-from highnoon._native.ops.quantum_crystallization_ops import (
+from saguaro._native.ops.quantum_crystallization_ops import (
     crystallize_memory,
     retrieve_from_crystal,
 )
-from highnoon._native.ops.quantum_crystallization_ops import (
+from saguaro._native.ops.quantum_crystallization_ops import (
     ops_available as crystallization_ops_available,
 )
 
 # Phase 47: Quantum Measurement Dropout
-from highnoon._native.ops.quantum_dropout_ops import (
+from saguaro._native.ops.quantum_dropout_ops import (
     entangling_dropout,
     quantum_measurement_dropout,
     soft_quantum_dropout,
 )
-from highnoon._native.ops.quantum_dropout_ops import ops_available as dropout_ops_available
+from saguaro._native.ops.quantum_dropout_ops import ops_available as dropout_ops_available
 
 # Quantum Architecture ops (Phases 26-36, 51-52)
-from highnoon._native.ops.quantum_ops import (  # Phase 34: Unitary Residual; Phase 30: Quantum Norm; Phase 29: Unitary Expert; Phase 26: Quantum Embedding; Phase 27: Floquet Position; Phase 33: Quantum LM Head; Phase 32: Grover QSG; Phase 51: Born Rule Loss; Phase 52: Quantum Fidelity Loss
+from saguaro._native.ops.quantum_ops import (  # Phase 34: Unitary Residual; Phase 30: Quantum Norm; Phase 29: Unitary Expert; Phase 26: Quantum Embedding; Phase 27: Floquet Position; Phase 33: Quantum LM Head; Phase 32: Grover QSG; Phase 51: Born Rule Loss; Phase 52: Quantum Fidelity Loss
     born_rule_loss,
     born_rule_loss_available,
     floquet_position_encoding_forward,
@@ -194,20 +194,20 @@ from highnoon._native.ops.quantum_ops import (  # Phase 34: Unitary Residual; Ph
 )
 
 # Phase 44: Quantum Teleport Bus
-from highnoon._native.ops.quantum_teleport_bus_ops import bell_measurement, quantum_teleport_state
-from highnoon._native.ops.quantum_teleport_bus_ops import (
+from saguaro._native.ops.quantum_teleport_bus_ops import bell_measurement, quantum_teleport_state
+from saguaro._native.ops.quantum_teleport_bus_ops import (
     ops_available as teleport_bus_ops_available,
 )
 
 # Selective scan (Mamba) operation
-from highnoon._native.ops.selective_scan_op import (
+from saguaro._native.ops.selective_scan_op import (
     SELECTIVE_SCAN_CACHE_MAX_SEQ_LEN,
     selective_scan,
     selective_scan_available,
 )
 
 # Specialized Quantum Ops (Phases 50, 55-58, 64, 68, 70, 72, 78)
-from highnoon._native.ops.specialized_quantum_ops import (
+from saguaro._native.ops.specialized_quantum_ops import (
     majorana_position_encode,
     mpqr_reasoning,
     multi_stage_hamiltonian,
@@ -219,10 +219,10 @@ from highnoon._native.ops.specialized_quantum_ops import (
     teleport_gradients,
     topological_wavelet_attention,
 )
-from highnoon._native.ops.specialized_quantum_ops import ops_available as specialized_ops_available
+from saguaro._native.ops.specialized_quantum_ops import ops_available as specialized_ops_available
 
 # Train step operation
-from highnoon._native.ops.train_step import (
+from saguaro._native.ops.train_step import (
     fused_train_step,
     train_step_available,
     train_step_diagnostics,
@@ -230,8 +230,8 @@ from highnoon._native.ops.train_step import (
 )
 
 # Phase 62: VQEM Error Mitigation
-from highnoon._native.ops.vqem_ops import create_vqem_params, vqem_forward, vqem_train_step
-from highnoon._native.ops.vqem_ops import ops_available as vqem_ops_available
+from saguaro._native.ops.vqem_ops import create_vqem_params, vqem_forward, vqem_train_step
+from saguaro._native.ops.vqem_ops import ops_available as vqem_ops_available
 
 __all__ = [
     # Utility

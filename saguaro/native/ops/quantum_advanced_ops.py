@@ -1,4 +1,4 @@
-# highnoon/_native/ops/quantum_advanced_ops.py
+# saguaro/_native/ops/quantum_advanced_ops.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 """Python wrappers for Quantum Advanced C++ operations (Phases 73, 79, 80, 84).
 
@@ -11,8 +11,8 @@ import logging
 
 import tensorflow as tf
 
-from highnoon import config
-from highnoon._native.ops.lib_loader import resolve_op_library
+from saguaro import config
+from saguaro._native.ops.lib_loader import resolve_op_library
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ def _load_ops():
     if _module is not None:
         return _available
     try:
-        lib_path = resolve_op_library(__file__, "_highnoon_core.so")
+        lib_path = resolve_op_library(__file__, "_saguaro_core.so")
         _module = tf.load_op_library(lib_path)
         _available = True
     except Exception as e:

@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_tensor_layers_op.py
+# saguaro/_native/ops/fused_tensor_layers_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native import get_op
+from saguaro._native import get_op
 
 logger = logging.getLogger(__name__)
 

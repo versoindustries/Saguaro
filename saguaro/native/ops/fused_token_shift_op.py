@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_token_shift_op.py
+# saguaro/_native/ops/fused_token_shift_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -18,7 +18,7 @@
 This module provides a Python interface to the SIMD-optimized C++
 implementation of RWKV-6 style data-dependent token shifting.
 
-The C++ kernel is loaded from the consolidated _highnoon_core.so binary.
+The C++ kernel is loaded from the consolidated _saguaro_core.so binary.
 NO PYTHON FALLBACK - this op requires the native binary.
 
 The gate projection (input @ gate_kernel + gate_bias) is computed in Python
@@ -26,7 +26,7 @@ using TensorFlow's optimized einsum, then passed to the C++ kernel which
 handles sigmoid, learned decay, and token mixing with SIMD optimization.
 
 Example:
-    >>> from highnoon._native.ops.fused_token_shift_op import fused_token_shift
+    >>> from saguaro._native.ops.fused_token_shift_op import fused_token_shift
     >>> output = fused_token_shift(
     ...     input_tensor, prev_input,
     ...     gate_kernel, gate_bias, decay_weights,
@@ -40,7 +40,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native import get_op
+from saguaro._native import get_op
 
 logger = logging.getLogger(__name__)
 
@@ -49,7 +49,7 @@ _lib = get_op("fused_token_shift")
 if _lib is None:
     raise ImportError(
         "FusedTokenShift C++ op not available. "
-        "Build native ops with: cd highnoon/_native && ./build_secure.sh"
+        "Build native ops with: cd saguaro/_native && ./build_secure.sh"
     )
 
 _fused_token_shift_op = _lib.fused_token_shift

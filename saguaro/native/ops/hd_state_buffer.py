@@ -1,4 +1,4 @@
-# highnoon/_native/ops/hd_state_buffer.py
+# saguaro/_native/ops/hd_state_buffer.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -42,9 +42,9 @@ def _load_native_ops():
         return _native_available
 
     try:
-        from highnoon._native import load_highnoon_core
+        from saguaro._native import load_saguaro_core
 
-        _native_ops = load_highnoon_core()
+        _native_ops = load_saguaro_core()
         _native_available = hasattr(_native_ops, "hd_state_encode") or hasattr(
             _native_ops, "HDStateEncode"
         )

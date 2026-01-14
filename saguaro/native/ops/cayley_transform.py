@@ -1,4 +1,4 @@
-# highnoon/_native/ops/cayley_transform.py
+# saguaro/_native/ops/cayley_transform.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -27,7 +27,7 @@ from typing import Tuple
 
 import tensorflow as tf
 
-from highnoon._native.ops.lib_loader import get_highnoon_core_path
+from saguaro._native.ops.lib_loader import get_saguaro_core_path
 
 logger = logging.getLogger(__name__)
 
@@ -36,7 +36,7 @@ _lib = None
 _ops_available = False
 
 try:
-    _lib_path = get_highnoon_core_path()
+    _lib_path = get_saguaro_core_path()
     _lib = tf.load_op_library(_lib_path)
     if hasattr(_lib, 'CayleyDenseForward'):
         _ops_available = True
@@ -127,7 +127,7 @@ def cayley_dense_forward(
     if not _ops_available:
         raise RuntimeError(
             "CayleyDense C++ ops not available. "
-            "Build the native library: cd highnoon/_native && ./build_secure.sh --debug --lite"
+            "Build the native library: cd saguaro/_native && ./build_secure.sh --debug --lite"
         )
 
     # Ensure tensors are the right type
@@ -186,7 +186,7 @@ def cayley_dense_backward(
     if not _ops_available:
         raise RuntimeError(
             "CayleyDense C++ ops not available. "
-            "Build the native library: cd highnoon/_native && ./build_secure.sh --debug --lite"
+            "Build the native library: cd saguaro/_native && ./build_secure.sh --debug --lite"
         )
 
     if proj_weight is None:

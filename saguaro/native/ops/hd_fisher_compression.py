@@ -18,7 +18,7 @@ VQC-HD Integration Enhancement #1: Compress layer-wise Fisher information
 using holographic bundling before encoding into VQC qubit angles.
 
 Example:
-    >>> from highnoon._native.ops.hd_fisher_compression import hd_fisher_compress
+    >>> from saguaro._native.ops.hd_fisher_compression import hd_fisher_compress
     >>> fisher = tf.constant([0.1, 0.5, 0.3, 0.8])  # 4 layers
     >>> pos_keys = tf.random.uniform([4, 4096])
     >>> proj = tf.random.uniform([4096, 64])
@@ -46,7 +46,7 @@ def _load_native_ops() -> bool:
     try:
         import tensorflow as tf
 
-        from highnoon._native.ops.lib_loader import get_consolidated_library
+        from saguaro._native.ops.lib_loader import get_consolidated_library
 
         lib_path = get_consolidated_library()
         if lib_path is not None:

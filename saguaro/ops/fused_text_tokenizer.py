@@ -203,7 +203,6 @@ def fused_text_tokenize(
         byte_offset=byte_offset,
         add_special_tokens=add_special_tokens,
         max_length=max_length,
-        inject_thinking=inject_thinking,
     )
 
 
@@ -243,7 +242,6 @@ def fused_text_tokenize_batch(
         add_special_tokens=add_special_tokens,
         max_length=max_length,
         num_threads=num_threads,
-        inject_thinking=inject_thinking,
     )
 
 

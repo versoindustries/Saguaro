@@ -1,4 +1,4 @@
-# highnoon/_native/ops/circular_conv_op.py
+# saguaro/_native/ops/circular_conv_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -40,7 +40,7 @@ def _get_circular_conv_op():
     """Lazy-load the circular convolution C++ op."""
     global _circular_conv_op
     if _circular_conv_op is None:
-        from highnoon._native import get_op
+        from saguaro._native import get_op
         _circular_conv_op = get_op("circular_conv")
     return _circular_conv_op
 
@@ -76,7 +76,7 @@ def circular_convolution_native(
     if op is None or not hasattr(op, "CircularConvForward"):
         raise NotImplementedError(
             "CircularConvForward C++ op not available. "
-            "Compile with: cd highnoon/_native && ./build_secure.sh"
+            "Compile with: cd saguaro/_native && ./build_secure.sh"
         )
 
     if hd_dim is None:

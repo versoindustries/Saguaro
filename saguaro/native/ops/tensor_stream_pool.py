@@ -1,5 +1,5 @@
 """
-highnoon/_native/ops/tensor_stream_pool.py
+saguaro/_native/ops/tensor_stream_pool.py
 Python wrapper for TensorStreamPool zero-copy inter-kernel streaming.
 
 This module provides a Pythonic interface to the TensorStreamPool C++ ops
@@ -12,8 +12,8 @@ import logging
 import tensorflow as tf
 from typing import Dict, Any
 
-from highnoon._native import get_op
-from highnoon.config import TENSOR_STREAM_DEBUG
+from saguaro._native import get_op
+from saguaro.config import TENSOR_STREAM_DEBUG
 
 logger = logging.getLogger(__name__)
 
@@ -25,7 +25,7 @@ def _get_ops():
     """Lazy load the tensor stream pool ops."""
     global _ops_module
     if _ops_module is None:
-        _ops_module = get_op("highnoon_core")
+        _ops_module = get_op("saguaro_core")
         if _ops_module is None:
             raise ImportError(
                 "TensorStreamPool ops not available. "

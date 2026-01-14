@@ -21,21 +21,31 @@ message(STATUS "SAGUARO Build: Enforcing HN_EDITION=2 (Enterprise/No Caps)")
 # =============================================================================
 find_package(Python3 REQUIRED COMPONENTS Interpreter)
 
+# Get TensorFlow paths - filter cv2 pollution by extracting last line only
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} -c "import tensorflow as tf; print(tf.sysconfig.get_include())"
-    OUTPUT_VARIABLE TF_INCLUDE_DIR
+    COMMAND ${Python3_EXECUTABLE} -I -c "import tensorflow as tf; print(tf.sysconfig.get_include())"
+    OUTPUT_VARIABLE RAW_TF_INCLUDE_DIR
     OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
 )
+# Extract last line only (filters any stdout pollution from cv2/other packages)
+string(REGEX REPLACE ".*\n" "" TF_INCLUDE_DIR "${RAW_TF_INCLUDE_DIR}")
+
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} -c "import tensorflow as tf; print(' '.join(tf.sysconfig.get_compile_flags()))"
-    OUTPUT_VARIABLE TF_CFLAGS
+    COMMAND ${Python3_EXECUTABLE} -I -c "import tensorflow as tf; print(' '.join(tf.sysconfig.get_compile_flags()))"
+    OUTPUT_VARIABLE RAW_TF_CFLAGS
     OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
 )
+string(REGEX REPLACE ".*\n" "" TF_CFLAGS "${RAW_TF_CFLAGS}")
+
 execute_process(
-    COMMAND ${Python3_EXECUTABLE} -c "import tensorflow as tf; print(' '.join(tf.sysconfig.get_link_flags()))"
-    OUTPUT_VARIABLE TF_LFLAGS
+    COMMAND ${Python3_EXECUTABLE} -I -c "import tensorflow as tf; print(' '.join(tf.sysconfig.get_link_flags()))"
+    OUTPUT_VARIABLE RAW_TF_LFLAGS
     OUTPUT_STRIP_TRAILING_WHITESPACE
+    ERROR_QUIET
 )
+string(REGEX REPLACE ".*\n" "" TF_LFLAGS "${RAW_TF_LFLAGS}")
 
 message(STATUS "TF Include: ${TF_INCLUDE_DIR}")
 

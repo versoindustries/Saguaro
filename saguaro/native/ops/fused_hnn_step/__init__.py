@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_hnn_step/__init__.py
+# saguaro/_native/ops/fused_hnn_step/__init__.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,7 +36,7 @@ _native_op = None
 _load_error: str | None = None
 
 try:
-    from highnoon._native import get_op, is_native_available
+    from saguaro._native import get_op, is_native_available
 
     if is_native_available():
         try:
@@ -94,7 +94,7 @@ def _fused_hnn_step_grad(op: tf.Operation, *grads):
     if _op_module is None or not hasattr(_op_module, "fused_hnn_step_grad"):
         raise RuntimeError(
             "FusedHNNStepGrad C++ op not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh --debug --lite"
+            "cd saguaro/_native && ./build_secure.sh --debug --lite"
         )
 
     # Get inputs from forward op

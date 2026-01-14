@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_moe_dispatch_op.py
+# saguaro/_native/ops/fused_moe_dispatch_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -33,7 +33,7 @@ fused_moe_dispatch_grad_op = None
 
 try:
     # Try consolidated binary first via parent module
-    from highnoon._native import get_op
+    from saguaro._native import get_op
 
     _fused_moe_dispatch_module = get_op("fused_moe_dispatch")
 

@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_superposition_slots_op.py
+# saguaro/_native/ops/fused_superposition_slots_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -36,13 +36,13 @@ _collapse_read_grad_op: tf.Operation | None = None
 _write_op: tf.Operation | None = None
 
 try:
-    from highnoon._native import _load_consolidated_binary
+    from saguaro._native import _load_consolidated_binary
 
-    _highnoon_core = _load_consolidated_binary()
-    if _highnoon_core is not None:
-        _collapse_read_op = _highnoon_core.superposition_collapse_read
-        _collapse_read_grad_op = _highnoon_core.superposition_collapse_read_grad
-        _write_op = _highnoon_core.superposition_write
+    _saguaro_core = _load_consolidated_binary()
+    if _saguaro_core is not None:
+        _collapse_read_op = _saguaro_core.superposition_collapse_read
+        _collapse_read_grad_op = _saguaro_core.superposition_collapse_read_grad
+        _write_op = _saguaro_core.superposition_write
         logger.debug("Superposition slots C++ ops loaded successfully.")
     else:
         logger.warning(
@@ -96,7 +96,7 @@ def superposition_collapse_read(
     if _collapse_read_op is None:
         raise RuntimeError(
             "Superposition collapse C++ op not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     return _collapse_read_with_gradient(
@@ -140,7 +140,7 @@ def _collapse_read_with_gradient(
             if _collapse_read_grad_op is None:
                 raise RuntimeError(
                     "Superposition collapse grad C++ op not available. Build with: "
-                    "cd highnoon/_native && ./build_secure.sh"
+                    "cd saguaro/_native && ./build_secure.sh"
                 )
             grads = _collapse_read_grad_op(
                 grad_collapsed=grad_output,
@@ -186,7 +186,7 @@ def superposition_write(
     if _write_op is None:
         raise RuntimeError(
             "Superposition write C++ op not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     return _write_op(

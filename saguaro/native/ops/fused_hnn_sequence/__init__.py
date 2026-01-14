@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_hnn_sequence/__init__.py
+# saguaro/_native/ops/fused_hnn_sequence/__init__.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ This module provides the Python interface to the FusedHNNSequence custom TensorF
 operation, which efficiently computes Hamiltonian Neural Network sequence dynamics
 using Yoshida 4th-order symplectic integration.
 
-The operation is compiled into _highnoon_core.so and loaded via the native loader.
+The operation is compiled into _saguaro_core.so and loaded via the native loader.
 """
 
 import logging
@@ -44,11 +44,11 @@ def _ensure_loaded():
     _load_attempted = True
 
     try:
-        from highnoon._native import _load_consolidated_binary
+        from saguaro._native import _load_consolidated_binary
 
         _native_op_module = _load_consolidated_binary()
         if _native_op_module is not None and hasattr(_native_op_module, "fused_hnn_sequence"):
-            logger.info("Loaded FusedHNNSequence from _highnoon_core.so")
+            logger.info("Loaded FusedHNNSequence from _saguaro_core.so")
             return _native_op_module
     except ImportError:
         pass
@@ -83,7 +83,7 @@ def _fused_hnn_sequence_grad(op: tf.Operation, *grads):
     if native_module is None or not hasattr(native_module, "fused_hnn_sequence_grad"):
         raise RuntimeError(
             "FusedHNNSequenceGrad C++ op not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     # Get inputs from forward op
@@ -167,7 +167,7 @@ def fused_hnn_sequence(
     if native_module is None or not hasattr(native_module, "fused_hnn_sequence"):
         raise RuntimeError(
             "FusedHNNSequence C++ op not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     return native_module.fused_hnn_sequence(

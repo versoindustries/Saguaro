@@ -1,4 +1,4 @@
-# highnoon/_native/__init__.py
+# saguaro/_native/__init__.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Native binary loader and license validation for HighNoon Language Framework.
+"""Native binary loader and license validation for Saguaro Language Framework.
 
 This module handles loading of compiled C++ TensorFlow operations and validates
 the binary chain authentication to prevent tampering.
@@ -25,9 +25,9 @@ Binary Structure (Consolidated Build):
     _native/
     ├── bin/
     │   ├── x86_64/              # Linux x86_64 binaries
-    │   │   └── _highnoon_core.so  # Single consolidated binary
+    │   │   └── _saguaro_core.so  # Single consolidated binary
     │   └── arm64/               # Linux arm64 binaries
-    │       └── _highnoon_core.so
+    │       └── _saguaro_core.so
     └── ops/                     # C++ source files (for reference)
         └── ...
 
@@ -67,7 +67,7 @@ _NATIVE_DIR = Path(__file__).parent.absolute()
 _BIN_DIR = _NATIVE_DIR / "bin" / _ARCH_DIR
 
 # Core binary name (consolidated binary)
-_CORE_BINARY_NAME = "_highnoon_core.so"
+_CORE_BINARY_NAME = "_saguaro_core.so"
 
 # Thread-safe singleton for consolidated binary
 _consolidated_binary_lock = threading.Lock()
@@ -84,7 +84,7 @@ def _find_core_binary() -> Path | None:
     """Find the consolidated core binary.
 
     Returns:
-        Path to _highnoon_core.so if found, None otherwise.
+        Path to _saguaro_core.so if found, None otherwise.
     """
     # 1. Check standard bin directory
     core_path = _BIN_DIR / _CORE_BINARY_NAME
@@ -105,7 +105,7 @@ def _find_op_binary(op_name: str) -> Path | None:
     First checks for consolidated binary, then falls back to individual binaries.
 
     Searches in order:
-    1. _highnoon_core.so (consolidated binary with all ops)
+    1. _saguaro_core.so (consolidated binary with all ops)
     2. _<op_name>.so (legacy individual binary)
     3. _<op_name>.<arch>.so (arch-specific)
     4. _<op_name>_op.so (op suffix format)
@@ -146,7 +146,7 @@ def resolve_op_library(caller_file: str, library_name: str) -> str:
 
     Args:
         caller_file: __file__ from the calling module (used for relative path resolution).
-        library_name: Name of the library file (e.g., '_highnoon_core.so').
+        library_name: Name of the library file (e.g., '_saguaro_core.so').
 
     Returns:
         Absolute path to the library file (may not exist).
@@ -162,7 +162,7 @@ def _export_native_config_flags() -> None:
     kernel timing, and work-stealing MoE dispatch. Must be called
     before loading the native library.
     """
-    from highnoon import config
+    from saguaro import config
 
     # Memory allocation flags
     if hasattr(config, "USE_NUMA_ALLOCATION"):
@@ -184,7 +184,7 @@ def _export_native_config_flags() -> None:
 def _load_consolidated_binary() -> Any | None:
     """Load the consolidated core binary (singleton).
 
-    Thread-safe loading of the single _highnoon_core.so binary
+    Thread-safe loading of the single _saguaro_core.so binary
     containing all native ops.
 
     Returns:
@@ -353,7 +353,7 @@ def list_available_ops() -> list[str]:
             for suffix in [f".{_ARCH_DIR}", "_op"]:
                 if name.endswith(suffix):
                     name = name[: -len(suffix)]
-            if name not in ops and name != "highnoon_core":
+            if name not in ops and name != "saguaro_core":
                 ops.append(name)
     return sorted(ops)
 
@@ -371,7 +371,7 @@ def is_consolidated_available() -> bool:
     """Check if consolidated binary is available.
 
     Returns:
-        True if _highnoon_core.so is present.
+        True if _saguaro_core.so is present.
     """
     return _find_core_binary() is not None
 
@@ -429,7 +429,7 @@ def check_enterprise_license(domain: str) -> bool:
     Returns:
         True if the domain is accessible, False if locked.
     """
-    from highnoon._native._limits import check_enterprise_license as _check
+    from saguaro._native._limits import check_enterprise_license as _check
 
     return _check(domain)
 
@@ -516,8 +516,8 @@ def load_text_tokenizer():
     return get_op("fused_text_tokenizer")
 
 
-def load_highnoon_core():
-    """Load the consolidated HighNoon core binary.
+def load_saguaro_core():
+    """Load the consolidated Saguaro core binary.
     
     This is the preferred way to access native ops. Returns the loaded
     TensorFlow module containing all operations.
@@ -532,7 +532,7 @@ def load_highnoon_core():
 _edition = get_edition().upper()
 _native_avail = "available" if is_native_available() else "not found"
 _consolidated_avail = "consolidated" if is_consolidated_available() else "individual"
-log.info(f"HighNoon Language Framework - {_edition} Edition")
+log.info(f"Saguaro Language Framework - {_edition} Edition")
 log.info(f"Platform: {_PLATFORM}/{_ARCH}, Native ops: {_native_avail} ({_consolidated_avail})")
 
 __all__ = [
@@ -561,6 +561,6 @@ __all__ = [
     "load_ssd",
     "load_continuous_thought",
     "load_text_tokenizer",
-    "load_highnoon_core",
+    "load_saguaro_core",
 ]
 
