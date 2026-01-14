@@ -110,7 +110,9 @@ def structured_sparse_matmul(
     ) -> tuple[tuple[tf.Tensor, ...], list[tf.Tensor | None]]:
         """Gradient function that calls the custom C++ backward kernel."""
         if structured_sparse_matmul_grad_op is None:
-            raise NotImplementedError("The C++ StructuredSparseMatmulGrad operator is unavailable.")
+            raise NotImplementedError(
+                "The C++ StructuredSparseMatmulGrad operator is unavailable."
+            )
 
         grads = structured_sparse_matmul_grad_op(
             grad_output,
@@ -123,7 +125,7 @@ def structured_sparse_matmul(
 
         # Returns gradients for: matrix_diagonals, vector (None for structure, lower_bands, upper_bands)
         input_grads = (grads[0], grads[1], None, None, None)
-        
+
         # GRADIENT FIX: Map C++ gradient outputs to tf.Variables by name pattern
         # Instead of returning [None] * len(variables) which zeros out all gradients
         if variables is not None and len(variables) > 0:
@@ -131,9 +133,9 @@ def structured_sparse_matmul(
             variable_grads_list = []
             for v in variables:
                 name = v.name.lower()
-                if 'diagonal' in name or 'matrix' in name:
+                if "diagonal" in name or "matrix" in name:
                     variable_grads_list.append(grads[0])
-                elif 'vector' in name:
+                elif "vector" in name:
                     variable_grads_list.append(grads[1])
                 else:
                     variable_grads_list.append(None)

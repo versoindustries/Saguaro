@@ -42,14 +42,16 @@ def _mps_contract_with_gradient(
     # CRITICAL: Pass compute_entropy and truncation_threshold as KEYWORD ARGUMENTS (op attributes),
     # not positional arguments. Positional arguments become input tensors; keyword arguments
     # become op attributes which must be Python literals (bool/float).
-    contracted_state, entanglement_entropies, log_norm = _mps_contract_module.mps_contract(
-        mps_tensors,
-        physical_dims,
-        bond_dims,
-        max_bond_dim,
-        compute_entropy=compute_entropy_bool,  # Op attribute (keyword)
-        truncation_threshold=truncation_threshold_float,  # Op attribute (keyword)
-        uniform=uniform_bool,  # Op attribute (keyword)
+    contracted_state, entanglement_entropies, log_norm = (
+        _mps_contract_module.mps_contract(
+            mps_tensors,
+            physical_dims,
+            bond_dims,
+            max_bond_dim,
+            compute_entropy=compute_entropy_bool,  # Op attribute (keyword)
+            truncation_threshold=truncation_threshold_float,  # Op attribute (keyword)
+            uniform=uniform_bool,  # Op attribute (keyword)
+        )
     )
 
     def grad_fn(grad_state, grad_entropies, grad_log_norm, variables=None):
@@ -86,7 +88,15 @@ def _mps_contract_with_gradient(
         # When variables is provided, return (input_grads, variable_grads)
         # Input grads: None for MPS tensors (since they're tracked as variables)
         #              None for other inputs (not differentiable)
-        input_grads = [None] * len(grad_list) + [None, None, None, None, None, None, None]
+        input_grads = [None] * len(grad_list) + [
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+            None,
+        ]
         variable_grads = grad_list  # Gradients for the variables
 
         return input_grads, variable_grads
@@ -154,7 +164,7 @@ def mps_contract(
         tf.size(physical_dims), N, message=f"physical_dims must have {N} elements"
     )
     tf.debugging.assert_equal(
-        tf.size(bond_dims), N + 1, message=f"bond_dims must have {N+1} elements"
+        tf.size(bond_dims), N + 1, message=f"bond_dims must have {N + 1} elements"
     )
 
     # Ensure all MPS tensors are float32
@@ -309,13 +319,17 @@ def mps_expect(mps_tensors, operator, physical_dims, bond_dims, max_bond_dim):
             mps_tensors, operator, physical_dims, bond_dims, max_bond_dim
         )
 
-    return _mps_expect_python(mps_tensors, operator, physical_dims, bond_dims, max_bond_dim)
+    return _mps_expect_python(
+        mps_tensors, operator, physical_dims, bond_dims, max_bond_dim
+    )
 
 
 def _mps_expect_python(mps_tensors, operator, physical_dims, bond_dims, max_bond_dim):
     """Python fallback for expectation value computation."""
     # Contract MPS to full state using specialized function that avoids graph mode issues
-    state, _ = _mps_contract_no_entropy(mps_tensors, physical_dims, bond_dims, max_bond_dim)
+    state, _ = _mps_contract_no_entropy(
+        mps_tensors, physical_dims, bond_dims, max_bond_dim
+    )
 
     # Compute norm: <psi|psi>
     state_conj = tf.math.conj(state)
@@ -354,7 +368,9 @@ def _mps_expect_with_gradient(
 
     def grad_fn(grad_out, variables=None):
         # Recompute state to build gradients via the native contract gradient.
-        state, _ = _mps_contract_no_entropy(mps_tensors, physical_dims, bond_dims, max_bond_dim)
+        state, _ = _mps_contract_no_entropy(
+            mps_tensors, physical_dims, bond_dims, max_bond_dim
+        )
         state = tf.cast(state, tf.float32)
         op_state = tf.linalg.matvec(operator, state)
         op_state_t = tf.linalg.matvec(tf.transpose(operator), state)
@@ -363,9 +379,9 @@ def _mps_expect_with_gradient(
         denom = norm_squared + 1e-10
         expectation_unnorm = tf.reduce_sum(state * op_state)
 
-        grad_state = ((op_state + op_state_t) * denom - 2.0 * expectation_unnorm * state) / (
-            denom * denom
-        )
+        grad_state = (
+            (op_state + op_state_t) * denom - 2.0 * expectation_unnorm * state
+        ) / (denom * denom)
         grad_state = tf.cast(grad_state, tf.float32) * tf.cast(grad_out, tf.float32)
 
         grad_mps_list = _mps_contract_module.mps_contract_grad(
@@ -456,11 +472,15 @@ def canonical_mps(mps_tensors, physical_dims, bond_dims, center_site=None):
         q, r = tf.linalg.qr(mat_t)
 
         # Store right-orthogonal tensor
-        canonical_tensors[i] = tf.reshape(tf.transpose(q), [bond_left, phys, bond_right])
+        canonical_tensors[i] = tf.reshape(
+            tf.transpose(q), [bond_left, phys, bond_right]
+        )
 
         # Absorb R into previous tensor
         if i > 0:
-            mps_tensors[i - 1] = tf.einsum("ijk,kl->ijl", mps_tensors[i - 1], tf.transpose(r))
+            mps_tensors[i - 1] = tf.einsum(
+                "ijk,kl->ijl", mps_tensors[i - 1], tf.transpose(r)
+            )
 
     # Center site
     canonical_tensors[center_site] = mps_tensors[center_site]
@@ -482,7 +502,9 @@ def mps_expect_pauli(mps_tensors, pauli_indices, coefficients):
         expectation: Scalar float32 tensor
     """
     len(mps_tensors)
-    return _mps_contract_module.mps_expect_pauli(mps_tensors, pauli_indices, coefficients)
+    return _mps_contract_module.mps_expect_pauli(
+        mps_tensors, pauli_indices, coefficients
+    )
 
 
 def mps_feature_importance(entanglement_entropies):
@@ -501,7 +523,12 @@ def mps_feature_importance(entanglement_entropies):
 
 
 def mps_trotter_step(
-    mps_tensors, gate_sites, gates_real, gates_imag, max_bond_dim, truncation_threshold=1e-10
+    mps_tensors,
+    gate_sites,
+    gates_real,
+    gates_imag,
+    max_bond_dim,
+    truncation_threshold=1e-10,
 ):
     """
     Apply a set of two-site gates to an MPS (Trotter step).
@@ -520,7 +547,12 @@ def mps_trotter_step(
     len(mps_tensors)
     len(gates_real)
     return _mps_contract_module.mps_trotter_step(
-        mps_tensors, gate_sites, gates_real, gates_imag, max_bond_dim, truncation_threshold
+        mps_tensors,
+        gate_sites,
+        gates_real,
+        gates_imag,
+        max_bond_dim,
+        truncation_threshold,
     )
 
 

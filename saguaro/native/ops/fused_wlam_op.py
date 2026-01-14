@@ -109,7 +109,8 @@ def fused_wlam(
     """
     if _fused_wlam_op is None:
         raise RuntimeError(
-            "FusedWLAM C++ op not available. Build with: " "cd saguaro/_native && ./build_ops.sh"
+            "FusedWLAM C++ op not available. Build with: "
+            "cd saguaro/_native && ./build_ops.sh"
         )
 
     embed_dim = x.shape[-1] if x.shape[-1] is not None else 64
@@ -209,12 +210,23 @@ def fused_wlam(
             # For simplified backward, use small placeholders when streaming is enabled
             if streaming_chunk_size and streaming_chunk_size > 0:
                 cache_seq = max(1, streaming_chunk_size // 2)
-                low_freq_cache = tf.zeros([batch_size, cache_seq, embed_d], dtype=tf.float32)
-                high_freq_cache = tf.zeros([batch_size, cache_seq, embed_d], dtype=tf.float32)
-                residual_cache = tf.zeros([batch_size, max(1, streaming_chunk_size), embed_d], dtype=tf.float32)
+                low_freq_cache = tf.zeros(
+                    [batch_size, cache_seq, embed_d], dtype=tf.float32
+                )
+                high_freq_cache = tf.zeros(
+                    [batch_size, cache_seq, embed_d], dtype=tf.float32
+                )
+                residual_cache = tf.zeros(
+                    [batch_size, max(1, streaming_chunk_size), embed_d],
+                    dtype=tf.float32,
+                )
             else:
-                low_freq_cache = tf.zeros([batch_size, half_seq, embed_d], dtype=tf.float32)
-                high_freq_cache = tf.zeros([batch_size, half_seq, embed_d], dtype=tf.float32)
+                low_freq_cache = tf.zeros(
+                    [batch_size, half_seq, embed_d], dtype=tf.float32
+                )
+                high_freq_cache = tf.zeros(
+                    [batch_size, half_seq, embed_d], dtype=tf.float32
+                )
                 residual_cache = x_in + output  # Approximate residual
 
             grads = _fused_wlam_grad_op(

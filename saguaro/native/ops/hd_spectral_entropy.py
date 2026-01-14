@@ -183,7 +183,9 @@ def hd_spectral_entropy_with_grad(
 
     def grad(upstream):
         if _load_native_ops():
-            return _native_ops.HDSpectralEntropyGrad(hidden_states, upstream, epsilon=epsilon), None
+            return _native_ops.HDSpectralEntropyGrad(
+                hidden_states, upstream, epsilon=epsilon
+            ), None
 
         # TensorFlow gradient via automatic differentiation
         with tf.GradientTape() as tape:

@@ -35,7 +35,7 @@ import tensorflow as tf
 
 # Phase 4.2: Suppress false-positive complex casting warnings
 # The FFT->real extraction is mathematically correct but triggers TF warnings
-warnings.filterwarnings('ignore', message='.*casting.*complex.*float.*')
+warnings.filterwarnings("ignore", message=".*casting.*complex.*float.*")
 
 logger = logging.getLogger(__name__)
 

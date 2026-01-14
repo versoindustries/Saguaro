@@ -72,7 +72,9 @@ def unified_quantum_ops_available() -> bool:
 # =============================================================================
 
 
-def holographic_bind(a: tf.Tensor, b: tf.Tensor, name: str = "holographic_bind") -> tf.Tensor:
+def holographic_bind(
+    a: tf.Tensor, b: tf.Tensor, name: str = "holographic_bind"
+) -> tf.Tensor:
     """Holographic binding via circular convolution (FFT-based).
 
     Binds two vectors using circular convolution:
@@ -202,7 +204,9 @@ def thermodynamic_route(
             "cd saguaro/_native && ./build_secure.sh"
         )
 
-    return _lib.high_noon_thermodynamic_route(logits, temperature=temperature, name=name)
+    return _lib.high_noon_thermodynamic_route(
+        logits, temperature=temperature, name=name
+    )
 
 
 # =============================================================================
@@ -239,7 +243,10 @@ def orthogonalize_keys(
 
 
 def qsvt_activation(
-    x: tf.Tensor, coefficients: tf.Tensor, degree: int = 8, name: str = "qsvt_activation"
+    x: tf.Tensor,
+    coefficients: tf.Tensor,
+    degree: int = 8,
+    name: str = "qsvt_activation",
 ) -> tf.Tensor:
     """QSVT-inspired activation via Chebyshev polynomial approximation.
 
@@ -613,7 +620,9 @@ class UnifiedQuantumEnhancements(tf.keras.layers.Layer):
             # Average over sequence for dynamics
             x_mean = tf.reduce_mean(x, axis=1)
             grad_h_mean = tf.reduce_mean(grad_h, axis=1)
-            x_evolved = port_hamiltonian_step(x_mean, j_matrix, r_matrix, grad_h_mean, dt=0.01)
+            x_evolved = port_hamiltonian_step(
+                x_mean, j_matrix, r_matrix, grad_h_mean, dt=0.01
+            )
             # Residual connection
             x = x + tf.expand_dims(x_evolved - x_mean, axis=1)
 
@@ -622,7 +631,9 @@ class UnifiedQuantumEnhancements(tf.keras.layers.Layer):
             # Normalize to [-1, 1] range for Chebyshev
             # GRADIENT FIX: Add epsilon to prevent NaN/Inf gradients when norm → 0
             x_norm = tf.nn.l2_normalize(x, axis=-1, epsilon=1e-8)
-            x_activated = qsvt_activation(x_norm, self.qsvt_coefficients, degree=self.qsvt_degree)
+            x_activated = qsvt_activation(
+                x_norm, self.qsvt_coefficients, degree=self.qsvt_degree
+            )
             x = x + 0.1 * x_activated  # Residual with small scaling
 
         if return_aux:

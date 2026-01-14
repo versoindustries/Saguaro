@@ -5,6 +5,7 @@ import os
 import shutil
 from saguaro.benchmarks.runner import BenchmarkRunner
 
+
 class TestBenchmarkRunner(unittest.TestCase):
     def setUp(self):
         self.test_dir = tempfile.mkdtemp()
@@ -27,6 +28,7 @@ class TestBenchmarkRunner(unittest.TestCase):
         results = runner.run()
         self.assertEqual(results["dataset"], "custom")
         self.assertEqual(results["total_queries"], 1)
+
 
 if __name__ == "__main__":
     unittest.main()

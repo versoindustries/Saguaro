@@ -1,15 +1,18 @@
 from typing import List
 
+
 class HardNegativeMiner:
     """
     Identifies and stores 'Hard Negatives': results that had high similarity
     scores but were rejected/ignored by the user.
     """
-    
+
     def __init__(self):
         self.negatives_db = []
 
-    def log_negatives(self, query: str, returned_ids: List[str], accepted_ids: List[str]):
+    def log_negatives(
+        self, query: str, returned_ids: List[str], accepted_ids: List[str]
+    ):
         """
         Finds and stores items that looked relevant but were ignored.
         """

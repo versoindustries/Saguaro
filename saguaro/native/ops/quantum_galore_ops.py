@@ -48,14 +48,16 @@ try:
         _native_lib = _load_consolidated_binary()
         if _native_lib is not None:
             # Check if the ops are accessible via the library module
-            _NATIVE_OPS_AVAILABLE = hasattr(_native_lib, "quantum_galore_project") or hasattr(
-                _native_lib, "compute_effective_rank"
-            )
+            _NATIVE_OPS_AVAILABLE = hasattr(
+                _native_lib, "quantum_galore_project"
+            ) or hasattr(_native_lib, "compute_effective_rank")
             if not _NATIVE_OPS_AVAILABLE:
                 # TensorFlow registers ops with snake_case names on the loaded module
                 # Try to detect by looking for any GaLore-related attribute
                 lib_attrs = [
-                    a for a in dir(_native_lib) if "galore" in a.lower() or "rank" in a.lower()
+                    a
+                    for a in dir(_native_lib)
+                    if "galore" in a.lower() or "rank" in a.lower()
                 ]
                 _NATIVE_OPS_AVAILABLE = len(lib_attrs) > 0
             if _NATIVE_OPS_AVAILABLE:
@@ -104,7 +106,9 @@ def _get_op(op_name: str):
         return getattr(_native_lib, pascal_name)
 
     # List available relevant ops for debugging
-    available = [a for a in dir(_native_lib) if op_name.replace("_", "").lower() in a.lower()]
+    available = [
+        a for a in dir(_native_lib) if op_name.replace("_", "").lower() in a.lower()
+    ]
     raise RuntimeError(
         f"[QUANTUM_GALORE] Op '{op_name}' not found in native library. "
         f"Tried: {pascal_name}. Available similar: {available}"

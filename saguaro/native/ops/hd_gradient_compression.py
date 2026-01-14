@@ -58,8 +58,12 @@ try:
 
     _hd_gc_module = get_op("hd_gradient_compression")
     if _hd_gc_module is not None:
-        _hd_gradient_fft_compress = getattr(_hd_gc_module, "HDGradientFFTCompress", None)
-        _hd_gradient_fft_decompress = getattr(_hd_gc_module, "HDGradientFFTDecompress", None)
+        _hd_gradient_fft_compress = getattr(
+            _hd_gc_module, "HDGradientFFTCompress", None
+        )
+        _hd_gradient_fft_decompress = getattr(
+            _hd_gc_module, "HDGradientFFTDecompress", None
+        )
         if _hd_gradient_fft_compress is not None:
             _NATIVE_AVAILABLE = True
             logger.info("Loaded hd_gradient_compression C++ FFT ops")
@@ -282,7 +286,9 @@ class HDGradientCompressor:
         flat_grad = tf.reshape(gradient, [-1, original_dim])
 
         # Compute frequency compression
-        compressed_fft, mask_indices = frequency_topk_mask(flat_grad, effective_bandwidth)
+        compressed_fft, mask_indices = frequency_topk_mask(
+            flat_grad, effective_bandwidth
+        )
 
         # Track stats
         if tf.executing_eagerly():
@@ -390,28 +396,28 @@ class HDGradientCompressor:
 @tf.autograph.experimental.do_not_convert
 def _get_gradient_compressor(bandwidth: int):
     """Get or create a cached gradient compression function for a specific bandwidth.
-    
+
     This function caches the created compression functions to prevent tf.function
     retracing on every call. Each unique bandwidth value gets its own cached function.
-    
+
     The @tf.autograph.experimental.do_not_convert decorator prevents AutoGraph
     from attempting to transform this function, silencing "could not get source code"
     warnings that occur with dynamically loaded C++ ops.
-    
+
     Args:
         bandwidth: Number of frequency components to keep.
-        
+
     Returns:
         A cached function decorated with @tf.custom_gradient that compresses gradients.
     """
     # Check cache first to avoid creating new functions
     if bandwidth in _GRADIENT_COMPRESSOR_CACHE:
         return _GRADIENT_COMPRESSOR_CACHE[bandwidth]
-    
+
     # Create new function for this bandwidth value
     # Capture bandwidth as a closure variable (constant for this function)
     bw = bandwidth  # Capture in closure
-    
+
     @tf.autograph.experimental.do_not_convert
     @tf.custom_gradient
     def compress_gradients(x):
@@ -425,17 +431,18 @@ def _get_gradient_compressor(bandwidth: int):
             else:
                 # Fallback for dynamic shapes - use tf.shape
                 last_dim = tf.shape(dy)[-1]
-            
+
             flat_dy = tf.reshape(dy, [-1, last_dim])
             compressed, indices = frequency_topk_mask(flat_dy, bw)
             reconstructed = frequency_reconstruct(compressed, indices, last_dim)
             return tf.reshape(reconstructed, tf.shape(dy))
+
         return x, grad
-    
+
     # Cache the function
     _GRADIENT_COMPRESSOR_CACHE[bandwidth] = compress_gradients
     logger.debug("[HD_GRADIENT] Cached compressor function for bandwidth=%d", bandwidth)
-    
+
     return compress_gradients
 
 

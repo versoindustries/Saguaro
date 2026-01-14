@@ -12,6 +12,7 @@ from typing import Optional, Dict, Any
 
 logger = logging.getLogger("saguaro.chronicle.storage")
 
+
 class ChronicleStorage:
     def __init__(self, db_path: str = ".saguaro/chronicle.db"):
         self.db_path = db_path
@@ -65,29 +66,32 @@ class ChronicleStorage:
         hd_state_blob: bytes,
         commit_hash: str = "HEAD",
         description: str = "",
-        metadata: Dict[str, Any] = None
+        metadata: Dict[str, Any] = None,
     ) -> int:
         """
         Save a new semantic snapshot of the codebase.
-        
+
         Args:
             hd_state_blob: Serialized bytes of the Hyperdimensional state (Time Crystal)
             commit_hash: Git commit hash associated with this state
             description: Human readable description
             metadata: Additional JSON metadata
-            
+
         Returns:
             id of the inserted snapshot
         """
         timestamp = time.time()
         metadata_json = json.dumps(metadata) if metadata else None
-        
+
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO snapshots (timestamp, commit_hash, description, hd_state_blob, metadata)
                 VALUES (?, ?, ?, ?, ?)
-            """, (timestamp, commit_hash, description, hd_state_blob, metadata_json))
+            """,
+                (timestamp, commit_hash, description, hd_state_blob, metadata_json),
+            )
             snapshot_id = cursor.lastrowid
             conn.commit()
             logger.info(f"Saved snapshot {snapshot_id} for commit {commit_hash}")
@@ -102,7 +106,7 @@ class ChronicleStorage:
             if row:
                 return dict(row)
             return None
-            
+
     def get_latest_snapshot(self) -> Optional[Dict[str, Any]]:
         with self.get_connection() as conn:
             conn.row_factory = sqlite3.Row
@@ -118,13 +122,16 @@ class ChronicleStorage:
         snapshot_id_a: int,
         snapshot_id_b: int,
         drift_score: float,
-        details: str = ""
+        details: str = "",
     ):
         timestamp = time.time()
         with self.get_connection() as conn:
             cursor = conn.cursor()
-            cursor.execute("""
+            cursor.execute(
+                """
                 INSERT INTO drift_logs (timestamp, snapshot_id_a, snapshot_id_b, drift_score, details)
                 VALUES (?, ?, ?, ?, ?)
-            """, (timestamp, snapshot_id_a, snapshot_id_b, drift_score, details))
+            """,
+                (timestamp, snapshot_id_a, snapshot_id_b, drift_score, details),
+            )
             conn.commit()

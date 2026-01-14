@@ -30,7 +30,7 @@ import tensorflow as tf
 
 # Phase 4.2: Suppress false-positive complex casting warnings
 # The FFT->real extraction is mathematically correct but triggers TF warnings
-warnings.filterwarnings('ignore', message='.*casting.*complex.*float.*')
+warnings.filterwarnings("ignore", message=".*casting.*complex.*float.*")
 
 logger = logging.getLogger(__name__)
 
@@ -49,9 +49,9 @@ def _load_native_ops():
 
         lib_path = get_saguaro_core_path()
         _native_ops = tf.load_op_library(lib_path)
-        _native_available = hasattr(_native_ops, "holographic_attention_scores") or hasattr(
-            _native_ops, "HolographicAttentionScores"
-        )
+        _native_available = hasattr(
+            _native_ops, "holographic_attention_scores"
+        ) or hasattr(_native_ops, "HolographicAttentionScores")
         if _native_available:
             logger.debug("Holographic Attention native ops loaded from %s", lib_path)
     except Exception as e:
@@ -94,7 +94,9 @@ def holographic_bind(x: tf.Tensor, y: tf.Tensor) -> tf.Tensor:
     return tf.cast(tf.math.real(bound), tf.float32)
 
 
-def holographic_unbind(bundle: tf.Tensor, key: tf.Tensor, epsilon: float = 1e-8) -> tf.Tensor:
+def holographic_unbind(
+    bundle: tf.Tensor, key: tf.Tensor, epsilon: float = 1e-8
+) -> tf.Tensor:
     """Holographic unbind: retrieval via complex division.
 
     unbind(bundle, key) = IFFT(FFT(bundle) / FFT(key))
@@ -168,7 +170,9 @@ def holographic_attention_scores(
         Attention scores [batch, heads, seq_q, seq_k].
     """
     if _load_native_ops():
-        return _native_ops.HolographicAttentionScores(queries, keys, temperature=temperature)
+        return _native_ops.HolographicAttentionScores(
+            queries, keys, temperature=temperature
+        )
 
     # TensorFlow fallback - compute pairwise holographic similarity
     # This is O(n² × d log d) instead of native O(n × d log d + n²)

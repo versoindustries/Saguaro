@@ -1,4 +1,3 @@
-
 """
 SAGUARO Default Configuration Values
 Defines the zero-config defaults that overlap with "correct but conservative" principle.
@@ -42,6 +41,7 @@ chronicle:
   # Auto-snapshot on specific events not yet implemented, but config ready
   auto_snapshot: false
 """
+
 
 def get_default_yaml() -> str:
     return DEFAULT_CONFIG_YAML.strip()

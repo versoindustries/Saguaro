@@ -32,7 +32,7 @@ import logging
 
 logger = logging.getLogger(__name__)
 
-from saguaro.ops.fused_text_tokenizer import (
+from saguaro.ops.fused_text_tokenizer import (  # noqa: E402
     fused_text_tokenize_batch,
     SuperwordTrieHandle,
 )
@@ -41,6 +41,7 @@ from saguaro.ops.fused_text_tokenizer import (
 @dataclass
 class _Encoding:
     """Internal encoding representation."""
+
     input_ids: list[int]
     attention_mask: list[int]
 
@@ -48,6 +49,7 @@ class _Encoding:
 @dataclass
 class SuperpositionEncoding:
     """Superposition BPE encoding with multiple segmentations."""
+
     input_ids: list[list[int]]
     amplitudes: list[float]
     attention_masks: list[list[int]]
@@ -146,80 +148,80 @@ class QWTTextTokenizer:
         """Tokenize text(s) using C++ fused operations."""
         single = isinstance(texts, str)
         input_texts = [texts] if single else list(texts)
-        
+
         target_len = max_length or self.model_max_length
-        
+
         # Use C++ batch tokenization
         try:
-             # inject_thinking=True allows recognizing <think> tags.
-             # Note: This doesn't do automatic insertion based on complexity.
-             tokens_tensor, lengths_tensor = fused_text_tokenize_batch(
+            # inject_thinking=True allows recognizing <think> tags.
+            # Note: This doesn't do automatic insertion based on complexity.
+            tokens_tensor, lengths_tensor = fused_text_tokenize_batch(
                 input_texts,
                 trie=self.trie,
                 byte_offset=self._byte_offset,
                 add_special_tokens=add_special_tokens,
                 max_length=target_len,
                 inject_thinking=self.enable_thinking_tokens,
-             )
-             
-             # Convert to lists if not returning tensors
-             if return_tensors != "tf":
-                 tokens = tokens_tensor.numpy().tolist()
-                 # Trim padding if requested (C++ pads to max_length by default)
-                 # Actually C++ returns padded to max_length.
-                 # If user wants padding='max_length', it's done.
-                 # If user wants padding=False, we might need to trim.
-                 
-                 # But sticking to TF tensors is most efficient.
-                 # If return_tensors != 'tf', we convert.
-                 
-                 input_ids = []
-                 attention_masks = []
-                 real_lengths = lengths_tensor.numpy().tolist()
-                 
-                 for i, seq in enumerate(tokens):
-                     length = real_lengths[i]
-                     # If truncation was True, length is min(len, max_length)
-                     # C++ Op handles truncation.
-                     
-                     # Padding logic:
-                     # C++ Op ALWAYS pads to max_length with PAD_ID.
-                     
-                     if padding == "max_length":
-                         # Already padded
-                         curr_ids = seq
-                         curr_mask = [1] * length + [0] * (len(seq) - length)
-                     elif padding is False:
-                         # Trim to actual length
-                         curr_ids = seq[:length]
-                         curr_mask = [1] * length
-                     else:
-                         # Dynamic padding (pad to max in batch)
-                         # Here batch is processed with fixed max_length.
-                         # We can trim to max(real_lengths)
-                         max_in_batch = max(real_lengths)
-                         curr_ids = seq[:max_in_batch]
-                         curr_mask = [1] * length + [0] * (max_in_batch - length)
+            )
 
-                     input_ids.append(curr_ids)
-                     attention_masks.append(curr_mask)
-                 
-                 result = {
-                     "input_ids": input_ids,
-                     "attention_mask": attention_masks,
-                 }
-             else:
-                 # Return tensors directly
-                 # Attention mask must be generated
-                 tf.shape(tokens_tensor)[0]
-                 seq_len = tf.shape(tokens_tensor)[1]
-                 # specific lengths are in lengths_tensor
-                 mask = tf.sequence_mask(lengths_tensor, maxlen=seq_len, dtype=tf.int32)
-                 
-                 result = {
-                     "input_ids": tokens_tensor,
-                     "attention_mask": mask,
-                 }
+            # Convert to lists if not returning tensors
+            if return_tensors != "tf":
+                tokens = tokens_tensor.numpy().tolist()
+                # Trim padding if requested (C++ pads to max_length by default)
+                # Actually C++ returns padded to max_length.
+                # If user wants padding='max_length', it's done.
+                # If user wants padding=False, we might need to trim.
+
+                # But sticking to TF tensors is most efficient.
+                # If return_tensors != 'tf', we convert.
+
+                input_ids = []
+                attention_masks = []
+                real_lengths = lengths_tensor.numpy().tolist()
+
+                for i, seq in enumerate(tokens):
+                    length = real_lengths[i]
+                    # If truncation was True, length is min(len, max_length)
+                    # C++ Op handles truncation.
+
+                    # Padding logic:
+                    # C++ Op ALWAYS pads to max_length with PAD_ID.
+
+                    if padding == "max_length":
+                        # Already padded
+                        curr_ids = seq
+                        curr_mask = [1] * length + [0] * (len(seq) - length)
+                    elif padding is False:
+                        # Trim to actual length
+                        curr_ids = seq[:length]
+                        curr_mask = [1] * length
+                    else:
+                        # Dynamic padding (pad to max in batch)
+                        # Here batch is processed with fixed max_length.
+                        # We can trim to max(real_lengths)
+                        max_in_batch = max(real_lengths)
+                        curr_ids = seq[:max_in_batch]
+                        curr_mask = [1] * length + [0] * (max_in_batch - length)
+
+                    input_ids.append(curr_ids)
+                    attention_masks.append(curr_mask)
+
+                result = {
+                    "input_ids": input_ids,
+                    "attention_mask": attention_masks,
+                }
+            else:
+                # Return tensors directly
+                # Attention mask must be generated
+                tf.shape(tokens_tensor)[0]
+                seq_len = tf.shape(tokens_tensor)[1]
+                # specific lengths are in lengths_tensor
+                mask = tf.sequence_mask(lengths_tensor, maxlen=seq_len, dtype=tf.int32)
+
+                result = {
+                    "input_ids": tokens_tensor,
+                    "attention_mask": mask,
+                }
 
         except RuntimeError as e:
             logger.warning("C++ ops failed, falling back to Python: %s", e)
@@ -229,9 +231,9 @@ class QWTTextTokenizer:
 
         if single:
             if return_tensors == "tf":
-                # Squeeze batch dim? HF tokenizer usually doesn't squeeze for single? 
+                # Squeeze batch dim? HF tokenizer usually doesn't squeeze for single?
                 # Actually HF tokenizer returns dict of lists or tensors.
-                # If single input, usually unbatched? 
+                # If single input, usually unbatched?
                 # Let's check original behavior: "result = {k: v[0] ...}"
                 result = {k: v[0] for k, v in result.items()}
             else:
@@ -264,7 +266,10 @@ class QWTTextTokenizer:
         *,
         skip_special_tokens: bool = True,
     ) -> list[str]:
-        return [self.decode(ids, skip_special_tokens=skip_special_tokens) for ids in batch_ids]
+        return [
+            self.decode(ids, skip_special_tokens=skip_special_tokens)
+            for ids in batch_ids
+        ]
 
     def _compute_complexity(self, text: str) -> int:
         """Compute text complexity score (Python logic)."""
@@ -282,7 +287,7 @@ class QWTTextTokenizer:
         complexity_override: int | None = None,
     ) -> list[int]:
         """Inject thinking tokens (Python logic).
-        
+
         Useful if you want to perform automatic injection based on complexity
         AFTER tokenization.
         """
@@ -306,7 +311,11 @@ class QWTTextTokenizer:
         pause_interval = max(10, 50 - (complexity * 5))
         for i, token_id in enumerate(token_ids):
             result.append(token_id)
-            if complexity >= 5 and (i + 1) % pause_interval == 0 and i < len(token_ids) - 1:
+            if (
+                complexity >= 5
+                and (i + 1) % pause_interval == 0
+                and i < len(token_ids) - 1
+            ):
                 result.append(self.pause_token_id)
 
         if complexity >= 3:

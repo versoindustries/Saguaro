@@ -38,7 +38,9 @@ try:
     _fused_wavelet_module = tf.load_op_library(_op_lib_path)
     # Try to get the ops - names may differ in consolidated binary
     if hasattr(_fused_wavelet_module, "fused_wavelet_encoder_chunk"):
-        fused_wavelet_encoder_chunk_op = _fused_wavelet_module.fused_wavelet_encoder_chunk
+        fused_wavelet_encoder_chunk_op = (
+            _fused_wavelet_module.fused_wavelet_encoder_chunk
+        )
         fused_wavelet_encoder_chunk_grad_op = getattr(
             _fused_wavelet_module, "fused_wavelet_encoder_chunk_grad", None
         )
@@ -46,7 +48,9 @@ try:
     else:
         raise AttributeError("fused_wavelet_encoder_chunk op not found in library")
 except (tf.errors.NotFoundError, OSError, AttributeError) as e:
-    logger.error(f"Could not load the custom C++ FusedWaveletEncoderChunk op. Error: {e}")
+    logger.error(
+        f"Could not load the custom C++ FusedWaveletEncoderChunk op. Error: {e}"
+    )
     fused_wavelet_encoder_chunk_op = None
 
 
@@ -113,7 +117,7 @@ def fused_wavelet_encoder_chunk(
 
         # The C++ op returns 3 gradients for the differentiable inputs.
         input_grads = (grads[0], grads[1], grads[2], None)
-        
+
         # GRADIENT FIX: Map C++ gradient outputs to tf.Variables by name pattern
         # Instead of returning [None] * len(variables) which zeros out all gradients
         if variables is not None and len(variables) > 0:
@@ -121,9 +125,9 @@ def fused_wavelet_encoder_chunk(
             variable_grads_list = []
             for v in variables:
                 name = v.name.lower()
-                if 'low_pass' in name or 'lowpass' in name:
+                if "low_pass" in name or "lowpass" in name:
                     variable_grads_list.append(grads[1])
-                elif 'high_pass' in name or 'highpass' in name:
+                elif "high_pass" in name or "highpass" in name:
                     variable_grads_list.append(grads[2])
                 else:
                     variable_grads_list.append(None)

@@ -148,7 +148,9 @@ def fused_mamba_core(
         vqc_angles = tf.cast(vqc_angles, tf.float32)
 
     @tf.custom_gradient
-    def _fused_mamba_core_inner(x_c_t, z_t, conv_f, conv_b, dt_t, a_log_t, b_p, c_p, d_s, vqc_a):
+    def _fused_mamba_core_inner(
+        x_c_t, z_t, conv_f, conv_b, dt_t, a_log_t, b_p, c_p, d_s, vqc_a
+    ):
         output, h_final, conv_cache = _fused_mamba_core_op(
             x_c_t,
             z_t,

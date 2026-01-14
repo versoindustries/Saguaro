@@ -1,5 +1,8 @@
 # SAGUARO Performance Benchmarks
 
+> [!WARNING]
+> **Legacy Data**: These benchmarks refer to the v0.1 alpha (Pure Python/PyTorch) implementation. The current v0.2 "Quantum Native" engine (C++/TensorFlow) has significantly different memory characteristics (improved efficiency). Updated benchmarks pending.
+
 This document outlines the memory and performance characteristics of SAGUARO (Quantum Codebase Operating System).
 
 ## Methodology

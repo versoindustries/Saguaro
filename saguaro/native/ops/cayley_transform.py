@@ -38,7 +38,7 @@ _ops_available = False
 try:
     _lib_path = get_saguaro_core_path()
     _lib = tf.load_op_library(_lib_path)
-    if hasattr(_lib, 'CayleyDenseForward'):
+    if hasattr(_lib, "CayleyDenseForward"):
         _ops_available = True
         logger.info("CayleyDense C++ ops loaded successfully from %s", _lib_path)
     else:
@@ -58,41 +58,44 @@ def cayley_dense_ops_available() -> bool:
 # =============================================================================
 
 if _ops_available:
+
     @tf.RegisterGradient("CayleyDenseForward")
     def _cayley_dense_forward_grad(op, grad_output):
         """Gradient function for CayleyDenseForward.
-        
+
         Uses the C++ backward pass for gradient computation.
-        
+
         Args:
             op: The forward operation.
             grad_output: Gradient w.r.t. output [batch, output_dim].
-            
+
         Returns:
             Gradients for each input: (grad_input, grad_skew_params, grad_proj_weight, grad_bias).
         """
         # Get inputs from the forward op
-        inputs = op.inputs[0]       # input tensor
+        inputs = op.inputs[0]  # input tensor
         skew_params = op.inputs[1]  # skew_params
         proj_weight = op.inputs[2]  # proj_weight
-        op.inputs[3]         # bias
-        
+        op.inputs[3]  # bias
+
         # Get attributes
         input_dim = op.get_attr("input_dim")
         output_dim = op.get_attr("output_dim")
         use_bias = op.get_attr("use_bias")
-        
+
         # Call C++ backward pass
-        grad_input, grad_skew_params, grad_proj_weight, grad_bias = _lib.CayleyDenseBackward(
-            grad_output=tf.cast(grad_output, tf.float32),
-            input=tf.cast(inputs, tf.float32),
-            skew_params=tf.cast(skew_params, tf.float32),
-            proj_weight=tf.cast(proj_weight, tf.float32),
-            input_dim=input_dim,
-            output_dim=output_dim,
-            use_bias=use_bias,
+        grad_input, grad_skew_params, grad_proj_weight, grad_bias = (
+            _lib.CayleyDenseBackward(
+                grad_output=tf.cast(grad_output, tf.float32),
+                input=tf.cast(inputs, tf.float32),
+                skew_params=tf.cast(skew_params, tf.float32),
+                proj_weight=tf.cast(proj_weight, tf.float32),
+                input_dim=input_dim,
+                output_dim=output_dim,
+                use_bias=use_bias,
+            )
         )
-        
+
         # Return gradients for each input (including None for attributes)
         # Order must match inputs: input, skew_params, proj_weight, bias
         return grad_input, grad_skew_params, grad_proj_weight, grad_bias
@@ -208,4 +211,3 @@ __all__ = [
     "cayley_dense_forward",
     "cayley_dense_backward",
 ]
-

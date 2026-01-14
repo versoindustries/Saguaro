@@ -60,7 +60,7 @@ def _load_quantum_ops():
         _quantum_ops_available = False
         logger.warning(f"Failed to load quantum ops: {e}")
         raise RuntimeError(
-            "Quantum native ops not available. " "Run ./build_secure.sh to compile."
+            "Quantum native ops not available. Run ./build_secure.sh to compile."
         ) from e
 
     return _quantum_ops_available
@@ -306,7 +306,13 @@ def unitary_expert_backward(
     """
     _load_quantum_ops()
     return _quantum_ops_module.unitary_expert_backward(
-        grad_output, input_tensor, u1_weights, u2_weights, activation_angle, hidden_cache, d_ff=d_ff
+        grad_output,
+        input_tensor,
+        u1_weights,
+        u2_weights,
+        activation_angle,
+        hidden_cache,
+        d_ff=d_ff,
     )
 
 
@@ -325,8 +331,16 @@ def _unitary_expert_forward_grad(op, grad_output, grad_hidden_cache):
     d_ff = op.get_attr("d_ff")
 
     _load_quantum_ops()
-    grad_input, grad_u1, grad_u2, grad_angle = _quantum_ops_module.unitary_expert_backward(
-        grad_output, input_tensor, u1_weights, u2_weights, activation_angle, hidden_cache, d_ff=d_ff
+    grad_input, grad_u1, grad_u2, grad_angle = (
+        _quantum_ops_module.unitary_expert_backward(
+            grad_output,
+            input_tensor,
+            u1_weights,
+            u2_weights,
+            activation_angle,
+            hidden_cache,
+            d_ff=d_ff,
+        )
     )
 
     return [grad_input, grad_u1, grad_u2, grad_angle]
@@ -401,7 +415,12 @@ def quantum_embedding_backward(
     """
     _load_quantum_ops()
     return _quantum_ops_module.quantum_embedding_backward(
-        grad_output, token_ids, token_keys, vocab_size=vocab_size, dim=dim, num_bundles=num_bundles
+        grad_output,
+        token_ids,
+        token_keys,
+        vocab_size=vocab_size,
+        dim=dim,
+        num_bundles=num_bundles,
     )
 
 
@@ -417,7 +436,12 @@ def _quantum_embedding_forward_grad(op, grad_output):
 
     _load_quantum_ops()
     grad_store = _quantum_ops_module.quantum_embedding_backward(
-        grad_output, token_ids, token_keys, vocab_size=vocab_size, dim=dim, num_bundles=num_bundles
+        grad_output,
+        token_ids,
+        token_keys,
+        vocab_size=vocab_size,
+        dim=dim,
+        num_bundles=num_bundles,
     )
 
     # No gradient for token_ids (discrete), return grad_store for holographic_store, None for token_keys
@@ -527,7 +551,11 @@ def quantum_lm_head_forward(
     """
     _load_quantum_ops()
     return _quantum_ops_module.quantum_lm_head_forward(
-        hidden_states, rotation_params, token_weights, vocab_size=vocab_size, num_layers=num_layers
+        hidden_states,
+        rotation_params,
+        token_weights,
+        vocab_size=vocab_size,
+        num_layers=num_layers,
     )
 
 

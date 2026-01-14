@@ -55,23 +55,31 @@ def _load_fused_collapse_op():
         if _fused_collapse_module is not None:
             # Try lowercase first (TensorFlow snake_case)
             fused_collapse_op = getattr(_fused_collapse_module, "fused_collapse", None)
-            fused_collapse_grad_op = getattr(_fused_collapse_module, "fused_collapse_grad", None)
+            fused_collapse_grad_op = getattr(
+                _fused_collapse_module, "fused_collapse_grad", None
+            )
 
             # Try PascalCase if snake_case not found
             if fused_collapse_op is None:
-                fused_collapse_op = getattr(_fused_collapse_module, "FusedCollapse", None)
-                fused_collapse_grad_op = getattr(_fused_collapse_module, "FusedCollapseGrad", None)
+                fused_collapse_op = getattr(
+                    _fused_collapse_module, "FusedCollapse", None
+                )
+                fused_collapse_grad_op = getattr(
+                    _fused_collapse_module, "FusedCollapseGrad", None
+                )
 
             if fused_collapse_op is not None:
                 logger.info("Successfully loaded FusedCollapse from _saguaro_core.so")
             else:
                 logger.warning(
                     "FusedCollapse op not found in module. Available: %s",
-                    [a for a in dir(_fused_collapse_module) if not a.startswith("_")][:10],
+                    [a for a in dir(_fused_collapse_module) if not a.startswith("_")][
+                        :10
+                    ],
                 )
         else:
             logger.error(
-                "FusedCollapse op not available. " "Please compile with: ./build_secure.sh"
+                "FusedCollapse op not available. Please compile with: ./build_secure.sh"
             )
     except (AttributeError, Exception) as e:
         logger.error(
@@ -163,7 +171,9 @@ def fused_collapse(
     def grad_fn(dy: tf.Tensor):
         """Gradient function for fused collapse."""
         if fused_collapse_grad_op is None:
-            raise NotImplementedError("The C++ fused_collapse_grad operator could not be loaded.")
+            raise NotImplementedError(
+                "The C++ fused_collapse_grad operator could not be loaded."
+            )
 
         (
             grad_context,

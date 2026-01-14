@@ -64,7 +64,13 @@ def _mps_temporal_scan_with_gradient(
 
     def grad_fn(grad_outputs, grad_log_probs, variables=None):
         if grad_outputs is None:
-            return [None, tf.zeros_like(site_weights), tf.zeros_like(initial_state), None, None]
+            return [
+                None,
+                tf.zeros_like(site_weights),
+                tf.zeros_like(initial_state),
+                None,
+                None,
+            ]
 
         with tf.GradientTape() as tape:
             tape.watch([site_weights, initial_state])
@@ -75,7 +81,9 @@ def _mps_temporal_scan_with_gradient(
             if grad_log_probs is not None:
                 loss += tf.reduce_sum(fallback_log_probs * grad_log_probs)
 
-        grad_site_weights, grad_initial_state = tape.gradient(loss, [site_weights, initial_state])
+        grad_site_weights, grad_initial_state = tape.gradient(
+            loss, [site_weights, initial_state]
+        )
         if grad_site_weights is None:
             grad_site_weights = tf.zeros_like(site_weights)
         if grad_initial_state is None:

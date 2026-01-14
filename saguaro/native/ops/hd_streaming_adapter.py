@@ -61,13 +61,19 @@ def _load_hd_streaming_ops():
         try:
             _hd_streaming_module = tf.load_op_library(consolidated_lib_path)
             hd_streaming_project_op = _hd_streaming_module.hd_streaming_project
-            hd_streaming_project_grad_op = _hd_streaming_module.hd_streaming_project_grad
+            hd_streaming_project_grad_op = (
+                _hd_streaming_module.hd_streaming_project_grad
+            )
             logger.info("Loaded HDStreamingProject from consolidated _saguaro_core.so")
             return
         except (tf.errors.NotFoundError, OSError, AttributeError) as e:
-            logger.error(f"Could not load HDStreamingProject from consolidated library: {e}")
+            logger.error(
+                f"Could not load HDStreamingProject from consolidated library: {e}"
+            )
 
-    logger.error("HD Streaming ops not found. Run build_secure.sh to compile native ops.")
+    logger.error(
+        "HD Streaming ops not found. Run build_secure.sh to compile native ops."
+    )
 
 
 # Load ops on module import
@@ -82,7 +88,9 @@ def _hd_streaming_project_grad_fn(op, grad):
     This connects the forward op to the backward op for automatic differentiation.
     """
     if hd_streaming_project_grad_op is None:
-        raise NotImplementedError("HDStreamingProjectGrad op not loaded. Cannot compute gradients.")
+        raise NotImplementedError(
+            "HDStreamingProjectGrad op not loaded. Cannot compute gradients."
+        )
 
     # Get forward pass inputs
     hd_bundles = op.inputs[0]
@@ -230,7 +238,9 @@ class HDStreamingAdapter(tf.keras.layers.Layer):
     def build(self, input_shape: tf.TensorShape) -> None:
         # Validate input shape
         if input_shape[-1] != self.hd_dim:
-            raise ValueError(f"Input shape {input_shape} incompatible with hd_dim={self.hd_dim}")
+            raise ValueError(
+                f"Input shape {input_shape} incompatible with hd_dim={self.hd_dim}"
+            )
 
         # Create projection weights [hd_dim, hidden_dim]
         self.projection_weights = self.add_weight(
@@ -281,8 +291,12 @@ class HDStreamingAdapter(tf.keras.layers.Layer):
                 "hidden_dim": self.hidden_dim,
                 "hd_dim": self.hd_dim,
                 "use_bias": self.use_bias,
-                "kernel_initializer": tf.keras.initializers.serialize(self.kernel_initializer),
-                "bias_initializer": tf.keras.initializers.serialize(self.bias_initializer),
+                "kernel_initializer": tf.keras.initializers.serialize(
+                    self.kernel_initializer
+                ),
+                "bias_initializer": tf.keras.initializers.serialize(
+                    self.bias_initializer
+                ),
             }
         )
         return config

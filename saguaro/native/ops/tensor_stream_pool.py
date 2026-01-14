@@ -38,10 +38,8 @@ def _get_ops():
 # Core API Functions
 # =============================================================================
 
-def tensor_stream_acquire(
-    size_bytes: int,
-    producer_hint: str = ""
-) -> int:
+
+def tensor_stream_acquire(size_bytes: int, producer_hint: str = "") -> int:
     """Acquire a buffer from the TensorStreamPool.
 
     Returns a pointer (as int64) to an aligned buffer suitable for
@@ -61,24 +59,22 @@ def tensor_stream_acquire(
     """
     ops = _get_ops()
     result = ops.tensor_stream_acquire(
-        tf.constant(size_bytes, dtype=tf.int64),
-        producer_hint=producer_hint
+        tf.constant(size_bytes, dtype=tf.int64), producer_hint=producer_hint
     )
     ptr = int(result.numpy())
 
     if TENSOR_STREAM_DEBUG:
         logger.debug(
             "[TensorStreamPool] ACQUIRE: size=%d bytes, producer='%s', ptr=0x%x",
-            size_bytes, producer_hint, ptr
+            size_bytes,
+            producer_hint,
+            ptr,
         )
 
     return ptr
 
 
-def tensor_stream_handoff(
-    buffer_ptr: int,
-    consumer_hint: str = ""
-) -> None:
+def tensor_stream_handoff(buffer_ptr: int, consumer_hint: str = "") -> None:
     """Mark buffer as ready for handoff to consumer.
 
     Signals that the producer has finished writing and the buffer
@@ -91,13 +87,13 @@ def tensor_stream_handoff(
     if TENSOR_STREAM_DEBUG:
         logger.debug(
             "[TensorStreamPool] HANDOFF: ptr=0x%x, consumer='%s'",
-            buffer_ptr, consumer_hint
+            buffer_ptr,
+            consumer_hint,
         )
 
     ops = _get_ops()
     ops.tensor_stream_handoff(
-        tf.constant(buffer_ptr, dtype=tf.int64),
-        consumer_hint=consumer_hint
+        tf.constant(buffer_ptr, dtype=tf.int64), consumer_hint=consumer_hint
     )
 
 
@@ -119,7 +115,7 @@ def tensor_stream_release(buffer_ptr: int) -> None:
 
 def tensor_stream_get_stats() -> Dict[str, Any]:
     """Get streaming statistics from TensorStreamPool.
-    
+
     Returns:
         Dictionary with telemetry data:
         - total_allocated_bytes: Total bytes allocated by pool
@@ -133,7 +129,7 @@ def tensor_stream_get_stats() -> Dict[str, Any]:
     """
     ops = _get_ops()
     results = ops.tensor_stream_get_stats()
-    
+
     # Unpack 8 outputs
     return {
         "total_allocated_bytes": int(results[0].numpy()),
@@ -149,7 +145,7 @@ def tensor_stream_get_stats() -> Dict[str, Any]:
 
 def tensor_stream_clear() -> None:
     """Clear all buffers from the pool, freeing memory.
-    
+
     WARNING: Invalidates all previously acquired pointers!
     """
     ops = _get_ops()
@@ -160,21 +156,22 @@ def tensor_stream_clear() -> None:
 # High-Level Utilities
 # =============================================================================
 
+
 class StreamingBuffer:
     """Context manager for safe buffer lifecycle.
-    
+
     Ensures proper acquire/release even if exceptions occur.
-    
+
     Example:
         >>> with StreamingBuffer(4096) as buf:
         ...     # Use buf.ptr for computation
         ...     buf.handoff("consumer")
         # Buffer automatically released on exit
     """
-    
+
     def __init__(self, size_bytes: int, producer_hint: str = ""):
         """Initialize streaming buffer.
-        
+
         Args:
             size_bytes: Number of bytes to allocate.
             producer_hint: Optional producer name.
@@ -183,21 +180,21 @@ class StreamingBuffer:
         self.producer_hint = producer_hint
         self.ptr: int = 0
         self._handed_off = False
-    
+
     def __enter__(self) -> "StreamingBuffer":
         """Acquire buffer."""
         self.ptr = tensor_stream_acquire(self.size_bytes, self.producer_hint)
         if self.ptr == 0:
             raise MemoryError(f"Failed to acquire {self.size_bytes} bytes")
         return self
-    
+
     def __exit__(self, exc_type, exc_val, exc_tb):
         """Release buffer."""
         if self.ptr > 0:
             tensor_stream_release(self.ptr)
             self.ptr = 0
         return False
-    
+
     def handoff(self, consumer_hint: str = "") -> None:
         """Mark buffer ready for consumer."""
         if self.ptr > 0 and not self._handed_off:
@@ -208,7 +205,7 @@ class StreamingBuffer:
 def print_stats() -> None:
     """Print formatted streaming statistics."""
     stats = tensor_stream_get_stats()
-    
+
     print("\n=== TensorStreamPool Statistics ===")
     print(f"Buffers:           {stats['num_buffers']}")
     print(f"Total Allocated:   {stats['total_allocated_bytes'] / (1024**2):.2f} MB")
@@ -216,8 +213,8 @@ def print_stats() -> None:
     print(f"Peak Usage:        {stats['peak_usage_bytes'] / (1024**2):.2f} MB")
     print(f"Acquire Count:     {stats['acquire_count']}")
     print(f"Reuse Count:       {stats['reuse_count']}")
-    if stats['acquire_count'] > 0:
-        reuse_rate = stats['reuse_count'] / stats['acquire_count'] * 100
+    if stats["acquire_count"] > 0:
+        reuse_rate = stats["reuse_count"] / stats["acquire_count"] * 100
         print(f"Reuse Rate:        {reuse_rate:.1f}%")
     print(f"Zero-Copy Handoffs: {stats['zero_copy_handoffs']}")
     print(f"Release Count:     {stats['release_count']}")

@@ -55,7 +55,9 @@ def _load_coconut_ops() -> bool:
         _coconut_ops_lib = _load_consolidated_binary()
         _coconut_ops_available = _coconut_ops_lib is not None
         if _coconut_ops_available:
-            logger.debug("CoCoNut native ops loaded successfully from consolidated binary")
+            logger.debug(
+                "CoCoNut native ops loaded successfully from consolidated binary"
+            )
         else:
             logger.warning("CoCoNut native ops: consolidated binary not available")
     except Exception as e:
@@ -420,26 +422,26 @@ def fused_coconut_bfs_with_grad(
                 num_paths=num_paths,
                 num_thought_steps=num_thought_steps,
             )
-            
+
             # C++ backward returns 16 gradient tensors:
             # (grad_hidden_states, grad_context, grad_input_norm_gamma, grad_input_norm_beta,
-            #  grad_aggregator_weight, grad_aggregator_bias, grad_projector_norm_gamma, 
+            #  grad_aggregator_weight, grad_aggregator_bias, grad_projector_norm_gamma,
             #  grad_projector_norm_beta, grad_projector_dense1_weight, grad_projector_dense1_bias,
             #  grad_projector_dense2_weight, grad_projector_dense2_bias, grad_broadcast_weight,
             #  grad_broadcast_bias, grad_output_norm_gamma, grad_output_norm_beta)
-            
+
             # Map to input tensor order
             return (
-                grads[0],   # hs (hidden_states)
-                grads[1],   # ctx (context)
-                grads[2],   # ing (input_norm_gamma)
-                grads[3],   # inb (input_norm_beta)
-                grads[4],   # agg_w (aggregator_weight)
-                grads[5],   # agg_b (aggregator_bias)
-                grads[6],   # png (projector_norm_gamma)
-                grads[7],   # pnb (projector_norm_beta)
-                grads[8],   # pd1_w (projector_dense1_weight)
-                grads[9],   # pd1_b (projector_dense1_bias)
+                grads[0],  # hs (hidden_states)
+                grads[1],  # ctx (context)
+                grads[2],  # ing (input_norm_gamma)
+                grads[3],  # inb (input_norm_beta)
+                grads[4],  # agg_w (aggregator_weight)
+                grads[5],  # agg_b (aggregator_bias)
+                grads[6],  # png (projector_norm_gamma)
+                grads[7],  # pnb (projector_norm_beta)
+                grads[8],  # pd1_w (projector_dense1_weight)
+                grads[9],  # pd1_b (projector_dense1_bias)
                 grads[10],  # pd2_w (projector_dense2_weight)
                 grads[11],  # pd2_b (projector_dense2_bias)
                 grads[12],  # bc_w (broadcast_weight)
@@ -482,7 +484,7 @@ def fused_fft_projector_forward(
     persistent_freq: bool = False,
 ) -> tf.Tensor:
     """UQHA v3.1 FFT-based thought projector.
-    
+
     Args:
         state: Input states [total_paths, dim].
         freq_weights_1: Complex weights for layer 1 [2, dim].
@@ -493,7 +495,7 @@ def fused_fft_projector_forward(
         norm_beta: LayerNorm beta [dim].
         dim: Hidden dimension (must be power of 2).
         persistent_freq: Whether to keep state in frequency domain between calls.
-        
+
     Returns:
         Projected states [total_paths, dim].
     """

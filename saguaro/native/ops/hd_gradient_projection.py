@@ -198,7 +198,9 @@ class HDGradientCompressor:
                 param_size=param_size,
             )
         else:
-            flat_grad = self._tf_srht_reconstruct(compressed, signs, indices, param_size)
+            flat_grad = self._tf_srht_reconstruct(
+                compressed, signs, indices, param_size
+            )
 
         return tf.reshape(flat_grad, shape)
 

@@ -117,4 +117,10 @@ def compute_coherence(
     return _module.compute_coherence(state)
 
 
-__all__ = ["nqs_decoder", "qcot_reason", "waveform_attention", "compute_coherence", "ops_available"]
+__all__ = [
+    "nqs_decoder",
+    "qcot_reason",
+    "waveform_attention",
+    "compute_coherence",
+    "ops_available",
+]

@@ -1,94 +1,76 @@
-# Usage Guide
+# Saguaro Usage Guide
 
-## 1. Indexing the Codebase
+This guide covers the command-line interface (CLI) for Saguaro.
 
-The core function of SAGUARO is creating a Holographic Knowledge Graph (HKG) of your code.
+## 1. Lifecycle Commands
 
+### `init`
+Initialize a new Saguaro project. Creates `.saguaro/` directory and config.
+```bash
+saguaro init
+```
+
+### `index`
+Build or update the holographic knowledge graph.
 ```bash
 saguaro index
+# Options:
+#   --verbose   Show detailed logs
+#   --clean     Force full re-indexing
 ```
 
-**Options:**
-*   `--path <dir>`: Target directory (default: current directory).
-*   `--verbose`: Show detailed indexing logs.
-
-**What happens?**
-1.  **Scanning**: SAGUARO scans files, respecting `.gitignore`.
-2.  **Auto-Scaling**: It calculates dimensionality based on LoC.
-3.  **Embedding**: Text is converted to hyperdimensional vectors (Quantum Embedding).
-4.  **Storage**: Vectors are stored in `hkg/vectors.npy`.
-
-## 2. Querying (The "Neuroserver")
-
-Agents (and humans) can query the index to find code conceptually.
-
-### Human Mode
+### `watch`
+Run in daemon mode, watching for file changes and re-indexing incrementally.
 ```bash
-saguaro query "How is authentication handled?"
+saguaro watch
 ```
-*Output: A readable list of file paths and snippets.*
 
-### Agent Mode (JSON)
-Agents typically consume structured JSON output.
+## 2. Intelligence Commands
 
+### `query`
+Semantic search.
 ```bash
-saguaro query "auth middleware" --json
+saguaro query "How is user auth handled?"
+# Options:
+#   --json      Output JSON
+#   --k 10      Number of results
 ```
 
-**Output:**
-```json
-{
-  "results": [
-    {
-      "file": "src/middleware/auth.py",
-      "score": 0.92,
-      "snippet": "class AuthMiddleware..."
-    }
-  ]
-}
-```
+### `agent` (SSAI)
+Tools for AI perception.
+*   `skeleton <file>`: View structural outline.
+*   `slice <symbol>`: View code implementation with dependencies.
+*   `impact <sandbox_id>`: Predict risk of proposed changes.
 
-## 3. The Sentinel (Verification)
+### `simulate`
+Predictive modeling throughout the codebase.
+*   `volatility`: Heatmap of unstable code regions.
+*   `regression <file>`: Predict regression probability.
 
-The Sentinel enforces project rules defined in `.saguaro.rules`.
+## 3. Governance Commands
 
+### `verify` (The Sentinel)
+Check compliance against rules.
 ```bash
-saguaro verify
+saguaro verify .
+# Options:
+#   --fix       Auto-fix violations
+#   --engines   Select engines (native, ruff, semantic)
 ```
 
-**Options:**
-*   `path`: Specific file or directory to verify (default: all).
+### `chronicle`
+Manage semantic history.
+*   `snapshot`: Save current memory state.
+*   `diff`: Compare current state to last snapshot.
 
-**Exit Codes:**
-*   `0`: Success (No violations).
-*   `1`: Failure (Violations found).
-
-## 4. The Chronicle (Time Crystal)
-
-Manage semantic snapshots of your codebase.
-
-### Create Snapshot
+### `health`
+System diagnostics.
 ```bash
-saguaro chronicle snapshot --message "Refactored API"
+saguaro health
 ```
 
-### Diff Snapshots
-Check semantic drift between versions:
+### `coverage`
+AST parsing coverage report.
 ```bash
-saguaro chronicle diff
-```
-
-## 5. The Constellation (Global Logic)
-
-Manage shared libraries.
-
-### List Global Libraries
-```bash
-saguaro constellation list
-```
-
-### Link Library
-Link a globally indexed library (e.g., `React`) to your local project:
-```bash
-saguaro constellation link React-18
+saguaro coverage
 ```

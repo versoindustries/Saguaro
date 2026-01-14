@@ -289,7 +289,9 @@ def validate_model_config(config: Any) -> None:
     # Check context length / max sequence length
     max_seq = getattr(config, "max_seq_length", None)
     if max_seq is not None and max_seq > _LITE_MAX_CONTEXT_LENGTH:
-        violations.append(f"max_seq_length: {max_seq} > {_LITE_MAX_CONTEXT_LENGTH} (max for Lite)")
+        violations.append(
+            f"max_seq_length: {max_seq} > {_LITE_MAX_CONTEXT_LENGTH} (max for Lite)"
+        )
 
     # Raise error if any violations found
     if violations:

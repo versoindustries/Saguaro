@@ -58,6 +58,7 @@ try:
         ops_available,
         trie_apply_merges as native_trie_apply_merges,
     )
+
     if ops_available():
         _SuperwordTrieHandle = SuperwordTrieHandle
         _native_trie_available = True
@@ -144,7 +145,7 @@ class SuperwordMerger:
 
         # Statistics
         self._total_merges_applied = 0
-        
+
         # Native C++ trie (None until trained, then built for O(N) lookup)
         self._native_trie: Any = None
 
@@ -196,7 +197,9 @@ class SuperwordMerger:
             for seq_idx, sequence in enumerate(token_sequences):
                 seq_list = list(sequence)
                 # Stream n-grams directly into counter (no list materialization)
-                for n in range(self.config.min_ngram_size, self.config.max_ngram_size + 1):
+                for n in range(
+                    self.config.min_ngram_size, self.config.max_ngram_size + 1
+                ):
                     ngram_counts.update(self._extract_ngrams_gen(seq_list, n))
 
                 # Progress callback at intervals
@@ -265,9 +268,7 @@ class SuperwordMerger:
             ngrams = list(self._superword_table.keys())
             ids = [self._superword_table[ng].superword_id for ng in ngrams]
             self._native_trie.insert_batch(ngrams, ids)
-            logger.debug(
-                "Built native C++ trie with %d entries", len(ngrams)
-            )
+            logger.debug("Built native C++ trie with %d entries", len(ngrams))
         except Exception as e:
             logger.warning("Failed to build native trie: %s", e)
             self._native_trie = None
@@ -291,19 +292,15 @@ class SuperwordMerger:
 
         if self._native_trie is None:
             raise RuntimeError(
-                "SuperwordMerger.apply() requires native C++ trie. "
-                "Rebuild native ops."
+                "SuperwordMerger.apply() requires native C++ trie. Rebuild native ops."
             )
 
         if native_trie_apply_merges is None:
-             raise RuntimeError(
-                "Native trie_apply_merges not available."
-            )
+            raise RuntimeError("Native trie_apply_merges not available.")
 
         # Build ID-only lookup table for efficiency
         id_table = {
-            ngram: entry.superword_id
-            for ngram, entry in self._superword_table.items()
+            ngram: entry.superword_id for ngram, entry in self._superword_table.items()
         }
 
         # Use optimized longest-match algorithm
@@ -368,7 +365,11 @@ class SuperwordMerger:
         with open(path, "w") as f:
             json.dump(state, f, indent=2)
 
-        logger.info("SuperwordMerger saved to %s (%d superwords)", path, len(self._superword_table))
+        logger.info(
+            "SuperwordMerger saved to %s (%d superwords)",
+            path,
+            len(self._superword_table),
+        )
 
     @classmethod
     def load(cls, path: str | Path) -> SuperwordMerger:

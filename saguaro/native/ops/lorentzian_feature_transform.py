@@ -40,11 +40,15 @@ try:
     _lorentzian_module = tf.load_op_library(_op_lib_path)
 
     if hasattr(_lorentzian_module, "lorentzian_feature_transform"):
-        lorentzian_feature_transform_op = _lorentzian_module.lorentzian_feature_transform
+        lorentzian_feature_transform_op = (
+            _lorentzian_module.lorentzian_feature_transform
+        )
         lorentzian_feature_transform_grad_op = getattr(
             _lorentzian_module, "lorentzian_feature_transform_grad", None
         )
-        logger.info("Successfully loaded custom C++ LorentzianFeatureTransform operator.")
+        logger.info(
+            "Successfully loaded custom C++ LorentzianFeatureTransform operator."
+        )
     else:
         raise AttributeError("lorentzian_feature_transform op not found in library")
 except (tf.errors.NotFoundError, OSError, AttributeError) as e:
@@ -117,7 +121,7 @@ def lorentzian_feature_transform(
 
         # Returns gradients for: node_features, boost_vector, rotation_matrix_param
         input_grads = (grads[0], grads[1], grads[2])
-        
+
         # GRADIENT FIX: Map C++ gradient outputs to tf.Variables by name pattern
         # Instead of returning [None] * len(variables) which zeros out all gradients
         if variables is not None and len(variables) > 0:
@@ -125,11 +129,11 @@ def lorentzian_feature_transform(
             variable_grads_list = []
             for v in variables:
                 name = v.name.lower()
-                if 'boost' in name:
+                if "boost" in name:
                     variable_grads_list.append(grads[1])
-                elif 'rotation' in name or 'matrix' in name:
+                elif "rotation" in name or "matrix" in name:
                     variable_grads_list.append(grads[2])
-                elif 'feature' in name or 'node' in name:
+                elif "feature" in name or "node" in name:
                     variable_grads_list.append(grads[0])
                 else:
                     variable_grads_list.append(None)

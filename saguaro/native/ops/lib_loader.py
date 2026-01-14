@@ -24,7 +24,10 @@ import logging
 import os
 from pathlib import Path
 
-from saguaro._native.runtime.arch import DEFAULT_VERSO_TARGET_ARCH, canonicalize_target_arch
+from saguaro._native.runtime.arch import (
+    DEFAULT_VERSO_TARGET_ARCH,
+    canonicalize_target_arch,
+)
 
 logger = logging.getLogger(__name__)
 
@@ -56,12 +59,12 @@ def get_consolidated_library(target_arch: str | None = None) -> str | None:
     consolidated_path = arch_bin_dir / "_saguaro_core.so"
     if consolidated_path.exists():
         return str(consolidated_path)
-    
+
     # Fallback: Check local build directory (developer convenience)
     build_path = _NATIVE_DIR / "build" / "_saguaro_core.so"
     if build_path.exists():
         return str(build_path)
-        
+
     return None
 
 

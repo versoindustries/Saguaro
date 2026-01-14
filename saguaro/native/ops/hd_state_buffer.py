@@ -138,7 +138,9 @@ class HDStateBuffer:
 
         # For large variables, use on-the-fly projection (hash-based)
         # instead of storing the full projection matrix
-        logger.debug(f"[HDStateBuffer] Registering {var_name}: shape={shape}, param_size={param_size}, threshold={self.MAX_STORED_PROJECTION_SIZE}")
+        logger.debug(
+            f"[HDStateBuffer] Registering {var_name}: shape={shape}, param_size={param_size}, threshold={self.MAX_STORED_PROJECTION_SIZE}"
+        )
         if param_size > self.MAX_STORED_PROJECTION_SIZE:
             # Store metadata for on-the-fly computation
             self._projections[var_name] = {
@@ -198,7 +200,9 @@ class HDStateBuffer:
                 projection["sparse_density"],
             )
         elif self._use_native:
-            compressed = _native_ops.HDStateEncode(state=flat_state, projection=projection)
+            compressed = _native_ops.HDStateEncode(
+                state=flat_state, projection=projection
+            )
         else:
             # TensorFlow fallback
             compressed = tf.linalg.matvec(projection, flat_state, transpose_a=True)
@@ -246,7 +250,9 @@ class HDStateBuffer:
                 minval=0,
                 maxval=2,
                 dtype=tf.int32,
-            ) * 2 - 1,
+            )
+            * 2
+            - 1,
             tf.float32,
         )
 
@@ -291,7 +297,9 @@ class HDStateBuffer:
                 projection["sparse_density"],
             )
         elif self._use_native:
-            flat_state = _native_ops.HDStateDecode(state=compressed, projection=projection)
+            flat_state = _native_ops.HDStateDecode(
+                state=compressed, projection=projection
+            )
         else:
             # TensorFlow fallback
             flat_state = tf.linalg.matvec(projection, compressed)
@@ -332,7 +340,9 @@ class HDStateBuffer:
                 minval=0,
                 maxval=2,
                 dtype=tf.int32,
-            ) * 2 - 1,
+            )
+            * 2
+            - 1,
             tf.float32,
         )
 

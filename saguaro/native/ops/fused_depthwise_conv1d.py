@@ -41,7 +41,9 @@ def _load_op():
             # Access the ops directly from the loaded module
             fused_depthwise_conv1d_op = _op_module.FusedDepthwiseConv1D
             fused_depthwise_conv1d_grad_op = _op_module.FusedDepthwiseConv1DGrad
-            logger.info("Loaded FusedDepthwiseConv1D from consolidated _saguaro_core.so")
+            logger.info(
+                "Loaded FusedDepthwiseConv1D from consolidated _saguaro_core.so"
+            )
             return
         except (tf.errors.NotFoundError, OSError, AttributeError) as e:
             logger.debug(f"Could not load from consolidated library: {e}")
@@ -58,7 +60,9 @@ def _load_op():
         except (tf.errors.NotFoundError, OSError, AttributeError) as e:
             logger.error(f"Failed to load FusedDepthwiseConv1D: {e}")
     else:
-        logger.warning(f"Custom C++ op files not found. Looked for: {consolidated_lib_path}")
+        logger.warning(
+            f"Custom C++ op files not found. Looked for: {consolidated_lib_path}"
+        )
 
 
 _load_op()
@@ -102,7 +106,9 @@ def fused_depthwise_conv1d(input_tensor, filter_tensor, bias_tensor, stride, pad
                         "'stride' must be a concrete integer for fused_depthwise_conv1d"
                     ) from err
             else:
-                raise ValueError("'stride' must be a concrete integer for fused_depthwise_conv1d")
+                raise ValueError(
+                    "'stride' must be a concrete integer for fused_depthwise_conv1d"
+                )
     else:
         stride_val = int(stride)
 
@@ -126,7 +132,9 @@ def fused_depthwise_conv1d(input_tensor, filter_tensor, bias_tensor, stride, pad
                         "'padding' must be a concrete string for fused_depthwise_conv1d"
                     ) from err
             else:
-                raise ValueError("'padding' must be a concrete string for fused_depthwise_conv1d")
+                raise ValueError(
+                    "'padding' must be a concrete string for fused_depthwise_conv1d"
+                )
         else:
             # tf.get_static_value returned a value, handle it
             # It might still be a numpy array wrapper
@@ -185,9 +193,9 @@ def fused_depthwise_conv1d(input_tensor, filter_tensor, bias_tensor, stride, pad
                 var_grads = []
                 for v in variables:
                     name = v.name.lower()
-                    if 'filter' in name or 'kernel' in name:
+                    if "filter" in name or "kernel" in name:
                         var_grads.append(grad_filter)
-                    elif 'bias' in name:
+                    elif "bias" in name:
                         var_grads.append(grad_bias)
                     else:
                         # Unknown variable - return None to let TF handle

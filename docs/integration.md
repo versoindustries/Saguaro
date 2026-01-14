@@ -1,51 +1,57 @@
 # Integration Guide
 
-## 1. Agent Integration (DNI)
+Saguaro is designed to be the "Cortex" for other AI Agents. This guide explains how to integrate Saguaro into your agentic workflow.
 
-SAGUARO connects to agents via the **Direct Native Interface (DNI)**. This is a JSON-RPC protocol over standard I/O strings.
+## 1. CLI Usage (JSON Mode)
+All Saguaro commands support structured output, making them easy to parse.
 
-### The Loop
-1.  **Agent**: "I need to fix the login bug."
-2.  **Tool Call**: `saguaro query "login authentication failure" --json`
-3.  **SAGUARO**: Returns JSON list of relevant files (`[auth.py, login.tsx]`).
-4.  **Agent**: Opens specific files.
+### Retrieval
+```bash
+saguaro query "database connection pool" --json
+```
 
-### Antigravity / Gemini
-Gemini is SAGUARO-aware. Ensure `GEMINI.md` references the SAGUARO protocol.
+**Output:**
+```json
+{
+  "matches": [
+    {
+      "file": "src/db/pool.py",
+      "score": 0.89,
+      "type": "class",
+      "line": 45
+    }
+  ]
+}
+```
+
+### Perception (SSAI)
+Use the **Standard Agent Interface (SSAI)** to read code.
+
+1.  **Get Context**: `saguaro agent skeleton path/to/file.py`
+2.  **Read Function**: `saguaro agent slice ClassName.function`
 
 ## 2. Model Context Protocol (MCP)
+Saguaro exposes an MCP-compatible server.
 
-SAGUARO complies with the MCP Specification.
-
-### Starting the Server
 ```bash
-saguaro serve --mcp --port 3000
+saguaro serve
 ```
+This starts a stdio or SSE server that exposing resources:
+*   `saguaro://query?q=...`
+*   `saguaro://file/...`
 
-### Capabilities
-*   **Resources**: Exposes codebase files as MCP resources (`saguaro://path/to/file`).
-*   **Prompts**: Exposes templates for querying code.
-*   **Tools**: Exposes `query` and `verify` tools to the MCP client.
+## 3. Python API
+For deep integration, import the `saguaro` package directly.
 
-## 3. CI/CD Integration
+```python
+from saguaro.indexing.engine import IndexEngine
 
-Use the Sentinel to gate deployments.
+# Load existing index
+engine = IndexEngine(repo_path=".")
 
-### GitHub Actions (`.github/workflows/sentinel.yml`)
+# Vector Search
+results = engine.search("authentication", k=5)
 
-```yaml
-name: SAGUARO Sentinel
-on: [push, pull_request]
-
-jobs:
-  verify:
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - name: Install SAGUARO
-        run: pip install saguaro-core
-      - name: Run Sentinel
-        run: saguaro verify
+for res in results:
+    print(f"{res.file}: {res.score}")
 ```
-
-If `saguaro verify` returns exit code `1` (Violation), the build fails.

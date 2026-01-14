@@ -40,12 +40,15 @@ V2.0 Performance Optimizations (Phase P0):
     - fused_qhd_spatial_mega_op: Fused QHD Spatial Block (2.0-2.5× speedup)
     - fused_quls_loss_op: Fused QULS Loss (7 terms in 1 kernel, 1.4-1.8× speedup)
     - fused_moe_mega_op: Fused MoE forward (1.3-1.5× speedup)
-    
+
     See HIGHNOON_V2_PERFORMANCE_ANALYSIS.md Section 6.1 for details.
 """
 
 # Phase 61: AlphaQubit Decoder
-from saguaro._native.ops.alphaqubit_ops import alphaqubit_decode, create_alphaqubit_weights
+from saguaro._native.ops.alphaqubit_ops import (
+    alphaqubit_decode,
+    create_alphaqubit_weights,
+)
 from saguaro._native.ops.alphaqubit_ops import ops_available as alphaqubit_ops_available
 
 # Phase 45: Entropy Regularization
@@ -53,7 +56,9 @@ from saguaro._native.ops.entropy_regularization_ops import (
     compute_activation_covariance,
     von_neumann_entropy_loss,
 )
-from saguaro._native.ops.entropy_regularization_ops import ops_available as entropy_ops_available
+from saguaro._native.ops.entropy_regularization_ops import (
+    ops_available as entropy_ops_available,
+)
 
 # QWT tokenizer operation
 from saguaro._native.ops.fused_qwt_tokenizer import (
@@ -85,7 +90,9 @@ from saguaro._native.ops.intrinsic_plasticity_ops import (
     project_gradient_tangent,
     retract_to_manifold,
 )
-from saguaro._native.ops.intrinsic_plasticity_ops import ops_available as plasticity_ops_available
+from saguaro._native.ops.intrinsic_plasticity_ops import (
+    ops_available as plasticity_ops_available,
+)
 from saguaro._native.ops.lib_loader import resolve_op_library
 
 # TensorStreamPool zero-copy inter-kernel streaming (Phase 0)
@@ -99,6 +106,7 @@ try:
         StreamingBuffer,
         print_stats as tensor_stream_print_stats,
     )
+
     tensor_stream_pool_available = True
 except ImportError:
     tensor_stream_pool_available = False
@@ -138,7 +146,9 @@ from saguaro._native.ops.quantum_advanced_ops import (
     qcot_reason,
     waveform_attention,
 )
-from saguaro._native.ops.quantum_advanced_ops import ops_available as advanced_ops_available
+from saguaro._native.ops.quantum_advanced_ops import (
+    ops_available as advanced_ops_available,
+)
 
 # Phase 76/127: Quantum Coherence Bus
 from saguaro._native.ops.quantum_coherence_bus_ops import (
@@ -169,7 +179,9 @@ from saguaro._native.ops.quantum_dropout_ops import (
     quantum_measurement_dropout,
     soft_quantum_dropout,
 )
-from saguaro._native.ops.quantum_dropout_ops import ops_available as dropout_ops_available
+from saguaro._native.ops.quantum_dropout_ops import (
+    ops_available as dropout_ops_available,
+)
 
 # Quantum Architecture ops (Phases 26-36, 51-52)
 from saguaro._native.ops.quantum_ops import (  # Phase 34: Unitary Residual; Phase 30: Quantum Norm; Phase 29: Unitary Expert; Phase 26: Quantum Embedding; Phase 27: Floquet Position; Phase 33: Quantum LM Head; Phase 32: Grover QSG; Phase 51: Born Rule Loss; Phase 52: Quantum Fidelity Loss
@@ -194,7 +206,10 @@ from saguaro._native.ops.quantum_ops import (  # Phase 34: Unitary Residual; Pha
 )
 
 # Phase 44: Quantum Teleport Bus
-from saguaro._native.ops.quantum_teleport_bus_ops import bell_measurement, quantum_teleport_state
+from saguaro._native.ops.quantum_teleport_bus_ops import (
+    bell_measurement,
+    quantum_teleport_state,
+)
 from saguaro._native.ops.quantum_teleport_bus_ops import (
     ops_available as teleport_bus_ops_available,
 )
@@ -219,7 +234,9 @@ from saguaro._native.ops.specialized_quantum_ops import (
     teleport_gradients,
     topological_wavelet_attention,
 )
-from saguaro._native.ops.specialized_quantum_ops import ops_available as specialized_ops_available
+from saguaro._native.ops.specialized_quantum_ops import (
+    ops_available as specialized_ops_available,
+)
 
 # Train step operation
 from saguaro._native.ops.train_step import (
@@ -230,12 +247,28 @@ from saguaro._native.ops.train_step import (
 )
 
 # Phase 62: VQEM Error Mitigation
-from saguaro._native.ops.vqem_ops import create_vqem_params, vqem_forward, vqem_train_step
+from saguaro._native.ops.vqem_ops import (
+    create_vqem_params,
+    vqem_forward,
+    vqem_train_step,
+)
 from saguaro._native.ops.vqem_ops import ops_available as vqem_ops_available
 
 __all__ = [
     # Utility
     "resolve_op_library",
+    # TensorStreamPool
+    "tensor_stream_pool_available",
+    "tensor_stream_acquire",
+    "tensor_stream_handoff",
+    "tensor_stream_release",
+    "tensor_stream_get_stats",
+    "tensor_stream_clear",
+    "StreamingBuffer",
+    "tensor_stream_print_stats",
+    # MPS
+    "mps_contract",
+    "mps_temporal_scan",
     # Train step
     "train_step_module",
     "train_step_diagnostics",

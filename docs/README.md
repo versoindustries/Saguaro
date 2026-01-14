@@ -1,24 +1,53 @@
-# SAGUARO Documentation
+# SAGUARO: Quantum Codebase Operating System (Q-COS)
 
-Welcome to the official documentation for **SAGUARO**, the Quantum Codebase Operating System (Q-COS).
+> **Semantic Intelligence for Enterprise Agents**
 
-SAGUARO is a cognitive layer that sits between your codebase and AI agents, providing deep semantic understanding, rule enforcement, and evolutionary context.
+Saguaro is a **Quantum Codebase Operating System** that converts large-scale software repositories into a **Holographic Knowledge Graph**. Unlike traditional RAG (which chunks text blindly), Saguaro uses **hyperdimensional embedding** and **quantum state logic** to maintain semantic fidelity across millions of lines of code.
 
-## Documentation Index
+It provides AI Agents with a **Direct Native Interface (DNI)** to perceive, reason about, and modify code with 10-100x fewer tokens than standard methods.
 
-### 🚀 Getting Started
-*   [Installation Guide](installation.md) - Setup instructions for local and CI/CD environments.
-*   [Usage Guide](usage_guide.md) - How to index, query, and verify your codebase.
+## 🚀 Quick Start
 
-### ⚙️ configuration
-*   [Configuration & Rules](configuration.md) - Configuring `.saguaro.rules`, `.saguaro.yaml`, and managing the Sentinel.
+### 1. Initialize
+```bash
+pip install -e .
+saguaro init
+```
 
-### 🧠 Under the Hood
-*   [Architecture](architecture.md) - Deep dive into Quantum Indexing, Time Crystals, and the Holographic Knowledge Graph.
+### 2. Index the Codebase
+Create the holographic crystal (vectors + metadata):
+```bash
+saguaro index --verbose
+```
 
-### 🔌 Integration
-*   [Integration Guide](integration.md) - Connecting SAGUARO to Antigravity, Claude, CI/CD pipelines, and custom agents.
+### 3. Query (Human or Agent)
+```bash
+# Semantic Search
+saguaro query "Where is authentication logic?"
 
-## Quick Links
-*   [Source Code](../)
-*   [Analysis Report](../../saguaro_ANALYSIS_REPORT.md)
+# Structure Analysis (Low-Token)
+saguaro agent skeleton src/auth.py
+```
+
+### 4. Verify Compliance
+Run the Sentinel engine to check for drift and violations:
+```bash
+saguaro verify . --fix
+```
+
+## ⚡ Core Capabilities
+
+| Feature | Description | Command |
+| :--- | :--- | :--- |
+| **Holographic Indexing** | Constant-memory indexing of massive repos (10M+ LoC) | `saguaro index` |
+| **Agent Perception** | Specialized "Skeleton" and "Slice" views for AI | `saguaro agent` |
+| **Sentinel** | Native policy and compliance enforcement | `saguaro verify` |
+| **Chronicle** | Semantic version control and drift detection | `saguaro chronicle` |
+| **Volatile Simulation** | Predict regression risks before editing | `saguaro simulate` |
+
+## 📦 Requirements
+
+*   **OS**: Linux (Ubuntu 24.04 recommended)
+*   **Python**: 3.12+
+*   **Compiler**: C++17 (GCC 13 / Clang 17) for Native Ops
+*   **RAM**: 16GB Minimum (64GB for Enterprise Indexing)

@@ -55,7 +55,8 @@ def _load_ops():
         _available = False
         logger.warning(f"Failed to load Quantum Teleport Bus ops: {e}")
         raise RuntimeError(
-            "Quantum Teleport Bus native ops not available. " "Run ./build_secure.sh to compile."
+            "Quantum Teleport Bus native ops not available. "
+            "Run ./build_secure.sh to compile."
         ) from e
     return _available
 
@@ -118,7 +119,9 @@ def quantum_teleport_state(
     entanglement_dim = entanglement_dim or config.TELEPORT_ENTANGLEMENT_DIM
     fidelity_threshold = fidelity_threshold or config.TELEPORT_FIDELITY_THRESHOLD
     use_error_correction = (
-        use_error_correction if use_error_correction is not None else config.TELEPORT_USE_CORRECTION
+        use_error_correction
+        if use_error_correction is not None
+        else config.TELEPORT_USE_CORRECTION
     )
 
     return _module.quantum_teleport_state(

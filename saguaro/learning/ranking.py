@@ -1,10 +1,11 @@
 from typing import Dict, List, Any
 
+
 class FeedbackRanker:
     """
     Implements Learning-to-Rank by adjusting weights based on user feedback.
     """
-    
+
     def __init__(self):
         self.weights = {"semantic": 1.0, "text": 1.0}
 
@@ -22,4 +23,8 @@ class FeedbackRanker:
         Re-orders search results based on learned weights.
         """
         # Stub logic: sort by score * weight
-        return sorted(results, key=lambda x: x.get("score", 0) * self.weights["semantic"], reverse=True)
+        return sorted(
+            results,
+            key=lambda x: x.get("score", 0) * self.weights["semantic"],
+            reverse=True,
+        )

@@ -155,6 +155,7 @@ class IntelligentVocabController:
         # Sample if necessary
         if len(texts) > self.config.sample_size:
             import random
+
             texts = random.sample(list(texts), self.config.sample_size)
 
         logger.info(
@@ -182,7 +183,9 @@ class IntelligentVocabController:
         """Load a pre-trained codebook by name."""
         if name not in PRETRAINED_CODEBOOKS:
             available = list(PRETRAINED_CODEBOOKS.keys())
-            raise ValueError(f"Unknown pretrained codebook '{name}'. Available: {available}")
+            raise ValueError(
+                f"Unknown pretrained codebook '{name}'. Available: {available}"
+            )
 
         # Resolve path relative to project root (saguaro package parent)
         # Note: intelligent_controller.py is in saguaro/tokenization
@@ -260,4 +263,8 @@ class IntelligentVocabController:
         }
 
 
-__all__ = ["IntelligentVocabController", "VocabControllerConfig", "PRETRAINED_CODEBOOKS"]
+__all__ = [
+    "IntelligentVocabController",
+    "VocabControllerConfig",
+    "PRETRAINED_CODEBOOKS",
+]

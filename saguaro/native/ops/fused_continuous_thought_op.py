@@ -34,7 +34,9 @@ logger = logging.getLogger(__name__)
 
 # Load the C++ op library
 _lib = get_op("fused_continuous_thought")
-_fused_continuous_thought_op = getattr(_lib, "FusedContinuousThought", None) if _lib else None
+_fused_continuous_thought_op = (
+    getattr(_lib, "FusedContinuousThought", None) if _lib else None
+)
 _fused_continuous_thought_grad_op = (
     getattr(_lib, "FusedContinuousThoughtGrad", None) if _lib else None
 )

@@ -85,20 +85,26 @@ def _fused_token_shift_internal(
 
     # Call C++ kernel
     output, gate = _fused_token_shift_op(
-        input_tensor, prev_input, gate_proj, decay_weights, use_learned_decay=use_learned_decay
+        input_tensor,
+        prev_input,
+        gate_proj,
+        decay_weights,
+        use_learned_decay=use_learned_decay,
     )
 
     def grad(grad_output: tf.Tensor) -> tuple[tf.Tensor, ...]:
         """Compute gradients using C++ backward kernel + Python chain rule."""
         # Get gradients from C++ kernel
-        (grad_input_direct, grad_prev, grad_gate_proj, grad_decay) = _fused_token_shift_grad_op(
-            grad_output,
-            input_tensor,
-            prev_input,
-            gate_proj,
-            decay_weights,
-            gate,
-            use_learned_decay=use_learned_decay,
+        (grad_input_direct, grad_prev, grad_gate_proj, grad_decay) = (
+            _fused_token_shift_grad_op(
+                grad_output,
+                input_tensor,
+                prev_input,
+                gate_proj,
+                decay_weights,
+                gate,
+                use_learned_decay=use_learned_decay,
+            )
         )
 
         # Backprop through gate_proj = einsum('bld,de->ble', x, kernel) + bias
@@ -129,7 +135,12 @@ def fused_token_shift(
     decay_weights = tf.cast(decay_weights, tf.float32)
 
     return _fused_token_shift_internal(
-        input_tensor, prev_input, gate_kernel, gate_bias, decay_weights, use_learned_decay
+        input_tensor,
+        prev_input,
+        gate_kernel,
+        gate_bias,
+        decay_weights,
+        use_learned_decay,
     )
 
 
@@ -206,7 +217,15 @@ def _fused_hierarchical_token_shift_internal(
         grad_input_via_proj = tf.einsum("ble,ed->bld", grad_gate_proj, gate_kernel)
 
         total_grad_input = grad_input_direct + grad_input_via_proj
-        return total_grad_input, grad_prev, grad_kernel, grad_bias, grad_decay, None, None
+        return (
+            total_grad_input,
+            grad_prev,
+            grad_kernel,
+            grad_bias,
+            grad_decay,
+            None,
+            None,
+        )
 
     return output, grad
 
@@ -254,7 +273,9 @@ def _fused_delta_token_shift_internal(
         input_tensor, state, erase_proj, write_proj
     )
 
-    def grad(grad_output: tf.Tensor, grad_new_state: tf.Tensor) -> tuple[tf.Tensor, ...]:
+    def grad(
+        grad_output: tf.Tensor, grad_new_state: tf.Tensor
+    ) -> tuple[tf.Tensor, ...]:
         (grad_input_direct, grad_state, grad_erase_proj, grad_write_proj) = (
             _fused_delta_token_shift_grad_op(
                 grad_output,
@@ -277,7 +298,9 @@ def _fused_delta_token_shift_internal(
         grad_input_via_erase = tf.einsum("ble,ed->bld", grad_erase_proj, erase_kernel)
         grad_input_via_write = tf.einsum("ble,ed->bld", grad_write_proj, write_kernel)
 
-        total_grad_input = grad_input_direct + grad_input_via_erase + grad_input_via_write
+        total_grad_input = (
+            grad_input_direct + grad_input_via_erase + grad_input_via_write
+        )
 
         return (
             total_grad_input,
@@ -320,7 +343,9 @@ def fused_multi_position_token_shift(
     input_tensor = tf.cast(input_tensor, tf.float32)
     blend_weights = tf.cast(blend_weights, tf.float32)
 
-    output = _fused_multi_position_token_shift_op(input_tensor, blend_weights, distances=distances)
+    output = _fused_multi_position_token_shift_op(
+        input_tensor, blend_weights, distances=distances
+    )
 
     def grad(grad_output: tf.Tensor) -> tuple[tf.Tensor, ...]:
         grad_input, grad_blend = _fused_multi_position_token_shift_grad_op(
@@ -360,7 +385,11 @@ def fused_token_shift_with_gate(
     gate_proj = tf.einsum("bld,de->ble", input_tensor, gate_kernel) + gate_bias
 
     return _fused_token_shift_op(
-        input_tensor, prev_input, gate_proj, decay_weights, use_learned_decay=use_learned_decay
+        input_tensor,
+        prev_input,
+        gate_proj,
+        decay_weights,
+        use_learned_decay=use_learned_decay,
     )
 
 
@@ -388,7 +417,9 @@ def _python_reference_forward(
         Tuple of (output, gate) tensors.
     """
     # Compute gate = sigmoid(input @ gate_kernel + gate_bias)
-    gate = tf.nn.sigmoid(tf.einsum("bld,de->ble", input_tensor, gate_kernel) + gate_bias)
+    gate = tf.nn.sigmoid(
+        tf.einsum("bld,de->ble", input_tensor, gate_kernel) + gate_bias
+    )
 
     # Apply learned decay if enabled
     if use_learned_decay:

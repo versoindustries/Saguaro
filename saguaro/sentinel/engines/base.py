@@ -1,11 +1,12 @@
 from abc import ABC, abstractmethod
 from typing import List, Dict, Any
 
+
 class BaseEngine(ABC):
     """
     Abstract base class for analysis engines.
     """
-    
+
     def __init__(self, repo_path: str):
         self.repo_path = repo_path
         self.policy_config = {}
