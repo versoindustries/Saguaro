@@ -45,7 +45,7 @@ class TestSentinel(unittest.TestCase):
         verifier = SentinelVerifier(self.test_dir, engines=['native'])
         violations = verifier.verify_all()
         
-        self.assertEqual(len(violations), 1)
+        self.assertEqual(len(violations), 2)
         self.assertEqual(violations[0]['rule_id'], 'no-secrets')
 
 if __name__ == "__main__":

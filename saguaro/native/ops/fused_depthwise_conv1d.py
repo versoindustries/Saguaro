@@ -18,7 +18,7 @@ import os
 
 import tensorflow as tf
 
-from highnoon._native.ops.lib_loader import resolve_op_library
+from saguaro._native.ops.lib_loader import resolve_op_library
 
 # --- Setup ---
 logger = logging.getLogger(__name__)
@@ -33,15 +33,15 @@ def _load_op():
     """Load the FusedDepthwiseConv1D operation from the consolidated library."""
     global _op_module, fused_depthwise_conv1d_op, fused_depthwise_conv1d_grad_op
 
-    # First try to load from the consolidated _highnoon_core.so library
-    consolidated_lib_path = resolve_op_library(__file__, "_highnoon_core.so")
+    # First try to load from the consolidated _saguaro_core.so library
+    consolidated_lib_path = resolve_op_library(__file__, "_saguaro_core.so")
     if os.path.exists(consolidated_lib_path):
         try:
             _op_module = tf.load_op_library(consolidated_lib_path)
             # Access the ops directly from the loaded module
             fused_depthwise_conv1d_op = _op_module.FusedDepthwiseConv1D
             fused_depthwise_conv1d_grad_op = _op_module.FusedDepthwiseConv1DGrad
-            logger.info("Loaded FusedDepthwiseConv1D from consolidated _highnoon_core.so")
+            logger.info("Loaded FusedDepthwiseConv1D from consolidated _saguaro_core.so")
             return
         except (tf.errors.NotFoundError, OSError, AttributeError) as e:
             logger.debug(f"Could not load from consolidated library: {e}")

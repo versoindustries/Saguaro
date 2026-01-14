@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_collapse_op.py
+# saguaro/_native/ops/fused_collapse_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -20,7 +20,7 @@ multi-head cross-attention with Gumbel-Softmax sampling.
 
 Phase 16: Contextual Gating Collapse Enhancement.
 
-This op loads from the consolidated `_highnoon_core.so` binary built by
+This op loads from the consolidated `_saguaro_core.so` binary built by
 `./build_secure.sh`. For development testing only, individual ops can be
 built with `./build_ops.sh fused_collapse`.
 """
@@ -29,7 +29,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native import get_op
+from saguaro._native import get_op
 
 logger = logging.getLogger(__name__)
 
@@ -63,7 +63,7 @@ def _load_fused_collapse_op():
                 fused_collapse_grad_op = getattr(_fused_collapse_module, "FusedCollapseGrad", None)
 
             if fused_collapse_op is not None:
-                logger.info("Successfully loaded FusedCollapse from _highnoon_core.so")
+                logger.info("Successfully loaded FusedCollapse from _saguaro_core.so")
             else:
                 logger.warning(
                     "FusedCollapse op not found in module. Available: %s",

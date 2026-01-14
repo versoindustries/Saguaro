@@ -223,7 +223,7 @@ detect_environment() {
     }
 
     # Get TensorFlow XLA include path for controller headers
-    TF_XLA_INCLUDE_PATH=$("${PYTHON_EXEC}" -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
+    TF_XLA_INCLUDE_PATH=$("${PYTHON_EXEC}" -I -c 'import tensorflow as tf; print(tf.sysconfig.get_include())')
     export TF_XLA_INCLUDE_PATH
     log_info "TensorFlow include: ${TF_XLA_INCLUDE_PATH}"
 

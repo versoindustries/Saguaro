@@ -1,0 +1,22 @@
+nohup: ignoring input
+2026-01-13 17:48:55.152263: E external/local_xla/xla/stream_executor/cuda/cuda_fft.cc:467] Unable to register cuFFT factory: Attempting to register factory for plugin cuFFT when one has already been registered
+WARNING: All log messages before absl::InitializeLog() is called are written to STDERR
+E0000 00:00:1768351735.171191  206497 cuda_dnn.cc:8579] Unable to register cuDNN factory: Attempting to register factory for plugin cuDNN when one has already been registered
+E0000 00:00:1768351735.177600  206497 cuda_blas.cc:1407] Unable to register cuBLAS factory: Attempting to register factory for plugin cuBLAS when one has already been registered
+W0000 00:00:1768351735.194065  206497 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1768351735.194106  206497 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1768351735.194110  206497 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+W0000 00:00:1768351735.194114  206497 computation_placer.cc:177] computation placer already registered. Please check linkage and avoid linking the same target more than once.
+2026-01-13 17:48:55.198696: I tensorflow/core/platform/cpu_feature_guard.cc:210] This TensorFlow binary is optimized to use available CPU instructions in performance-critical operations.
+To enable the following instructions: AVX2 FMA, in other operations, rebuild TensorFlow with the appropriate compiler flags.
+/home/mike/Documents/Github/Saguaro/venv/lib/python3.12/site-packages/keras/src/export/tf2onnx_lib.py:8: FutureWarning: In the future `np.object` will be defined as the corresponding NumPy scalar.
+  if not hasattr(np, "object"):
+2026-01-13 17:48:59,191 [INFO] Initializing IntelligentVocabController...
+2026-01-13 17:48:59,191 [INFO] [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-13 17:48:59,191 [INFO] [VocabController] Initialized: max_length=8192, base_vocab=362
+2026-01-13 17:48:59,191 [INFO] Loading Curriculum: verso-baseline
+2026-01-13 17:48:59,191 [INFO] Streaming samples (Limit: 1024 MB)...
+2026-01-13 17:48:59,313 [INFO] PyTorch version 2.9.1 available.
+2026-01-13 17:48:59,313 [INFO] TensorFlow version 2.19.1 available.
+2026-01-13 17:48:59,496 [INFO] Streaming samples from 22 datasets in 'verso-baseline'...
+2026-01-13 17:48:59,496 [INFO] Loading stream: bigcode/the-stack-v2-dedup...

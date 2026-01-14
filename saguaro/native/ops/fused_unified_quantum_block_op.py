@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_unified_quantum_block_op.py
+# saguaro/_native/ops/fused_unified_quantum_block_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -49,9 +49,9 @@ def _ensure_lib_loaded():
         return _ops_available
 
     try:
-        from highnoon._native.ops.lib_loader import get_highnoon_core_path
+        from saguaro._native.ops.lib_loader import get_saguaro_core_path
 
-        lib_path = get_highnoon_core_path()
+        lib_path = get_saguaro_core_path()
         _lib = tf.load_op_library(lib_path)
         _ops_available = True
         logger.debug("Unified quantum ops loaded from %s", lib_path)
@@ -89,13 +89,13 @@ def holographic_bind(a: tf.Tensor, b: tf.Tensor, name: str = "holographic_bind")
     if not _ensure_lib_loaded():
         raise RuntimeError(
             "Unified quantum C++ ops not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     return _lib.high_noon_holographic_bind(a, b, name=name)
 
 
-@tf.RegisterGradient("HighNoonHolographicBind")
+@tf.RegisterGradient("SaguaroHolographicBind")
 def _holographic_bind_grad(op, grad):
     """Gradient for holographic bind is unbind."""
     a, b = op.inputs
@@ -123,7 +123,7 @@ def holographic_unbind(
     if not _ensure_lib_loaded():
         raise RuntimeError(
             "Unified quantum C++ ops not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     # Use the bind op with conjugated key for unbinding
@@ -165,7 +165,7 @@ def port_hamiltonian_step(
     if not _ensure_lib_loaded():
         raise RuntimeError(
             "Unified quantum C++ ops not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     if external_input is None:
@@ -199,7 +199,7 @@ def thermodynamic_route(
     if not _ensure_lib_loaded():
         raise RuntimeError(
             "Unified quantum C++ ops not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     return _lib.high_noon_thermodynamic_route(logits, temperature=temperature, name=name)
@@ -227,7 +227,7 @@ def orthogonalize_keys(
     if not _ensure_lib_loaded():
         raise RuntimeError(
             "Unified quantum C++ ops not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     return _lib.high_noon_orthogonalize_keys(keys, name=name)
@@ -257,7 +257,7 @@ def qsvt_activation(
     if not _ensure_lib_loaded():
         raise RuntimeError(
             "Unified quantum C++ ops not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     return _lib.high_noon_qsvt_activation(x, coefficients, degree=degree, name=name)
@@ -330,7 +330,7 @@ def quantum_reservoir(
     if not _ensure_lib_loaded():
         raise RuntimeError(
             "Unified quantum C++ ops not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     return _lib.high_noon_quantum_reservoir(
@@ -371,7 +371,7 @@ def entanglement_loss(
     if not _ensure_lib_loaded():
         raise RuntimeError(
             "Unified quantum C++ ops not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     return _lib.high_noon_entanglement_loss(
@@ -407,7 +407,7 @@ def quantum_memory_replay(
     if not _ensure_lib_loaded():
         raise RuntimeError(
             "Unified quantum C++ ops not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     # Note: Variable number of weight inputs not fully supported by this simple wrapper
@@ -458,7 +458,7 @@ def quantum_holographic_memory(
     if not _ensure_lib_loaded():
         raise RuntimeError(
             "Unified quantum C++ ops not available. Build with: "
-            "cd highnoon/_native && ./build_secure.sh"
+            "cd saguaro/_native && ./build_secure.sh"
         )
 
     # Use C++ op - QuantumHolographicMemory takes (inputs, memory_bank, beta)

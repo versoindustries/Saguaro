@@ -1,4 +1,4 @@
-"""Unified Attention Python Wrapper for HighNoon Framework.
+"""Unified Attention Python Wrapper for Saguaro Framework.
 
 This module provides a Python interface to the unified attention C++ operations.
 It consolidates all 11 attention mechanisms into a single, flexible API.
@@ -19,11 +19,11 @@ import tensorflow as tf
 
 # Attempt to load the native op, with fallback for development
 try:
-    from highnoon._native import load_highnoon_core
-    _highnoon_core = load_highnoon_core()
-    _NATIVE_AVAILABLE = _highnoon_core is not None
+    from saguaro._native import load_saguaro_core
+    _saguaro_core = load_saguaro_core()
+    _NATIVE_AVAILABLE = _saguaro_core is not None
 except ImportError:
-    _highnoon_core = None
+    _saguaro_core = None
     _NATIVE_AVAILABLE = False
 
 
@@ -205,7 +205,7 @@ def unified_attention(
         
         # Use native op if available
         if _NATIVE_AVAILABLE:
-            return _highnoon_core.unified_attention(
+            return _saguaro_core.unified_attention(
                 query=query,
                 key=key,
                 value=value,

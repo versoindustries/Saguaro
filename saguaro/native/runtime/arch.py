@@ -1,4 +1,4 @@
-# highnoon/_native/runtime/arch.py
+# saguaro/_native/runtime/arch.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");

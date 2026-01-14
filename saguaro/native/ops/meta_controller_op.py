@@ -1,4 +1,4 @@
-# highnoon/_native/ops/meta_controller_op.py
+# saguaro/_native/ops/meta_controller_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ which orchestrates the quantum-enhanced control system including:
 - Tensor Network Kalman Filter (memory-efficient high-dimensional states)
 
 Example:
-    >>> from highnoon._native.ops.meta_controller_op import trigger_meta_controller
+    >>> from saguaro._native.ops.meta_controller_op import trigger_meta_controller
     >>> block_names, evolution_times = trigger_meta_controller(
     ...     metric_values=tf.constant([0.5, 0.1]),
     ...     metric_names=tf.constant(["loss", "grad_norm"]),
@@ -36,7 +36,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native.ops.lib_loader import get_highnoon_core_path
+from saguaro._native.ops.lib_loader import get_saguaro_core_path
 
 logger = logging.getLogger(__name__)
 
@@ -48,17 +48,17 @@ def _get_native_ops():
     """Lazy-load the native ops library."""
     global _ops
     if _ops is None:
-        lib_path = get_highnoon_core_path()
+        lib_path = get_saguaro_core_path()
         if lib_path is None:
             raise ImportError(
-                "highnoon_core library not found. "
-                "Run 'cd highnoon/_native && ./build_secure.sh' to compile."
+                "saguaro_core library not found. "
+                "Run 'cd saguaro/_native && ./build_secure.sh' to compile."
             )
         try:
             _ops = tf.load_op_library(lib_path)
             logger.debug(f"Loaded meta_controller_op from {lib_path}")
         except Exception as e:
-            raise ImportError(f"Failed to load highnoon_core: {e}") from e
+            raise ImportError(f"Failed to load saguaro_core: {e}") from e
     return _ops
 
 

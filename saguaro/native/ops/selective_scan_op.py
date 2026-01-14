@@ -1,4 +1,4 @@
-# highnoon/_native/ops/selective_scan_op.py
+# saguaro/_native/ops/selective_scan_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,18 +45,18 @@ def _load_selective_scan_op():
         selective_scan_grad_op = tf.raw_ops.SelectiveScanGrad
         return
 
-    # First try to load from the consolidated _highnoon_core.so library
+    # First try to load from the consolidated _saguaro_core.so library
     import os
 
-    from highnoon._native import resolve_op_library
+    from saguaro._native import resolve_op_library
 
-    consolidated_lib_path = resolve_op_library(__file__, "_highnoon_core.so")
+    consolidated_lib_path = resolve_op_library(__file__, "_saguaro_core.so")
     if os.path.exists(consolidated_lib_path):
         try:
             _selective_scan_module = tf.load_op_library(consolidated_lib_path)
             selective_scan_op = _selective_scan_module.selective_scan
             selective_scan_grad_op = _selective_scan_module.selective_scan_grad
-            logger.info("Loaded SelectiveScan from consolidated _highnoon_core.so")
+            logger.info("Loaded SelectiveScan from consolidated _saguaro_core.so")
             return
         except (tf.errors.NotFoundError, OSError, AttributeError) as e:
             logger.debug(f"Could not load SelectiveScan from consolidated library: {e}")

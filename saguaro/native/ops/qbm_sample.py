@@ -20,7 +20,7 @@ import logging
 import tensorflow as tf
 from tensorflow.python.framework import ops
 
-from highnoon._native.ops.lib_loader import resolve_op_library
+from saguaro._native.ops.lib_loader import resolve_op_library
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +31,7 @@ qbm_sample_op = None
 qbm_sample_grad_op = None
 
 try:
-    # lib_loader.resolve_op_library now returns _highnoon_core.so path
+    # lib_loader.resolve_op_library now returns _saguaro_core.so path
     _op_lib_path = resolve_op_library(__file__, "_qbm_sample_op.so")
     _qbm_sample_module = tf.load_op_library(_op_lib_path)
     # Check if the ops exist in the consolidated binary (TF converts to snake_case)

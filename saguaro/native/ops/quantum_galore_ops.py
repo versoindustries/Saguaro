@@ -1,4 +1,4 @@
-# highnoon/_native/ops/quantum_galore_ops.py
+# saguaro/_native/ops/quantum_galore_ops.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -21,7 +21,7 @@ for entropy-based dynamic rank selection and quantum random feature projection.
 Note: This module requires the native C++ ops. No Python fallbacks are provided.
 
 Example:
-    >>> from highnoon._native.ops.quantum_galore_ops import quantum_galore_project
+    >>> from saguaro._native.ops.quantum_galore_ops import quantum_galore_project
     >>> compressed, actual_rank = quantum_galore_project(
     ...     gradient, eigenvalues, rotation_matrix, bias, max_rank=32
     ... )
@@ -41,7 +41,7 @@ _NATIVE_OPS_AVAILABLE = False
 _native_lib = None
 
 try:
-    from highnoon._native import _load_consolidated_binary, is_consolidated_available
+    from saguaro._native import _load_consolidated_binary, is_consolidated_available
 
     if is_consolidated_available():
         # Load the consolidated binary to register ops with TensorFlow

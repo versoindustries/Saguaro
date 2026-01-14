@@ -1,19 +1,19 @@
-# highnoon/_native/CMakeLists.txt
+# saguaro/_native/CMakeLists.txt
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
-# CMake build configuration for HighNoon Language Framework native operations.
-# This builds a single consolidated binary (_highnoon_core.so) with all ops
+# CMake build configuration for Saguaro Language Framework native operations.
+# This builds a single consolidated binary (_saguaro_core.so) with all ops
 # statically linked, enabling LTO optimizations and security hardening.
 #
 # Usage:
 #   mkdir build && cd build
-#   cmake .. -DCMAKE_BUILD_TYPE=Release -DPRODUCTION_BUILD=ON
+#   cmake .. -DCMAKE_BUILD_TYPE=Debug -DPRODUCTION_BUILD=OFF
 #   cmake --build . --parallel
 #
 # Or use the build_secure.sh script for fully hardened builds.
 
 cmake_minimum_required(VERSION 3.18)
-project(highnoon_core VERSION 1.0.0 LANGUAGES CXX)
+project(saguaro_core VERSION 1.0.0 LANGUAGES CXX)
 
 # =============================================================================
 # C++ Standard Configuration
@@ -29,6 +29,8 @@ set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 # =============================================================================
 # Build Options
 # =============================================================================
+add_compile_options(-g -O0) # Force debug symbols as requested by user
+
 option(ENABLE_LTO "Enable Link-Time Optimization for better inlining" ON)
 option(ENABLE_OBFUSCATION "Enable symbol and control flow obfuscation" ON)
 option(STRIP_SYMBOLS "Strip all symbols from release binary" ON)
@@ -94,35 +96,35 @@ if(NOT DEFINED CHAIN_SECRET_LOW)
 endif()
 
 # Crypto key for string encryption
-if(NOT DEFINED HN_CRYPTO_KEY)
-    set(HN_CRYPTO_KEY "V3RS0_1NDUSTR13S_H1GHN00N_2025_K3Y")
+if(NOT DEFINED SAGUARO_CRYPTO_KEY)
+    set(SAGUARO_CRYPTO_KEY "V3RS0_1NDUSTR13S_H1GHN00N_2025_K3Y")
 endif()
 
 # =============================================================================
 # Edition Configuration (Lite, Pro, Enterprise)
 # =============================================================================
-# HN_EDITION values:
+# SAGUARO_EDITION values:
 #   0 = LITE       (default) - Free tier with scale limits enforced
 #   1 = PRO        - Paid tier with no scale limits, pre-compiled binary
 #   2 = ENTERPRISE - Source code access + no limits + dedicated support
 
-if(NOT DEFINED HN_EDITION)
-    set(HN_EDITION 0)
+if(NOT DEFINED SAGUARO_EDITION)
+    set(SAGUARO_EDITION 0)
 endif()
 
-if(NOT DEFINED HN_EDITION_NAME)
-    if(HN_EDITION EQUAL 0)
-        set(HN_EDITION_NAME "LITE")
-    elseif(HN_EDITION EQUAL 1)
-        set(HN_EDITION_NAME "PRO")
-    elseif(HN_EDITION EQUAL 2)
-        set(HN_EDITION_NAME "ENTERPRISE")
+if(NOT DEFINED SAGUARO_EDITION_NAME)
+    if(SAGUARO_EDITION EQUAL 0)
+        set(SAGUARO_EDITION_NAME "LITE")
+    elseif(SAGUARO_EDITION EQUAL 1)
+        set(SAGUARO_EDITION_NAME "PRO")
+    elseif(SAGUARO_EDITION EQUAL 2)
+        set(SAGUARO_EDITION_NAME "ENTERPRISE")
     else()
-        set(HN_EDITION_NAME "UNKNOWN")
+        set(SAGUARO_EDITION_NAME "UNKNOWN")
     endif()
 endif()
 
-message(STATUS "Edition: ${HN_EDITION_NAME} (HN_EDITION=${HN_EDITION})")
+message(STATUS "Edition: ${SAGUARO_EDITION_NAME} (SAGUARO_EDITION=${SAGUARO_EDITION})")
 
 # =============================================================================
 # Find TensorFlow
@@ -518,11 +520,11 @@ endif()
 # =============================================================================
 # Build Consolidated Library
 # =============================================================================
-add_library(highnoon_core SHARED ${HIGHNOON_ALL_SOURCES})
+add_library(saguaro_core SHARED ${HIGHNOON_ALL_SOURCES})
 
 # Set output properties
-set_target_properties(highnoon_core PROPERTIES
-    OUTPUT_NAME "_highnoon_core"
+set_target_properties(saguaro_core PROPERTIES
+    OUTPUT_NAME "_saguaro_core"
     PREFIX ""
     SUFFIX ".so"
     CXX_VISIBILITY_PRESET hidden
@@ -530,7 +532,7 @@ set_target_properties(highnoon_core PROPERTIES
 )
 
 # Include directories (including spdlog for controllers)
-target_include_directories(highnoon_core PRIVATE
+target_include_directories(saguaro_core PRIVATE
     ${TF_INCLUDE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}
     ${CMAKE_CURRENT_SOURCE_DIR}/ops
@@ -540,17 +542,17 @@ target_include_directories(highnoon_core PRIVATE
 )
 
 # Compile definitions
-target_compile_definitions(highnoon_core PRIVATE
+target_compile_definitions(saguaro_core PRIVATE
     CHAIN_SECRET_HIGH=${CHAIN_SECRET_HIGH}
     CHAIN_SECRET_LOW=${CHAIN_SECRET_LOW}
-    HN_CRYPTO_KEY="${HN_CRYPTO_KEY}"
+    SAGUARO_CRYPTO_KEY="${SAGUARO_CRYPTO_KEY}"
     HIGHNOON_VERSION="${PROJECT_VERSION}"
-    HIGHNOON_EDITION="${HN_EDITION_NAME}"
-    HN_EDITION=${HN_EDITION}
+    HIGHNOON_EDITION="${SAGUARO_EDITION_NAME}"
+    SAGUARO_EDITION=${SAGUARO_EDITION}
 )
 
 # Compile options
-target_compile_options(highnoon_core PRIVATE
+target_compile_options(saguaro_core PRIVATE
     ${BASE_CXX_FLAGS}
     ${HARDENING_FLAGS}
     ${TF_REQUIRED_FLAGS}
@@ -564,7 +566,7 @@ target_compile_options(highnoon_core PRIVATE
 if(ENABLE_OPENMP)
     find_package(OpenMP)
     if(OpenMP_CXX_FOUND)
-        target_link_libraries(highnoon_core PRIVATE OpenMP::OpenMP_CXX)
+        target_link_libraries(saguaro_core PRIVATE OpenMP::OpenMP_CXX)
         message(STATUS "OpenMP: Enabled")
     else()
         message(WARNING "OpenMP: Not found, parallelization disabled")
@@ -575,11 +577,11 @@ endif()
 if(HIGHNOON_CONTROLLER_SOURCES)
     find_package(spdlog QUIET)
     if(spdlog_FOUND)
-        target_link_libraries(highnoon_core PRIVATE spdlog::spdlog)
+        target_link_libraries(saguaro_core PRIVATE spdlog::spdlog)
         message(STATUS "spdlog: Found via CMake package")
     else()
         # Fallback to system library
-        target_link_libraries(highnoon_core PRIVATE spdlog fmt)
+        target_link_libraries(saguaro_core PRIVATE spdlog fmt)
         message(STATUS "spdlog: Using system library")
     endif()
 endif()
@@ -588,13 +590,13 @@ endif()
 if(ENABLE_LAPACK)
     find_package(LAPACK QUIET)
     if(LAPACK_FOUND)
-        target_compile_definitions(highnoon_core PRIVATE HIGHNOON_USE_LAPACK)
-        target_link_libraries(highnoon_core PRIVATE ${LAPACK_LIBRARIES})
+        target_compile_definitions(saguaro_core PRIVATE HIGHNOON_USE_LAPACK)
+        target_link_libraries(saguaro_core PRIVATE ${LAPACK_LIBRARIES})
         message(STATUS "LAPACK: Enabled (4x matrix inversion speedup)")
     else()
         # Try linking directly (common on Linux)
-        target_compile_definitions(highnoon_core PRIVATE HIGHNOON_USE_LAPACK)
-        target_link_libraries(highnoon_core PRIVATE lapack blas)
+        target_compile_definitions(saguaro_core PRIVATE HIGHNOON_USE_LAPACK)
+        target_link_libraries(saguaro_core PRIVATE lapack blas)
         message(STATUS "LAPACK: Using system library (apt install liblapack-dev)")
     endif()
 else()
@@ -602,7 +604,7 @@ else()
 endif()
 
 # Link options
-target_link_options(highnoon_core PRIVATE
+target_link_options(saguaro_core PRIVATE
     -Wl,-z,relro          # Read-only relocation
     -Wl,-z,now            # Immediate binding
     -Wl,--no-as-needed    # TensorFlow requires this
@@ -611,7 +613,7 @@ target_link_options(highnoon_core PRIVATE
 
 # TensorFlow link flags (parse and add)
 separate_arguments(TF_LFLAGS_LIST UNIX_COMMAND "${TF_LFLAGS}")
-target_link_options(highnoon_core PRIVATE ${TF_LFLAGS_LIST})
+target_link_options(saguaro_core PRIVATE ${TF_LFLAGS_LIST})
 
 # NOTE: Symbol stripping moved to after copy step below (line ~615)
 
@@ -704,15 +706,15 @@ endif()
 # Installation
 # =============================================================================
 
-install(TARGETS highnoon_core
+install(TARGETS saguaro_core
     LIBRARY DESTINATION ${INSTALL_BIN_DIR}
 )
 
 # Copy to bin directory on build, then strip
-add_custom_command(TARGET highnoon_core POST_BUILD
+add_custom_command(TARGET saguaro_core POST_BUILD
     COMMAND ${CMAKE_COMMAND} -E make_directory ${INSTALL_BIN_DIR}
-    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:highnoon_core> ${INSTALL_BIN_DIR}/
-    COMMENT "Copying _highnoon_core.so to ${INSTALL_BIN_DIR}/"
+    COMMAND ${CMAKE_COMMAND} -E copy $<TARGET_FILE:saguaro_core> ${INSTALL_BIN_DIR}/
+    COMMENT "Copying _saguaro_core.so to ${INSTALL_BIN_DIR}/"
 )
 
 # =============================================================================
@@ -722,9 +724,9 @@ if(STRIP_SYMBOLS AND CMAKE_BUILD_TYPE STREQUAL "Release")
     # Find strip command
     find_program(STRIP_EXECUTABLE strip)
     if(STRIP_EXECUTABLE)
-        add_custom_command(TARGET highnoon_core POST_BUILD
-            COMMAND ${STRIP_EXECUTABLE} --strip-all ${INSTALL_BIN_DIR}/_highnoon_core.so
-            COMMENT "Stripping symbols from ${INSTALL_BIN_DIR}/_highnoon_core.so"
+        add_custom_command(TARGET saguaro_core POST_BUILD
+            COMMAND ${STRIP_EXECUTABLE} --strip-all ${INSTALL_BIN_DIR}/_saguaro_core.so
+            COMMENT "Stripping symbols from ${INSTALL_BIN_DIR}/_saguaro_core.so"
         )
         message(STATUS "Symbol Stripping: Enabled (Release build)")
     else()
@@ -738,14 +740,14 @@ endif()
 # Summary
 # =============================================================================
 message(STATUS "")
-message(STATUS "=== HighNoon Build Configuration ===")
+message(STATUS "=== Saguaro Build Configuration ===")
 message(STATUS "Version:         ${PROJECT_VERSION}")
-message(STATUS "Edition:         ${HN_EDITION_NAME} (code=${HN_EDITION})")
+message(STATUS "Edition:         ${SAGUARO_EDITION_NAME} (code=${SAGUARO_EDITION})")
 message(STATUS "Architecture:    ${TARGET_ARCH}")
 message(STATUS "Build Type:      ${CMAKE_BUILD_TYPE}")
 message(STATUS "LTO:             ${ENABLE_LTO}")
 message(STATUS "Production:      ${PRODUCTION_BUILD}")
 message(STATUS "Anti-Debug:      ${ENABLE_ANTIDEBUG}")
 message(STATUS "Strip Symbols:   ${STRIP_SYMBOLS}")
-message(STATUS "Output:          ${INSTALL_BIN_DIR}/_highnoon_core.so")
+message(STATUS "Output:          ${INSTALL_BIN_DIR}/_saguaro_core.so")
 message(STATUS "")

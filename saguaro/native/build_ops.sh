@@ -1,9 +1,9 @@
 #!/bin/bash
 
 # ==============================================================================
-# HighNoon Language Framework - Build Script for Custom TensorFlow Operators
+# Saguaro Language Framework - Build Script for Custom TensorFlow Operators
 #
-# This script builds the custom C++ TensorFlow operators for HighNoon.
+# This script builds the custom C++ TensorFlow operators for Saguaro.
 # It supports x86_64 and arm64 architectures.
 #
 # Usage:
@@ -178,7 +178,7 @@ main() {
 
     echo "----------------------------------------"
 
-    # List of core ops for HighNoon
+    # List of core ops for Saguaro
     local ops=(
         "fused_moe_dispatch"
         "fused_superposition_moe"

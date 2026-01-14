@@ -1,9 +1,9 @@
 #!/bin/bash
-# highnoon/_native/build_secure.sh
+# saguaro/_native/build_secure.sh
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
-# Enterprise-grade secure build script for HighNoon Language Framework.
-# This script builds the consolidated _highnoon_core.so binary with full
+# Enterprise-grade secure build script for Saguaro Language Framework.
+# This script builds the consolidated _saguaro_core.so binary with full
 # security hardening enabled.
 #
 # v3.0 Update:
@@ -31,10 +31,10 @@
 #   PYTHON_EXEC              - Python interpreter to use
 #   CXX_COMPILER             - C++ compiler (default: g++, recommended: clang++)
 #   CPU_OPT_FLAGS            - Override CPU optimization flags
-#   HSMN_TARGET_PLATFORM     - Target platform (general, marlin_arm)
-#   HSMN_ENABLE_OPENMP       - Enable OpenMP (default: 1)
-#   HSMN_ENABLE_TBB          - Enable Intel TBB (auto-detected)
-#   HSMN_PAR_BACKEND         - Preferred parallel backend (openmp, tbb)
+#   SAGUARO_TARGET_PLATFORM     - Target platform (general, marlin_arm)
+#   SAGUARO_ENABLE_OPENMP       - Enable OpenMP (default: 1)
+#   SAGUARO_ENABLE_TBB          - Enable Intel TBB (auto-detected)
+#   SAGUARO_PAR_BACKEND         - Preferred parallel backend (openmp, tbb)
 
 set -euo pipefail
 
@@ -55,19 +55,19 @@ ENABLE_ANTIDEBUG="OFF"
 STRIP_SYMBOLS="ON"
 ENABLE_LTO="ON"
 ENABLE_OLLVM="OFF"  # Phase 2: Obfuscator-LLVM (requires O-LLVM toolchain)
-TARGET_PLATFORM="${HSMN_TARGET_PLATFORM:-general}"
-ARM_TOOLCHAIN_PREFIX="${HSMN_ARM_TOOLCHAIN_PREFIX:-aarch64-linux-gnu-}"
+TARGET_PLATFORM="${SAGUARO_TARGET_PLATFORM:-general}"
+ARM_TOOLCHAIN_PREFIX="${SAGUARO_ARM_TOOLCHAIN_PREFIX:-aarch64-linux-gnu-}"
 
 # =============================================================================
 # Edition Configuration (Lite, Pro, Enterprise)
 # =============================================================================
-# HN_EDITION values:
+# SAGUARO_EDITION values:
 #   0 = LITE       (default) - Free tier with scale limits enforced
 #   1 = PRO        - Paid tier with no scale limits, pre-compiled binary
 #   2 = ENTERPRISE - Source code access + no limits + dedicated support
-HN_EDITION=0
-HN_EDITION_NAME="LITE"
-HN_EDITION_DESCRIPTION="Free tier with scale limits (20B params, 5M context)"
+SAGUARO_EDITION=0
+SAGUARO_EDITION_NAME="LITE"
+SAGUARO_EDITION_DESCRIPTION="Free tier with scale limits (20B params, 5M context)"
 
 # Detected settings (populated by detection functions)
 CXX_COMPILER="${CXX_COMPILER:-g++}"
@@ -83,21 +83,21 @@ TF_XLA_INCLUDE_PATH=""
 while [[ $# -gt 0 ]]; do
     case $1 in
         --lite)
-            HN_EDITION=0
-            HN_EDITION_NAME="LITE"
-            HN_EDITION_DESCRIPTION="Free tier with scale limits (20B params, 5M context)"
+            SAGUARO_EDITION=0
+            SAGUARO_EDITION_NAME="LITE"
+            SAGUARO_EDITION_DESCRIPTION="Free tier with scale limits (20B params, 5M context)"
             shift
             ;;
         --pro)
-            HN_EDITION=1
-            HN_EDITION_NAME="PRO"
-            HN_EDITION_DESCRIPTION="Pro tier - no scale limits, unlimited performance"
+            SAGUARO_EDITION=1
+            SAGUARO_EDITION_NAME="PRO"
+            SAGUARO_EDITION_DESCRIPTION="Pro tier - no scale limits, unlimited performance"
             shift
             ;;
         --enterprise)
-            HN_EDITION=2
-            HN_EDITION_NAME="ENTERPRISE"
-            HN_EDITION_DESCRIPTION="Enterprise tier - source code access + unlimited"
+            SAGUARO_EDITION=2
+            SAGUARO_EDITION_NAME="ENTERPRISE"
+            SAGUARO_EDITION_DESCRIPTION="Enterprise tier - source code access + unlimited"
             shift
             ;;
         --production)
@@ -143,9 +143,9 @@ while [[ $# -gt 0 ]]; do
             echo "  PYTHON_EXEC           Python interpreter path"
             echo "  CXX_COMPILER          C++ compiler (default: g++)"
             echo "  CPU_OPT_FLAGS         Override SIMD flags"
-            echo "  HSMN_TARGET_PLATFORM  Target (general, marlin_arm)"
-            echo "  HSMN_ENABLE_OPENMP    Enable OpenMP (0/1)"
-            echo "  HSMN_ENABLE_TBB       Enable Intel TBB (0/1)"
+            echo "  SAGUARO_TARGET_PLATFORM  Target (general, marlin_arm)"
+            echo "  SAGUARO_ENABLE_OPENMP    Enable OpenMP (0/1)"
+            echo "  SAGUARO_ENABLE_TBB       Enable Intel TBB (0/1)"
             echo ""
             echo "Examples:"
             echo "  $0 --lite                    # Lite Edition release build"
@@ -179,10 +179,10 @@ log_error() {
 
 echo ""
 echo "╔══════════════════════════════════════════════════════════════════════════╗"
-echo "║                    HighNoon Secure Build System v3.0                     ║"
+echo "║                    Saguaro Secure Build System v3.0                     ║"
 echo "║                         Verso Industries 2025                            ║"
 echo "╠══════════════════════════════════════════════════════════════════════════╣"
-case ${HN_EDITION} in
+case ${SAGUARO_EDITION} in
     0) echo "║  📦 EDITION: LITE (Scale limits enforced)                                ║" ;;
     1) echo "║  🚀 EDITION: PRO (Unlimited scale, no limits)                            ║" ;;
     2) echo "║  🏢 EDITION: ENTERPRISE (Source access + unlimited)                      ║" ;;
@@ -194,15 +194,15 @@ echo ""
 if command -v python3 &> /dev/null; then
     CHAIN_SECRET_HIGH=$(python3 -c "import secrets; print(hex(secrets.randbits(64)))")
     CHAIN_SECRET_LOW=$(python3 -c "import secrets; print(hex(secrets.randbits(64)))")
-    HN_CRYPTO_KEY=$(python3 -c "import secrets, string; print(''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(32)))")
+    SAGUARO_CRYPTO_KEY=$(python3 -c "import secrets, string; print(''.join(secrets.choice(string.ascii_letters + string.digits) for _ in range(32)))")
 else
     CHAIN_SECRET_HIGH="0x$(head -c 8 /dev/urandom | xxd -p)ULL"
     CHAIN_SECRET_LOW="0x$(head -c 8 /dev/urandom | xxd -p)ULL"
-    HN_CRYPTO_KEY=$(head -c 32 /dev/urandom | base64 | head -c 32)
+    SAGUARO_CRYPTO_KEY=$(head -c 32 /dev/urandom | base64 | head -c 32)
 fi
 
 echo "🔐 Chain Secret: ${CHAIN_SECRET_HIGH:0:10}...${CHAIN_SECRET_LOW:0:10}..."
-echo "📋 Edition: ${HN_EDITION_NAME} - ${HN_EDITION_DESCRIPTION}"
+echo "📋 Edition: ${SAGUARO_EDITION_NAME} - ${SAGUARO_EDITION_DESCRIPTION}"
 echo ""
 
 # =============================================================================
@@ -210,8 +210,8 @@ echo ""
 # =============================================================================
 
 detect_cpu_vendor() {
-    if [[ -n "${HSMN_CPU_VENDOR:-}" ]]; then
-        echo "${HSMN_CPU_VENDOR}"
+    if [[ -n "${SAGUARO_CPU_VENDOR:-}" ]]; then
+        echo "${SAGUARO_CPU_VENDOR}"
         return
     fi
     local vendor=""
@@ -227,7 +227,7 @@ detect_cpu_vendor() {
         fi
     fi
     vendor=${vendor:-unknown}
-    export HSMN_CPU_VENDOR="${vendor}"
+    export SAGUARO_CPU_VENDOR="${vendor}"
     echo "${vendor}"
 }
 
@@ -292,7 +292,7 @@ configure_parallelism() {
     vendor=$(detect_cpu_vendor)
     log_info "Detected CPU vendor: ${vendor}"
 
-    local backend="${HSMN_PAR_BACKEND:-}"
+    local backend="${SAGUARO_PAR_BACKEND:-}"
     if [[ -z "${backend}" ]]; then
         if [[ "${vendor}" == *"amd"* || "${vendor}" == *"arm"* || "${vendor}" == *"apple"* ]]; then
             backend="openmp"
@@ -300,44 +300,44 @@ configure_parallelism() {
             backend="tbb"
         fi
     fi
-    export HSMN_PAR_BACKEND="${backend}"
+    export SAGUARO_PAR_BACKEND="${backend}"
 
-    if [[ -z "${HSMN_ENABLE_OPENMP+x}" ]]; then
+    if [[ -z "${SAGUARO_ENABLE_OPENMP+x}" ]]; then
         enable_openmp=1
     else
-        enable_openmp="${HSMN_ENABLE_OPENMP}"
+        enable_openmp="${SAGUARO_ENABLE_OPENMP}"
     fi
 
-    if [[ -z "${HSMN_ENABLE_TBB+x}" ]]; then
+    if [[ -z "${SAGUARO_ENABLE_TBB+x}" ]]; then
         if [[ "${vendor}" == *"amd"* || "${vendor}" == *"arm"* || "${vendor}" == *"apple"* ]]; then
             enable_tbb=0
         else
             enable_tbb=1
         fi
     else
-        enable_tbb="${HSMN_ENABLE_TBB}"
+        enable_tbb="${SAGUARO_ENABLE_TBB}"
     fi
 
-    export HSMN_ENABLE_OPENMP="${enable_openmp}"
-    export HSMN_ENABLE_TBB="${enable_tbb}"
+    export SAGUARO_ENABLE_OPENMP="${enable_openmp}"
+    export SAGUARO_ENABLE_TBB="${enable_tbb}"
 
     PARALLEL_DEFINES=""
     if [[ "${enable_openmp}" == "1" ]]; then
-        OPENMP_FLAGS="${HSMN_OPENMP_FLAGS:--fopenmp}"
-        PARALLEL_DEFINES+=" -DHSMN_WITH_OPENMP=1"
+        OPENMP_FLAGS="${SAGUARO_OPENMP_FLAGS:--fopenmp}"
+        PARALLEL_DEFINES+=" -DSAGUARO_WITH_OPENMP=1"
         log_info "OpenMP: Enabled (${OPENMP_FLAGS})"
     else
         OPENMP_FLAGS=""
-        PARALLEL_DEFINES+=" -DHSMN_WITH_OPENMP=0"
+        PARALLEL_DEFINES+=" -DSAGUARO_WITH_OPENMP=0"
         log_info "OpenMP: Disabled"
     fi
 
     if [[ "${enable_tbb}" == "1" ]]; then
-        PARALLEL_DEFINES+=" -DHSMN_WITH_TBB=1"
+        PARALLEL_DEFINES+=" -DSAGUARO_WITH_TBB=1"
         TBB_LFLAGS="-ltbb"
         log_info "Intel TBB: Enabled"
     else
-        PARALLEL_DEFINES+=" -DHSMN_WITH_TBB=0"
+        PARALLEL_DEFINES+=" -DSAGUARO_WITH_TBB=0"
         TBB_LFLAGS=""
         log_info "Intel TBB: Disabled"
     fi
@@ -390,7 +390,7 @@ detect_environment() {
 
 detect_compiler() {
     if [[ "${TARGET_PLATFORM}" == "marlin_arm" ]]; then
-        CXX_COMPILER="${HSMN_ARM_CXX:-${ARM_TOOLCHAIN_PREFIX}g++}"
+        CXX_COMPILER="${SAGUARO_ARM_CXX:-${ARM_TOOLCHAIN_PREFIX}g++}"
         log_info "Cross-compiler: ${CXX_COMPILER}"
         return
     fi
@@ -410,7 +410,7 @@ detect_compiler() {
 # =============================================================================
 
 echo "📋 Build Configuration:"
-echo "   Edition:       ${HN_EDITION_NAME}"
+echo "   Edition:       ${SAGUARO_EDITION_NAME}"
 echo "   Build Type:    ${BUILD_TYPE}"
 echo "   Production:    ${PRODUCTION_BUILD}"
 echo "   Anti-Debug:    ${ENABLE_ANTIDEBUG}"
@@ -473,12 +473,12 @@ cmake "${SCRIPT_DIR}" \
     -DENABLE_OLLVM="${ENABLE_OLLVM}" \
     -DCHAIN_SECRET_HIGH="${CHAIN_SECRET_HIGH}" \
     -DCHAIN_SECRET_LOW="${CHAIN_SECRET_LOW}" \
-    -DHN_CRYPTO_KEY="${HN_CRYPTO_KEY}" \
-    -DHN_EDITION="${HN_EDITION}" \
-    -DHN_EDITION_NAME="${HN_EDITION_NAME}" \
+    -DSAGUARO_CRYPTO_KEY="${SAGUARO_CRYPTO_KEY}" \
+    -DSAGUARO_EDITION="${SAGUARO_EDITION}" \
+    -DSAGUARO_EDITION_NAME="${SAGUARO_EDITION_NAME}" \
     -DCPU_OPT_FLAGS="${CPU_OPT_FLAGS}" \
-    -DENABLE_OPENMP="${HSMN_ENABLE_OPENMP:-1}" \
-    -DENABLE_TBB="${HSMN_ENABLE_TBB:-0}" \
+    -DENABLE_OPENMP="${SAGUARO_ENABLE_OPENMP:-1}" \
+    -DENABLE_TBB="${SAGUARO_ENABLE_TBB:-0}" \
     2>&1 | tee cmake_configure.log
 
 echo ""
@@ -495,7 +495,7 @@ echo "                          Build Verification                              
 echo "═══════════════════════════════════════════════════════════════════════════"
 echo ""
 
-BINARY="${DIST_DIR}/${ARCH_DIR}/_highnoon_core.so"
+BINARY="${DIST_DIR}/${ARCH_DIR}/_saguaro_core.so"
 
 if [ -f "${BINARY}" ]; then
     echo "✅ Binary created: ${BINARY}"
@@ -567,10 +567,10 @@ echo "                            Build Complete                                
 echo "═══════════════════════════════════════════════════════════════════════════"
 echo ""
 echo "📍 Output: ${BINARY}"
-echo "📦 Edition: ${HN_EDITION_NAME}"
+echo "📦 Edition: ${SAGUARO_EDITION_NAME}"
 echo ""
 
-case ${HN_EDITION} in
+case ${SAGUARO_EDITION} in
     0)
         echo "📋 Lite Edition Limits:"
         echo "   • Max Parameters:      20 billion"

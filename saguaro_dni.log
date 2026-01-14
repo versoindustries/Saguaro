@@ -122,3 +122,23 @@ Registered kernels:
 2026-01-13 08:56:40,151 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/SAGUARO/saguaro/artifacts/codebooks/verso_baseline.json (0 superwords, native_trie=False)
 2026-01-13 08:56:40,151 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/SAGUARO/saguaro/artifacts/codebooks/verso_baseline.json: 0 superwords, effective_vocab=362
 2026-01-13 08:56:44,027 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-13 12:50:09,963 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-13 12:50:09,963 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-13 12:50:09,964 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (0 superwords, native_trie=False)
+2026-01-13 12:50:09,964 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 0 superwords, effective_vocab=362
+2026-01-13 12:50:12,830 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-13 13:11:10,326 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-13 13:11:10,328 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-13 13:11:10,328 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (0 superwords, native_trie=False)
+2026-01-13 13:11:10,328 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 0 superwords, effective_vocab=362
+2026-01-13 13:11:13,032 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-13 13:11:26,414 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-13 13:11:26,414 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-13 13:11:26,414 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (0 superwords, native_trie=False)
+2026-01-13 13:11:26,414 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 0 superwords, effective_vocab=362
+2026-01-13 13:11:29,123 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-13 13:11:39,810 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-13 13:11:39,810 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-13 13:11:39,810 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (0 superwords, native_trie=False)
+2026-01-13 13:11:39,810 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 0 superwords, effective_vocab=362
+2026-01-13 13:11:42,422 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)

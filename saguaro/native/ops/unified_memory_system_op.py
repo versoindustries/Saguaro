@@ -22,9 +22,9 @@ from typing import Optional
 import tensorflow as tf
 
 # Import native ops loader - REQUIRED, no fallback
-from highnoon._native import load_highnoon_core
+from saguaro._native import load_saguaro_core
 
-_highnoon_core = load_highnoon_core()
+_saguaro_core = load_saguaro_core()
 
 
 # =============================================================================
@@ -116,7 +116,7 @@ def unified_memory_read(
     if aux_data is None:
         aux_data = tf.zeros([1], dtype=tf.float32)
     
-    return _highnoon_core.unified_memory_system_op(
+    return _saguaro_core.unified_memory_system_op(
         query=query,
         memory=memory,
         aux_data=aux_data,

@@ -1,4 +1,4 @@
-# highnoon/_native/ops/hd_gradient_compression.py
+# saguaro/_native/ops/hd_gradient_compression.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -54,7 +54,7 @@ _hd_gradient_fft_compress = None
 _hd_gradient_fft_decompress = None
 
 try:
-    from highnoon._native import get_op
+    from saguaro._native import get_op
 
     _hd_gc_module = get_op("hd_gradient_compression")
     if _hd_gc_module is not None:

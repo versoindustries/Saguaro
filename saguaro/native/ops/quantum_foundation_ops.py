@@ -32,9 +32,9 @@ from typing import Optional
 import tensorflow as tf
 
 # Import native ops loader - REQUIRED, no fallback
-from highnoon._native import load_highnoon_core
+from saguaro._native import load_saguaro_core
 
-_highnoon_core = load_highnoon_core()
+_saguaro_core = load_saguaro_core()
 
 
 # =============================================================================
@@ -161,7 +161,7 @@ def unified_quantum(
     if aux_input is None:
         aux_input = tf.zeros([1], dtype=tf.float32)
     
-    return _highnoon_core.unified_quantum_op(
+    return _saguaro_core.unified_quantum_op(
         input=input_tensor,
         params=params,
         aux_input=aux_input,
@@ -420,7 +420,7 @@ def quantum_residual(
         Blended output, same shape as x
     """
     # Call native forward op
-    output = _highnoon_core.unitary_residual_forward(
+    output = _saguaro_core.unitary_residual_forward(
         x=x,
         f_x=f_x,
         angle=angle,
@@ -428,7 +428,7 @@ def quantum_residual(
     
     def grad(upstream, variables=None):
         """Gradient function with variables support for tf.custom_gradient."""
-        grad_x, grad_f_x, grad_angle = _highnoon_core.unitary_residual_backward(
+        grad_x, grad_f_x, grad_angle = _saguaro_core.unitary_residual_backward(
             grad_output=upstream,
             x=x,
             f_x=f_x,

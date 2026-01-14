@@ -1,4 +1,4 @@
-# highnoon/_native/ops/quantum_moe_ops.py
+# saguaro/_native/ops/quantum_moe_ops.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Python wrapper for Quantum-Inspired MoE Operations.
@@ -41,7 +41,7 @@ entangled_mpo_router_op = None
 born_rule_sampling_op = None
 
 try:
-    from highnoon._native import get_op
+    from saguaro._native import get_op
 
     _quantum_moe_module = get_op("quantum_moe_ops")
 

@@ -1,4 +1,4 @@
-# highnoon/_native/ops/hyperdimensional_embedding.py
+# saguaro/_native/ops/hyperdimensional_embedding.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -45,7 +45,7 @@ _hde_holographic_bundle = None
 _hde_ctqw_spread = None
 
 try:
-    from highnoon._native import get_op
+    from saguaro._native import get_op
 
     _hde_module = get_op("hyperdimensional_embedding")
     if _hde_module is not None:

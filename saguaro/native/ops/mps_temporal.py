@@ -1,11 +1,11 @@
-# highnoon/_native/ops/mps_temporal.py
+# saguaro/_native/ops/mps_temporal.py
 # Python wrapper for MPSTemporalScan C++ Op
 
 import tensorflow as tf
 
-from highnoon._native.ops.lib_loader import resolve_op_library
+from saguaro._native.ops.lib_loader import resolve_op_library
 
-_LIB_PATH = resolve_op_library(__file__, "_highnoon_core")
+_LIB_PATH = resolve_op_library(__file__, "_saguaro_core")
 _mps_temporal_module = tf.load_op_library(_LIB_PATH)
 
 

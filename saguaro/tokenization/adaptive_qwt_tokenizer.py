@@ -185,7 +185,9 @@ class AdaptiveQWTTokenizer(QWTTextTokenizer):
                         if result:
                             token_sequences.append(result)
                     except Exception as e:
-                        logger.debug("[AdaptiveQWT] Tokenization error: %s", e)
+                        # Log first errors at WARNING to surface issues
+                        if completed < 5:
+                            logger.warning("[AdaptiveQWT] Tokenization error: %s", e)
                     
                     completed += 1
                     if completed % 5000 == 0:

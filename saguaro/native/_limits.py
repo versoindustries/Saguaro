@@ -1,4 +1,4 @@
-# highnoon/_native/_limits.py
+# saguaro/_native/_limits.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -13,7 +13,7 @@
 # See the License for the specific language governing permissions and
 # limitations under the License.
 
-"""Python-side limit enforcement for HighNoon Language Framework.
+"""Python-side limit enforcement for Saguaro Language Framework.
 
 This module provides edition-aware limit validation. Limits are enforced
 based on the build-time edition:
@@ -63,9 +63,9 @@ def _detect_edition() -> int:
     """
     try:
         # Try to get edition from compiled binary
-        from highnoon._native import _highnoon_core
+        from saguaro._native import _saguaro_core
 
-        edition = getattr(_highnoon_core, "_hn_edition", None)
+        edition = getattr(_saguaro_core, "_hn_edition", None)
         if edition is not None:
             return int(edition)
     except ImportError:
@@ -463,7 +463,7 @@ def require_enterprise(domain: str) -> None:
         raise LicenseError(
             f"The '{domain}' module requires a Pro or Enterprise license.\n\n"
             f"This module is part of the full HSMN-Architecture and is not\n"
-            f"available in the Lite edition of HighNoon Language Framework.\n\n"
+            f"available in the Lite edition of Saguaro Language Framework.\n\n"
             f"Upgrade to Pro or Enterprise: https://versoindustries.com/upgrade\n"
             f"For questions, visit: https://www.versoindustries.com/messages",
             domain=domain,

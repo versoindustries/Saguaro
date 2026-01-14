@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_qwt_tokenizer.py
+# saguaro/_native/ops/fused_qwt_tokenizer.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -34,7 +34,7 @@ _fused_qwt_tokenizer_grad = None
 _OP_LIBRARY_PATH: str | None = None
 
 try:
-    from highnoon._native import fused_qwt_tokenizer_op_path, load_qwt_tokenizer
+    from saguaro._native import fused_qwt_tokenizer_op_path, load_qwt_tokenizer
 
     _qwt_module = load_qwt_tokenizer()
     if _qwt_module is not None:

@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_text_tokenizer.py
+# saguaro/_native/ops/fused_text_tokenizer.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -29,7 +29,7 @@ Performance Characteristics:
     - Batch processing: Linear scaling with CPU cores
 
 Example:
-    >>> from highnoon._native.ops.fused_text_tokenizer import (
+    >>> from saguaro._native.ops.fused_text_tokenizer import (
     ...     fused_text_tokenize_batch,
     ...     SuperwordTrieHandle,
     ... )
@@ -52,9 +52,9 @@ _text_tok_module = None
 _ops_available = False
 
 try:
-    from highnoon._native import load_highnoon_core
+    from saguaro._native import load_saguaro_core
     
-    _core = load_highnoon_core()
+    _core = load_saguaro_core()
     if _core is not None:
         _text_tok_module = _core
         _ops_available = True

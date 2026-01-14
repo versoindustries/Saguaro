@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_coconut_ops.py
+# saguaro/_native/ops/fused_coconut_ops.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ Provides Python interfaces to the fused C++ ops for multi-path thought
 exploration, adaptive collapse, and crystallization.
 
 Example:
-    >>> from highnoon._native.ops.fused_coconut_ops import fused_coconut_bfs
+    >>> from saguaro._native.ops.fused_coconut_ops import fused_coconut_bfs
     >>> output, amplitudes = fused_coconut_bfs(hidden_states, context, ...)
 """
 
@@ -29,7 +29,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon.config import COLLAPSE_HARD_SAMPLES
+from saguaro.config import COLLAPSE_HARD_SAMPLES
 
 logger = logging.getLogger(__name__)
 
@@ -41,8 +41,8 @@ _coconut_ops_available = False
 def _load_coconut_ops() -> bool:
     """Lazy load the native CoCoNut ops library.
 
-    Uses the consolidated binary loading from `highnoon._native`.
-    All CoCoNut ops are compiled into `_highnoon_core.so`.
+    Uses the consolidated binary loading from `saguaro._native`.
+    All CoCoNut ops are compiled into `_saguaro_core.so`.
     """
     global _coconut_ops_lib, _coconut_ops_available
 
@@ -50,7 +50,7 @@ def _load_coconut_ops() -> bool:
         return _coconut_ops_available
 
     try:
-        from highnoon._native import _load_consolidated_binary
+        from saguaro._native import _load_consolidated_binary
 
         _coconut_ops_lib = _load_consolidated_binary()
         _coconut_ops_available = _coconut_ops_lib is not None
@@ -136,7 +136,7 @@ def fused_coconut_bfs(
     if not _load_coconut_ops():
         raise RuntimeError(
             "FusedCoconutBFS C++ op not available. "
-            "Build with: cd highnoon/_native && ./build_secure.sh --lite --debug"
+            "Build with: cd saguaro/_native && ./build_secure.sh --lite --debug"
         )
 
     return _coconut_ops_lib.fused_coconut_bfs(

@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_wavelet_encoder.py
+# saguaro/_native/ops/fused_wavelet_encoder.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,7 +23,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native.ops.lib_loader import resolve_op_library
+from saguaro._native.ops.lib_loader import resolve_op_library
 
 logger = logging.getLogger(__name__)
 
@@ -33,7 +33,7 @@ fused_wavelet_encoder_chunk_op = None
 fused_wavelet_encoder_chunk_grad_op = None
 
 try:
-    # lib_loader.resolve_op_library now returns _highnoon_core.so path
+    # lib_loader.resolve_op_library now returns _saguaro_core.so path
     _op_lib_path = resolve_op_library(__file__, "_fused_wavelet_encoder_op.so")
     _fused_wavelet_module = tf.load_op_library(_op_lib_path)
     # Try to get the ops - names may differ in consolidated binary

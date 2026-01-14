@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_mamba_op.py
+# saguaro/_native/ops/fused_mamba_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -25,7 +25,7 @@ with SIMD optimizations and the following enhancements:
     6. Quantum Superposition Paths
 
 Usage:
-    from highnoon._native.ops.fused_mamba_op import fused_mamba_core
+    from saguaro._native.ops.fused_mamba_op import fused_mamba_core
 
     output, h_final = fused_mamba_core(
         x_c, z, conv_filter, conv_bias,
@@ -41,7 +41,7 @@ import logging
 
 import tensorflow as tf
 
-from highnoon._native import get_op
+from saguaro._native import get_op
 
 logger = logging.getLogger(__name__)
 
@@ -127,7 +127,7 @@ def fused_mamba_core(
     if _fused_mamba_core_op is None:
         raise RuntimeError(
             "FusedMambaCore C++ kernel not available. "
-            "Build the native library with: cd highnoon/_native && ./build_secure.sh"
+            "Build the native library with: cd saguaro/_native && ./build_secure.sh"
         )
 
     # Ensure float32 for C++ kernel

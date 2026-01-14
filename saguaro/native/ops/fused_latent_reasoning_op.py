@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_latent_reasoning_op.py
+# saguaro/_native/ops/fused_latent_reasoning_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -23,8 +23,8 @@ from __future__ import annotations
 
 import tensorflow as tf
 
-from highnoon import config as hn_config
-from highnoon._native import get_op
+from saguaro import config as hn_config
+from saguaro._native import get_op
 
 # Load the C++ op library
 _lib = get_op("fused_latent_reasoning")
@@ -76,7 +76,7 @@ def fused_latent_reasoning(
     if _fused_latent_reasoning_op is None:
         raise RuntimeError(
             "FusedLatentReasoning C++ op not available. Build with: "
-            "cd highnoon/_native && ./build_ops.sh fused_latent_reasoning"
+            "cd saguaro/_native && ./build_ops.sh fused_latent_reasoning"
         )
 
     # Ensure float32

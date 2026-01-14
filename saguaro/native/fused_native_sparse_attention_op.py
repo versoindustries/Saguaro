@@ -1,4 +1,4 @@
-# highnoon/_native/fused_native_sparse_attention_op.py
+# saguaro/_native/fused_native_sparse_attention_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -26,7 +26,7 @@ Complexity: O(n log n) instead of O(n²)
 
 import tensorflow as tf
 
-from highnoon._native import _ops
+from saguaro._native import _ops
 
 
 def native_sparse_attention(

@@ -1,4 +1,4 @@
-# highnoon/_native/ops/lib_loader.py
+# saguaro/_native/ops/lib_loader.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -24,7 +24,7 @@ import logging
 import os
 from pathlib import Path
 
-from highnoon._native.runtime.arch import DEFAULT_VERSO_TARGET_ARCH, canonicalize_target_arch
+from saguaro._native.runtime.arch import DEFAULT_VERSO_TARGET_ARCH, canonicalize_target_arch
 
 logger = logging.getLogger(__name__)
 
@@ -43,7 +43,7 @@ def _base_path(module_file: str, lib_basename: str) -> Path:
 
 
 def get_consolidated_library(target_arch: str | None = None) -> str | None:
-    """Get the consolidated _highnoon_core.so binary path if it exists.
+    """Get the consolidated _saguaro_core.so binary path if it exists.
 
     Args:
         target_arch: Optional target architecture override.
@@ -53,20 +53,20 @@ def get_consolidated_library(target_arch: str | None = None) -> str | None:
     """
     arch = canonicalize_target_arch(target_arch or os.getenv("VERSO_TARGET_ARCH"))
     arch_bin_dir = _BIN_DIR / arch
-    consolidated_path = arch_bin_dir / "_highnoon_core.so"
+    consolidated_path = arch_bin_dir / "_saguaro_core.so"
     if consolidated_path.exists():
         return str(consolidated_path)
     
     # Fallback: Check local build directory (developer convenience)
-    build_path = _NATIVE_DIR / "build" / "_highnoon_core.so"
+    build_path = _NATIVE_DIR / "build" / "_saguaro_core.so"
     if build_path.exists():
         return str(build_path)
         
     return None
 
 
-def get_highnoon_core_path(target_arch: str | None = None) -> str:
-    """Get the path to the consolidated _highnoon_core.so binary.
+def get_saguaro_core_path(target_arch: str | None = None) -> str:
+    """Get the path to the consolidated _saguaro_core.so binary.
 
     This is the primary function for loading unified quantum ops.
     Unlike get_consolidated_library, this raises RuntimeError if
@@ -76,7 +76,7 @@ def get_highnoon_core_path(target_arch: str | None = None) -> str:
         target_arch: Optional target architecture override.
 
     Returns:
-        Path to the _highnoon_core.so file.
+        Path to the _saguaro_core.so file.
 
     Raises:
         RuntimeError: If the consolidated binary is not found.
@@ -86,7 +86,7 @@ def get_highnoon_core_path(target_arch: str | None = None) -> str:
         arch = canonicalize_target_arch(target_arch or os.getenv("VERSO_TARGET_ARCH"))
         arch_bin_dir = _BIN_DIR / arch
         raise RuntimeError(
-            f"HighNoon core binary not found at {arch_bin_dir / '_highnoon_core.so'}. "
+            f"Saguaro core binary not found at {arch_bin_dir / '_saguaro_core.so'}. "
             "Run build_secure.sh to compile native ops."
         )
     return lib_path
@@ -103,7 +103,7 @@ def resolve_op_library(
     Resolve the shared object path for a Verso custom op.
 
     PRIORITY ORDER (v2.0 consolidated build):
-    1. _highnoon_core.so (consolidated binary containing ALL ops)
+    1. _saguaro_core.so (consolidated binary containing ALL ops)
     2. *.{arch}.so (architecture-specific individual binary)
     3. *.so (legacy individual binary)
 

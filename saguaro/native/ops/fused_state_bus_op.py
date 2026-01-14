@@ -1,4 +1,4 @@
-# highnoon/_native/ops/fused_state_bus_op.py
+# saguaro/_native/ops/fused_state_bus_op.py
 # Copyright 2025 Verso Industries (Author: Michael B. Zimmerman)
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
@@ -19,7 +19,7 @@ from __future__ import annotations
 
 import tensorflow as tf
 
-from highnoon._native import get_op
+from saguaro._native import get_op
 
 _lib = get_op("fused_state_bus")
 _fused_state_bus_op = getattr(_lib, "FusedStateBus", None) if _lib else None
@@ -67,7 +67,7 @@ def fused_state_bus(
     if _fused_state_bus_op is None:
         raise RuntimeError(
             "FusedStateBus C++ op not available. Build with: "
-            "cd highnoon/_native && ./build_ops.sh fused_state_bus"
+            "cd saguaro/_native && ./build_ops.sh fused_state_bus"
         )
 
     query = tf.cast(query, tf.float32)

@@ -68,6 +68,7 @@ def load_saguaro_core():
                 os.path.join(proposal_dir, "build", "_saguaro_core.so"),
                 os.path.join(proposal_dir, "_saguaro_core.so"),
                 os.path.join(current_dir, "_saguaro_core.so"),
+                os.path.join(os.path.dirname(current_dir), "_saguaro_core.so"),  # saguaro/ dir
                 "_saguaro_core.so"
             ]
             
