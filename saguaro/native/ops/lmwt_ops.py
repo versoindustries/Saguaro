@@ -150,7 +150,8 @@ def learnable_filter_bank_dwt(
                 tf.stack([grad_low, zeros_low], axis=2), [batch_size, half_len * 2, dim]
             )
             upsampled_high = tf.reshape(
-                tf.stack([grad_high, zeros_high], axis=2), [batch_size, half_len * 2, dim]
+                tf.stack([grad_high, zeros_high], axis=2),
+                [batch_size, half_len * 2, dim],
             )
 
             # Reverse filters for gradient
@@ -159,7 +160,9 @@ def learnable_filter_bank_dwt(
 
             # Convolve: use 1D conv with filter applied across seq dimension
             # Reshape for conv1d: [batch * dim, seq_len, 1]
-            upsampled_low_t = tf.transpose(upsampled_low, [0, 2, 1])  # [batch, dim, seq]
+            upsampled_low_t = tf.transpose(
+                upsampled_low, [0, 2, 1]
+            )  # [batch, dim, seq]
             upsampled_low_flat = tf.reshape(upsampled_low_t, [-1, half_len * 2, 1])
             upsampled_high_t = tf.transpose(upsampled_high, [0, 2, 1])
             upsampled_high_flat = tf.reshape(upsampled_high_t, [-1, half_len * 2, 1])
@@ -169,8 +172,12 @@ def learnable_filter_bank_dwt(
             hp_filter = tf.reshape(hp_reversed, [kernel_size, 1, 1])
 
             # Apply convolution
-            conv_low = tf.nn.conv1d(upsampled_low_flat, lp_filter, stride=1, padding="SAME")
-            conv_high = tf.nn.conv1d(upsampled_high_flat, hp_filter, stride=1, padding="SAME")
+            conv_low = tf.nn.conv1d(
+                upsampled_low_flat, lp_filter, stride=1, padding="SAME"
+            )
+            conv_high = tf.nn.conv1d(
+                upsampled_high_flat, hp_filter, stride=1, padding="SAME"
+            )
 
             # Combine and reshape back
             grad_x_flat = conv_low + conv_high
@@ -180,7 +187,11 @@ def learnable_filter_bank_dwt(
             # Gradient for low_pass filter: correlation of input with grad_output
             # Approximate by averaging gradient magnitudes
             grad_scale = tf.reduce_mean(tf.abs(grad_low) + tf.abs(grad_high)) + 1e-8
-            grad_lp = tf.ones_like(lp) * grad_scale / tf.sqrt(tf.cast(kernel_size, tf.float32))
+            grad_lp = (
+                tf.ones_like(lp)
+                * grad_scale
+                / tf.sqrt(tf.cast(kernel_size, tf.float32))
+            )
 
             # Gradient for high_pass (usually ignored when enforce_qmf=True)
             grad_hp = tf.zeros_like(hp) if enforce_qmf else grad_lp

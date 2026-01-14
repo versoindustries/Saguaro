@@ -75,8 +75,11 @@ def hd_hierarchical_ops_available() -> bool:
 # Gradient Registration for HDHierarchicalBlockForward
 # =============================================================================
 
+
 @tf.RegisterGradient("HDHierarchicalBlockForward")
-def _hd_hierarchical_block_forward_grad(op, grad_output, grad_h_final, grad_coherence, grad_next_state):
+def _hd_hierarchical_block_forward_grad(
+    op, grad_output, grad_h_final, grad_coherence, grad_next_state
+):
     """Gradient registration for HDHierarchicalBlockForward.
 
     Connects the C++ forward op to its backward op for automatic differentiation.
@@ -192,24 +195,24 @@ def _hd_hierarchical_block_forward_grad(op, grad_output, grad_h_final, grad_cohe
     # (None for non-trainable inputs: uncertainty_trace, prev_state)
     # Note: qfm_rotation and qfm_bias need gradients too but backward doesn't compute them yet
     return [
-        grads[0],   # grad_hd_input
-        grads[1],   # grad_a_log
-        grads[2],   # grad_b_proj
-        grads[3],   # grad_c_proj
-        grads[4],   # grad_dt
-        grads[5],   # grad_skip_proj
-        grads[6],   # grad_amplitudes_real
-        grads[7],   # grad_amplitudes_imag
-        grads[8],   # grad_rotation_angles
-        grads[9],   # grad_level_embeddings
+        grads[0],  # grad_hd_input
+        grads[1],  # grad_a_log
+        grads[2],  # grad_b_proj
+        grads[3],  # grad_c_proj
+        grads[4],  # grad_dt
+        grads[5],  # grad_skip_proj
+        grads[6],  # grad_amplitudes_real
+        grads[7],  # grad_amplitudes_imag
+        grads[8],  # grad_rotation_angles
+        grads[9],  # grad_level_embeddings
         grads[10],  # grad_cross_q_proj
         grads[11],  # grad_cross_k_proj
         grads[12],  # grad_cross_v_proj
         grads[13],  # grad_cross_o_proj
-        None,       # uncertainty_trace - not trainable
-        None,       # prev_state - not trainable
-        None,       # qfm_rotation - TODO: add to backward op
-        None,       # qfm_bias - TODO: add to backward op
+        None,  # uncertainty_trace - not trainable
+        None,  # prev_state - not trainable
+        None,  # qfm_rotation - TODO: add to backward op
+        None,  # qfm_bias - TODO: add to backward op
     ]
 
 

@@ -68,7 +68,11 @@ try:
         else:
             logger.warning(
                 "C++ superposition MoE op loaded but symbols not found. Available: %s",
-                [a for a in dir(_fused_superposition_moe_module) if not a.startswith("_")][:10],
+                [
+                    a
+                    for a in dir(_fused_superposition_moe_module)
+                    if not a.startswith("_")
+                ][:10],
             )
     else:
         logger.warning("Consolidated binary not available for superposition MoE op.")
@@ -78,6 +82,7 @@ except Exception as e:
 
 class SuperpositionMoeOutput(NamedTuple):
     """Output from fused_superposition_moe."""
+
     output: tf.Tensor  # [batch, d_model]
     routing_weights: tf.Tensor  # [batch, K]
 
@@ -89,16 +94,16 @@ def _fused_superposition_moe_grad(
 ) -> tuple[tf.Tensor, ...]:
     """
     Defines the gradient for the UnifiedHDSuperposedExpert operator (v2.0).
-    
+
     Args:
         op: The forward op.
         grad_output: Gradient w.r.t. output tensor.
         grad_routing_weights: Gradient w.r.t. routing_weights (usually unused).
-    
+
     Returns:
         Gradients for all 7 inputs.
     """
-    # Unpack inputs: tokens, ffn1_cores, ffn2_cores, path_bases, path_weights, 
+    # Unpack inputs: tokens, ffn1_cores, ffn2_cores, path_bases, path_weights,
     #                hd_input_proj, hd_output_proj
     (
         tokens,
@@ -161,7 +166,9 @@ def _fused_superposition_moe_grad(
 
     is_grad_zero = tf.equal(tf.reduce_sum(tf.abs(grad_output)), 0.0)
 
-    grads = tf.cond(is_grad_zero, true_fn=return_zero_grads, false_fn=call_custom_grad_op)
+    grads = tf.cond(
+        is_grad_zero, true_fn=return_zero_grads, false_fn=call_custom_grad_op
+    )
 
     return grads
 
@@ -187,9 +194,9 @@ def fused_superposition_moe(
 ) -> SuperpositionMoeOutput:
     """
     Python wrapper for the Unified HD-SuperposedExpert C++ operator (v2.0).
-    
+
     Uses holographic circular correlation routing instead of attention-based collapse.
-    
+
     Args:
         tokens: Input tokens [batch, d_model].
         ffn1_cores: TT cores for first FFN layer (flattened).

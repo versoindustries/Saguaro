@@ -28,8 +28,12 @@ from saguaro._native import get_op
 
 # Load the C++ op library
 _lib = get_op("fused_latent_reasoning")
-_fused_latent_reasoning_op = getattr(_lib, "FusedLatentReasoning", None) if _lib else None
-_fused_latent_reasoning_grad_op = getattr(_lib, "FusedLatentReasoningGrad", None) if _lib else None
+_fused_latent_reasoning_op = (
+    getattr(_lib, "FusedLatentReasoning", None) if _lib else None
+)
+_fused_latent_reasoning_grad_op = (
+    getattr(_lib, "FusedLatentReasoningGrad", None) if _lib else None
+)
 
 
 def fused_latent_reasoning(
@@ -126,7 +130,9 @@ def fused_latent_reasoning(
                     num_thought_steps=num_thought_steps,
                     streaming_chunk_size=streaming_chunk_size,
                 )
-                grad_x, grad_gamma, grad_beta, grad_uw, grad_ub, grad_dw, grad_db = grads
+                grad_x, grad_gamma, grad_beta, grad_uw, grad_ub, grad_dw, grad_db = (
+                    grads
+                )
                 # Output norms get zero gradients for now
                 return (
                     grad_x,

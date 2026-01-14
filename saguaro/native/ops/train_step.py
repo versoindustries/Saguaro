@@ -66,9 +66,13 @@ try:
         _train_step_module = tf.load_op_library(_op_lib_path)
         # Check if the specific op exists in the consolidated binary
         if hasattr(_train_step_module, "train_step"):
-            logger.info("Successfully loaded TrainStep custom C++ op from %s.", _op_lib_path)
+            logger.info(
+                "Successfully loaded TrainStep custom C++ op from %s.", _op_lib_path
+            )
             _train_step_diagnostics["loaded"] = True
-            _train_step_diagnostics["available_symbols"] = sorted(dir(_train_step_module))
+            _train_step_diagnostics["available_symbols"] = sorted(
+                dir(_train_step_module)
+            )
         else:
             raise AttributeError("train_step op not found in library")
     else:

@@ -145,7 +145,9 @@ class LorentzianGATLayer(tf.keras.layers.Layer):
             Output features [batch, num_nodes, feature_dim]
         """
         if fused_lorentzian_gat_op is None:
-            raise NotImplementedError("The C++ FusedLorentzianGat operator could not be loaded.")
+            raise NotImplementedError(
+                "The C++ FusedLorentzianGat operator could not be loaded."
+            )
 
         return fused_lorentzian_gat_op(
             node_features=node_features,

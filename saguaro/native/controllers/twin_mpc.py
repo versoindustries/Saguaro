@@ -72,7 +72,9 @@ class TwinMPCController:
         # Extract dimensions from twin
         if hasattr(twin, "state_dim"):
             self.state_dim = twin.state_dim
-            self.input_dim = twin.input_dim if hasattr(twin, "input_dim") else twin.n_inputs
+            self.input_dim = (
+                twin.input_dim if hasattr(twin, "input_dim") else twin.n_inputs
+            )
         elif hasattr(twin, "order"):
             self.state_dim = twin.order
             self.input_dim = twin.n_inputs
@@ -227,7 +229,9 @@ class TwinMPCController:
         # Convert to tensors
         x0 = tf.constant(current_state, dtype=tf.float32)
         x_ref = tf.constant(
-            reference_state if reference_state is not None else np.zeros(self.state_dim),
+            reference_state
+            if reference_state is not None
+            else np.zeros(self.state_dim),
             dtype=tf.float32,
         )
 
@@ -235,7 +239,9 @@ class TwinMPCController:
         if warm_start is not None:
             u_init = warm_start
         else:
-            u_init = np.zeros([self.prediction_horizon, self.input_dim], dtype=np.float32)
+            u_init = np.zeros(
+                [self.prediction_horizon, self.input_dim], dtype=np.float32
+            )
 
         u_sequence = tf.Variable(u_init, dtype=tf.float32)
 
@@ -254,9 +260,9 @@ class TwinMPCController:
 
                 # Add constraint penalty if state constraints violated
                 if self.has_state_constraints:
-                    x_violation = tf.maximum(0.0, x_trajectory - self.x_max) + tf.maximum(
-                        0.0, self.x_min - x_trajectory
-                    )
+                    x_violation = tf.maximum(
+                        0.0, x_trajectory - self.x_max
+                    ) + tf.maximum(0.0, self.x_min - x_trajectory)
                     constraint_penalty = 1e3 * tf.reduce_sum(tf.square(x_violation))
                     cost = cost + constraint_penalty
 
@@ -276,7 +282,10 @@ class TwinMPCController:
                 best_u = u_sequence.numpy().copy()
 
             # Check convergence
-            if iteration > 0 and abs(current_cost - best_cost) / (best_cost + 1e-10) < 1e-4:
+            if (
+                iteration > 0
+                and abs(current_cost - best_cost) / (best_cost + 1e-10) < 1e-4
+            ):
                 converged = True
                 break
 
@@ -295,7 +304,7 @@ class TwinMPCController:
         }
 
         logger.debug(
-            f"MPC solved: cost={best_cost:.3f}, iterations={iteration+1}, "
+            f"MPC solved: cost={best_cost:.3f}, iterations={iteration + 1}, "
             f"time={solve_time_ms:.2f}ms, converged={converged}"
         )
 
@@ -385,9 +394,13 @@ class TwinMPCController:
 
         return {
             "mean_solve_time": float(np.mean(self.solve_times)),
-            "p95_solve_time": float(solve_times_sorted[p95_idx]) if solve_times_sorted else 0.0,
+            "p95_solve_time": float(solve_times_sorted[p95_idx])
+            if solve_times_sorted
+            else 0.0,
             "mean_prediction_error": (
-                float(np.mean(self.prediction_errors)) if self.prediction_errors else 0.0
+                float(np.mean(self.prediction_errors))
+                if self.prediction_errors
+                else 0.0
             ),
             "num_solves": len(self.solve_times),
         }

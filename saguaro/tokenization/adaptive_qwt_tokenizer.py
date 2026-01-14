@@ -143,8 +143,7 @@ class AdaptiveQWTTokenizer(QWTTextTokenizer):
         progress_callback: Any = None,
         num_workers: int = 4,
     ) -> int:
-        """Learn frequent n-grams from corpus to populate codebook.
-        """
+        """Learn frequent n-grams from corpus to populate codebook."""
         if self._codebook_capacity <= 0:
             logger.warning("[AdaptiveQWT] No codebook capacity.")
             return 0
@@ -158,9 +157,9 @@ class AdaptiveQWTTokenizer(QWTTextTokenizer):
 
         # Parallel tokenization
         from concurrent.futures import ThreadPoolExecutor, as_completed
-        
+
         token_sequences: list[list[int]] = []
-        
+
         def tokenize_text(text: str) -> list[int]:
             """Tokenize a single text (thread-safe)."""
             encoding = self._encode_one(
@@ -170,15 +169,21 @@ class AdaptiveQWTTokenizer(QWTTextTokenizer):
                 add_special_tokens=False,
             )
             # Handle dictionary output (if return_tensors='metrics' or none)
-            ids = encoding['input_ids'] if isinstance(encoding, dict) else encoding.input_ids
+            ids = (
+                encoding["input_ids"]
+                if isinstance(encoding, dict)
+                else encoding.input_ids
+            )
             # Ensure it is a list of ints
             return ids if isinstance(ids, list) else ids.numpy().tolist()
 
         try:
             completed = 0
             with ThreadPoolExecutor(max_workers=num_workers) as executor:
-                futures = {executor.submit(tokenize_text, t): i for i, t in enumerate(texts)}
-                
+                futures = {
+                    executor.submit(tokenize_text, t): i for i, t in enumerate(texts)
+                }
+
                 for future in as_completed(futures):
                     try:
                         result = future.result()
@@ -188,10 +193,14 @@ class AdaptiveQWTTokenizer(QWTTextTokenizer):
                         # Log first errors at WARNING to surface issues
                         if completed < 5:
                             logger.warning("[AdaptiveQWT] Tokenization error: %s", e)
-                    
+
                     completed += 1
                     if completed % 5000 == 0:
-                        logger.info("[AdaptiveQWT] Tokenized %d/%d texts...", completed, len(texts))
+                        logger.info(
+                            "[AdaptiveQWT] Tokenized %d/%d texts...",
+                            completed,
+                            len(texts),
+                        )
                         if progress_callback:
                             progress_callback(completed, len(texts))
 
@@ -200,7 +209,7 @@ class AdaptiveQWTTokenizer(QWTTextTokenizer):
 
         if not token_sequences:
             logger.warning("[AdaptiveQWT] No sequences tokenized, returning 0")
-            self._trained = True 
+            self._trained = True
             return 0
 
         # Create and train SuperwordMerger
@@ -244,7 +253,7 @@ class AdaptiveQWTTokenizer(QWTTextTokenizer):
         return_tensors: str | None = None,
     ) -> dict[str, Any]:
         """Tokenize text(s) with optional n-gram compression."""
-        
+
         # Get base encoding from parent class
         # Note: We pass return_tensors=None to manipulate lists before conversion
         result = super().__call__(
@@ -253,7 +262,7 @@ class AdaptiveQWTTokenizer(QWTTextTokenizer):
             max_length=max_length,
             padding=padding,
             add_special_tokens=add_special_tokens,
-            return_tensors=None, 
+            return_tensors=None,
         )
 
         # Apply n-gram merging if trained
@@ -291,6 +300,7 @@ class AdaptiveQWTTokenizer(QWTTextTokenizer):
         # Convert to tensors if requested
         if return_tensors == "tf":
             import tensorflow as tf
+
             result = {k: tf.constant(v, dtype=tf.int32) for k, v in result.items()}
 
         return result
@@ -365,6 +375,7 @@ class AdaptiveQWTTokenizer(QWTTextTokenizer):
         if self._merger is None or not self._trained:
             raise RuntimeError("Cannot save codebook: no training has been performed.")
         from pathlib import Path as PathLib
+
         save_path = PathLib(path)
         self._merger.save(save_path)
         logger.info("[AdaptiveQWT] Saved codebook to %s", path)

@@ -34,7 +34,7 @@ _ops_available = False
 
 try:
     from saguaro.ops.lib_loader import load_saguaro_library
-    
+
     _core = load_saguaro_library()
     if _core is not None:
         _text_tok_module = _core
@@ -53,33 +53,31 @@ def ops_available() -> bool:
 
 class SuperwordTrieHandle:
     """Resource handle for SuperwordTrie with Python-friendly API."""
-    
+
     def __init__(self) -> None:
         """Create empty SuperwordTrie resource."""
         if not _ops_available:
-            raise RuntimeError(
-                "Native text tokenizer ops not available. "
-            )
+            raise RuntimeError("Native text tokenizer ops not available. ")
         self._handle = _text_tok_module.saguaro_trie_create()
         self._num_entries = 0
-    
+
     @property
     def handle(self) -> tf.Tensor:
         """Get the raw resource handle for use in ops."""
         return self._handle
-    
+
     @property
     def num_entries(self) -> int:
         """Get number of n-gram entries in the trie."""
         return self._num_entries
-    
+
     def insert(self, ngram: Sequence[int], superword_id: int) -> None:
         """Insert a single n-gram to superword mapping."""
         ngram_tensor = tf.constant(list(ngram), dtype=tf.int32)
         id_tensor = tf.constant(superword_id, dtype=tf.int32)
         _text_tok_module.superword_trie_insert(self._handle, ngram_tensor, id_tensor)
         self._num_entries += 1
-    
+
     def insert_batch(
         self,
         ngrams: Sequence[Sequence[int]],
@@ -91,26 +89,26 @@ class SuperwordTrieHandle:
                 f"ngrams and superword_ids must have same length: "
                 f"{len(ngrams)} != {len(superword_ids)}"
             )
-        
+
         if not ngrams:
             return
-        
+
         # Build flat representation
         offsets = [0]
         tokens = []
         for ngram in ngrams:
             tokens.extend(ngram)
             offsets.append(len(tokens))
-        
+
         offsets_tensor = tf.constant(offsets, dtype=tf.int32)
         tokens_tensor = tf.constant(tokens, dtype=tf.int32)
         ids_tensor = tf.constant(list(superword_ids), dtype=tf.int32)
-        
+
         _text_tok_module.superword_trie_build_from_table(
             self._handle, offsets_tensor, tokens_tensor, ids_tensor
         )
         self._num_entries = len(ngrams)
-    
+
     def clear(self) -> None:
         """Clear and rebuild an empty trie."""
         # Recreate handle (cheaper than modifying existing)
@@ -140,7 +138,7 @@ class StreamingNgramCounterHandle:
         lengths: Sequence[int] | tf.Tensor,
     ) -> None:
         """Count n-grams from a batch of token sequences.
-        
+
         Note: The C++ op expects 'lengths' (1D tensor), not splits.
         """
         if not isinstance(tokens, (tf.Tensor, tf.Variable)):
@@ -166,6 +164,7 @@ class StreamingNgramCounterHandle:
 
 _EMPTY_TRIE = None
 
+
 def _get_empty_trie() -> SuperwordTrieHandle:
     global _EMPTY_TRIE
     if _EMPTY_TRIE is None:
@@ -182,21 +181,21 @@ def fused_text_tokenize(
     inject_thinking: bool = False,
 ) -> tuple[tf.Tensor, tf.Tensor]:
     """Tokenize single text with SIMD optimization.
-    
+
     Uses SAGUAROTextTokenize op.
     """
     if not _ops_available:
         raise RuntimeError("Native text tokenizer ops not available.")
-    
+
     if isinstance(text, str):
         text = text.encode("utf-8")
-    
+
     text_tensor = tf.constant(text.decode("utf-8", errors="replace"))
-    
+
     if trie is None:
         trie = _get_empty_trie()
     handle = trie.handle
-    
+
     return _text_tok_module.saguaro_text_tokenize(
         text_tensor,
         handle,
@@ -216,25 +215,25 @@ def fused_text_tokenize_batch(
     inject_thinking: bool = False,
 ) -> tuple[tf.Tensor, tf.Tensor]:
     """Tokenize batch of texts in parallel with SIMD optimization.
-    
+
     Uses SAGUAROTextTokenizeBatch op.
     """
     if not _ops_available:
         raise RuntimeError("Native text tokenizer ops not available.")
-    
+
     # Convert to strings
     str_texts = []
     for t in texts:
         if isinstance(t, bytes):
             t = t.decode("utf-8", errors="replace")
         str_texts.append(t)
-    
+
     texts_tensor = tf.constant(str_texts)
-    
+
     if trie is None:
         trie = _get_empty_trie()
     handle = trie.handle
-    
+
     return _text_tok_module.saguaro_text_tokenize_batch(
         texts_tensor,
         handle,
@@ -254,32 +253,32 @@ def trie_apply_merges(
     """Apply superword merges using longest-match algorithm (Python fallback)."""
     if trie is None or trie.num_entries == 0:
         return list(tokens)
-    
+
     if superword_table is None or len(superword_table) == 0:
         return list(tokens)
-    
+
     # Optimized longest-match algorithm
     tokens_list = list(tokens)
     n_tokens = len(tokens_list)
     result: list[int] = []
     i = 0
-    
+
     while i < n_tokens:
         # Try longest match first (greedy)
         matched = False
         for n in range(min(max_ngram, n_tokens - i), 1, -1):  # n >= 2
-            ngram = tuple(tokens_list[i:i + n])
+            ngram = tuple(tokens_list[i : i + n])
             superword_id = superword_table.get(ngram)
             if superword_id is not None:
                 result.append(superword_id)
                 i += n
                 matched = True
                 break
-        
+
         if not matched:
             result.append(tokens_list[i])
             i += 1
-    
+
     return result
 
 
@@ -288,14 +287,14 @@ def create_trie_from_superword_table(
 ) -> SuperwordTrieHandle:
     """Create SuperwordTrieHandle from a superword table."""
     trie = SuperwordTrieHandle()
-    
+
     if not superword_table:
         return trie
-    
+
     ngrams = list(superword_table.keys())
     ids = [superword_table[ng] for ng in ngrams]
     trie.insert_batch(ngrams, ids)
-    
+
     return trie
 
 

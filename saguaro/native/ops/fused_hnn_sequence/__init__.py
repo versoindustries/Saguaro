@@ -23,7 +23,6 @@ The operation is compiled into _saguaro_core.so and loaded via the native loader
 """
 
 import logging
-from typing import Optional
 
 import tensorflow as tf
 
@@ -47,7 +46,9 @@ def _ensure_loaded():
         from saguaro._native import _load_consolidated_binary
 
         _native_op_module = _load_consolidated_binary()
-        if _native_op_module is not None and hasattr(_native_op_module, "fused_hnn_sequence"):
+        if _native_op_module is not None and hasattr(
+            _native_op_module, "fused_hnn_sequence"
+        ):
             logger.info("Loaded FusedHNNSequence from _saguaro_core.so")
             return _native_op_module
     except ImportError:

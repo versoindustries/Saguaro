@@ -44,7 +44,7 @@ import platform
 import sys
 import threading
 from pathlib import Path
-from typing import Any, Optional
+from typing import Any
 
 log = logging.getLogger(__name__)
 
@@ -90,12 +90,12 @@ def _find_core_binary() -> Path | None:
     core_path = _BIN_DIR / _CORE_BINARY_NAME
     if core_path.exists():
         return core_path
-        
+
     # 2. Check build directory (developer fallback)
     build_path = _NATIVE_DIR / "build" / _CORE_BINARY_NAME
     if build_path.exists():
         return build_path
-        
+
     return None
 
 
@@ -170,11 +170,15 @@ def _export_native_config_flags() -> None:
 
     # Kernel timing/profiling flags
     if hasattr(config, "ENABLE_KERNEL_TIMING"):
-        os.environ["HIGHNOON_KERNEL_TIMING"] = "1" if config.ENABLE_KERNEL_TIMING else "0"
+        os.environ["HIGHNOON_KERNEL_TIMING"] = (
+            "1" if config.ENABLE_KERNEL_TIMING else "0"
+        )
 
     # MoE work-stealing dispatch flag
     if hasattr(config, "USE_WORK_STEALING_MOE"):
-        os.environ["HIGHNOON_WORK_STEALING_MOE"] = "1" if config.USE_WORK_STEALING_MOE else "0"
+        os.environ["HIGHNOON_WORK_STEALING_MOE"] = (
+            "1" if config.USE_WORK_STEALING_MOE else "0"
+        )
 
     # TensorStreamPool debug flag
     if hasattr(config, "TENSOR_STREAM_DEBUG"):
@@ -518,10 +522,10 @@ def load_text_tokenizer():
 
 def load_saguaro_core():
     """Load the consolidated Saguaro core binary.
-    
+
     This is the preferred way to access native ops. Returns the loaded
     TensorFlow module containing all operations.
-    
+
     Returns:
         Loaded TensorFlow operation module, or None if unavailable.
     """
@@ -533,7 +537,9 @@ _edition = get_edition().upper()
 _native_avail = "available" if is_native_available() else "not found"
 _consolidated_avail = "consolidated" if is_consolidated_available() else "individual"
 log.info(f"Saguaro Language Framework - {_edition} Edition")
-log.info(f"Platform: {_PLATFORM}/{_ARCH}, Native ops: {_native_avail} ({_consolidated_avail})")
+log.info(
+    f"Platform: {_PLATFORM}/{_ARCH}, Native ops: {_native_avail} ({_consolidated_avail})"
+)
 
 __all__ = [
     "get_op",
@@ -563,4 +569,3 @@ __all__ = [
     "load_text_tokenizer",
     "load_saguaro_core",
 ]
-

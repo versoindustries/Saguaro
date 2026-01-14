@@ -3,14 +3,15 @@ from typing import Dict, Any
 from saguaro.context import Context
 from saguaro.client import SAGUAROClient
 
+
 class Agent(ABC):
     """Base class for SAGUARO specialized agents."""
-    
+
     def __init__(self, name: str, role: str):
         self.name = name
         self.role = role
         self.client = SAGUAROClient()  # Access to SAGUARO Core
-        
+
     @abstractmethod
     def run(self, context: Context, **kwargs) -> Dict[str, Any]:
         """Execute the agent's main logic."""

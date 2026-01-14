@@ -293,7 +293,9 @@ def multi_stage_hamiltonian(
         return state
     _load_ops()
     num_stages = num_stages or config.HAMILTONIAN_NUM_STAGES
-    return _module.multi_stage_hamiltonian(state, hamiltonian_params, num_stages=num_stages)
+    return _module.multi_stage_hamiltonian(
+        state, hamiltonian_params, num_stages=num_stages
+    )
 
 
 # =============================================================================

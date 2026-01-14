@@ -39,31 +39,41 @@ try:
 
     if _fused_moe_dispatch_module is not None:
         # TensorFlow exposes ops with various naming conventions
-        fused_moe_dispatch_op = getattr(_fused_moe_dispatch_module, "fused_mo_e_dispatch", None)
+        fused_moe_dispatch_op = getattr(
+            _fused_moe_dispatch_module, "fused_mo_e_dispatch", None
+        )
         fused_moe_dispatch_grad_op = getattr(
             _fused_moe_dispatch_module, "fused_mo_e_dispatch_grad", None
         )
 
         if fused_moe_dispatch_op is None:
             # Try alternate names
-            fused_moe_dispatch_op = getattr(_fused_moe_dispatch_module, "fused_moe_dispatch", None)
+            fused_moe_dispatch_op = getattr(
+                _fused_moe_dispatch_module, "fused_moe_dispatch", None
+            )
             fused_moe_dispatch_grad_op = getattr(
                 _fused_moe_dispatch_module, "fused_moe_dispatch_grad", None
             )
 
         if fused_moe_dispatch_op is None:
             # Last fallback to CamelCase names
-            fused_moe_dispatch_op = getattr(_fused_moe_dispatch_module, "FusedMoEDispatch", None)
+            fused_moe_dispatch_op = getattr(
+                _fused_moe_dispatch_module, "FusedMoEDispatch", None
+            )
             fused_moe_dispatch_grad_op = getattr(
                 _fused_moe_dispatch_module, "FusedMoEDispatchGrad", None
             )
 
         if fused_moe_dispatch_op is not None:
-            logger.debug("Successfully loaded C++ MoE dispatch operator from consolidated binary.")
+            logger.debug(
+                "Successfully loaded C++ MoE dispatch operator from consolidated binary."
+            )
         else:
             logger.warning(
                 "C++ MoE op loaded but symbols not found. Available: %s",
-                [a for a in dir(_fused_moe_dispatch_module) if not a.startswith("_")][:10],
+                [a for a in dir(_fused_moe_dispatch_module) if not a.startswith("_")][
+                    :10
+                ],
             )
     else:
         logger.warning("Consolidated binary not available for MoE dispatch op.")
@@ -137,7 +147,9 @@ def fused_moe_dispatch(
         Gradient function that calls the custom C++ backward kernel.
         """
         if fused_moe_dispatch_grad_op is None:
-            raise NotImplementedError("The C++ FusedMoEDispatchGrad operator could not be loaded.")
+            raise NotImplementedError(
+                "The C++ FusedMoEDispatchGrad operator could not be loaded."
+            )
         if variables is not None:
             num_vars = len(variables)
             tf.print(
@@ -161,16 +173,16 @@ def fused_moe_dispatch(
             grad_router_logits,
             None,
         )  # Grad for tokens, router_logits, expert_capacity
-        
+
         # GRADIENT FIX: Map C++ gradient outputs to tf.Variables by name pattern
         # Instead of returning [None] * len(variables) which zeros out all gradients
         if variables is not None and len(variables) > 0:
             variable_grads_list = []
             for v in variables:
                 name = v.name.lower()
-                if 'router' in name or 'logit' in name:
+                if "router" in name or "logit" in name:
                     variable_grads_list.append(grad_router_logits)
-                elif 'token' in name or 'embed' in name:
+                elif "token" in name or "embed" in name:
                     variable_grads_list.append(grad_tokens)
                 else:
                     variable_grads_list.append(None)
@@ -282,18 +294,18 @@ def fused_moe_dispatch_v2(
             )
             # Grads for: tokens, logits, capacity, bias
             input_grads_v2 = (grad_tok, grad_logits, None, None)
-            
+
             # GRADIENT FIX: Map C++ gradient outputs to tf.Variables by name pattern
             # Instead of returning [None] * len(variables) which zeros out all gradients
             if variables and len(variables) > 0:
                 variable_grads = []
                 for v in variables:
                     name = v.name.lower()
-                    if 'router' in name or 'logit' in name:
+                    if "router" in name or "logit" in name:
                         variable_grads.append(grad_logits)
-                    elif 'token' in name or 'embed' in name:
+                    elif "token" in name or "embed" in name:
                         variable_grads.append(grad_tok)
-                    elif 'bias' in name:
+                    elif "bias" in name:
                         # routing_bias doesn't get gradients from this op
                         variable_grads.append(None)
                     else:
@@ -305,4 +317,6 @@ def fused_moe_dispatch_v2(
         return (d_tok, d_gate, d_meta, ex_bound, ex_idx, ex_loads), grad_fn_v2
 
     # Call the internal function
-    return _fused_moe_dispatch_v2_internal(tokens, router_logits, expert_capacity, routing_bias)
+    return _fused_moe_dispatch_v2_internal(
+        tokens, router_logits, expert_capacity, routing_bias
+    )

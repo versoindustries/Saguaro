@@ -2,7 +2,7 @@ class IntentRouter:
     """
     Classifies user queries to route them to the optimal retrieval strategy.
     """
-    
+
     def route(self, query: str) -> str:
         """
         Classifies query intent.

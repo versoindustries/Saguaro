@@ -54,7 +54,7 @@ def _load_ops():
         _available = False
         logger.warning(f"Failed to load AlphaQubit ops: {e}")
         raise RuntimeError(
-            "AlphaQubit native ops not available. " "Run ./build_secure.sh to compile."
+            "AlphaQubit native ops not available. Run ./build_secure.sh to compile."
         ) from e
     return _available
 
@@ -266,7 +266,9 @@ def create_alphaqubit_correct_weights(
 
     weights = {
         "qkv_weights": tf.Variable(
-            tf.random.normal([num_attn_layers, 3, feature_dim, hidden_dim], stddev=stddev),
+            tf.random.normal(
+                [num_attn_layers, 3, feature_dim, hidden_dim], stddev=stddev
+            ),
             trainable=True,
             name="alphaqubit_correct_qkv",
         ),

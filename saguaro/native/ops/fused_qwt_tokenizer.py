@@ -140,7 +140,9 @@ def fused_qwt_tokenizer(
 @ops.RegisterGradient("FusedQwtTokenizer")
 def _fused_qwt_tokenizer_gradients(op, grad_approx, grad_detail, grad_qwt):
     if _fused_qwt_tokenizer_grad is None:
-        raise NotImplementedError("The fused_qwt_tokenizer_grad custom op is unavailable.")
+        raise NotImplementedError(
+            "The fused_qwt_tokenizer_grad custom op is unavailable."
+        )
     grad_inputs = _fused_qwt_tokenizer_grad(
         grad_approx,
         grad_detail,

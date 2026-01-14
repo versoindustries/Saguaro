@@ -182,7 +182,8 @@ def lion_update(
     """
     if _lion_update_op is None:
         raise NotImplementedError(
-            "Native Lion update operation is unavailable. " "Use the Python Lion optimizer instead."
+            "Native Lion update operation is unavailable. "
+            "Use the Python Lion optimizer instead."
         )
 
     return _lion_update_op(

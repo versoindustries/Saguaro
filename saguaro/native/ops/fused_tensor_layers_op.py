@@ -36,7 +36,9 @@ def _get_ops():
     if _tensor_layers_module is None:
         _tensor_layers_module = get_op("fused_tensor_layers")
         if _tensor_layers_module is not None:
-            logger.info(f"Loaded fused_tensor_layers. Available ops: {dir(_tensor_layers_module)}")
+            logger.info(
+                f"Loaded fused_tensor_layers. Available ops: {dir(_tensor_layers_module)}"
+            )
             print(f"--- Fused Tensor Layers Ops: {dir(_tensor_layers_module)} ---")
     return _tensor_layers_module
 
@@ -93,7 +95,9 @@ def _tensor_ring_forward_reference(
 
     output_parts = []
     for m in range(num_cores):
-        part = tf.einsum("bij,bjok,bki->bo", prefixes[m], batch_matrices[m], suffixes[m + 1])
+        part = tf.einsum(
+            "bij,bjok,bki->bo", prefixes[m], batch_matrices[m], suffixes[m + 1]
+        )
         output_parts.append(part)
 
     output = tf.concat(output_parts, axis=-1)
@@ -201,7 +205,9 @@ def fused_tensor_ring_forward(
     """
     ops = _get_ops()
     if ops is None:
-        raise RuntimeError("FusedTensorRingForward requires C++ ops for proper trace contraction.")
+        raise RuntimeError(
+            "FusedTensorRingForward requires C++ ops for proper trace contraction."
+        )
 
     bias_provided = bias is not None
     if bias is None:
@@ -225,7 +231,7 @@ def fused_tensor_ring_forward(
             When TensorFlow detects that the function uses tf.Variables (like the
             ring cores), it passes them via the 'variables' kwarg. We must compute
             and return gradients for these variables as a second return value.
-            
+
             GRADIENT FIX: The cores_in list contains tensor values read from variables.
             When TensorFlow calls this grad function, 'variables' contains the actual
             tf.Variables from which cores_in was read. We need to map grad_cores
@@ -265,28 +271,30 @@ def fused_tensor_ring_forward(
                 for v in variables:
                     v_name = v.name.lower()
                     found_grad = None
-                    
+
                     # Check if this is a ring_core variable
-                    if 'ring_core' in v_name:
+                    if "ring_core" in v_name:
                         # Extract index from variable name (e.g., "ring_core_0:0" -> 0)
                         for idx, c in enumerate(cores_in):
-                            if f'ring_core_{idx}' in v_name:
+                            if f"ring_core_{idx}" in v_name:
                                 # This variable corresponds to cores_in[idx]
                                 if isinstance(grad_cores, list):
                                     found_grad = grad_cores[idx]
                                 else:
                                     # grad_cores is a single tensor - shouldn't happen for lists
-                                    found_grad = tape.gradient(ref, v, output_gradients=dy)
+                                    found_grad = tape.gradient(
+                                        ref, v, output_gradients=dy
+                                    )
                                 break
-                    elif 'bias' in v_name and bias_provided:
+                    elif "bias" in v_name and bias_provided:
                         found_grad = grad_bias
-                    
+
                     if found_grad is None:
                         # Fallback: compute gradient directly for this variable
                         found_grad = tape.gradient(ref, v, output_gradients=dy)
-                    
+
                     var_grads.append(found_grad)
-                
+
                 del tape  # Release persistent tape
                 return input_grads, var_grads
 

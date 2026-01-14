@@ -65,14 +65,20 @@ try:
             )
 
         # MPO Router
-        entangled_mpo_router_op = getattr(_quantum_moe_module, "entangled_mpo_router", None)
+        entangled_mpo_router_op = getattr(
+            _quantum_moe_module, "entangled_mpo_router", None
+        )
         if entangled_mpo_router_op is None:
-            entangled_mpo_router_op = getattr(_quantum_moe_module, "EntangledMPORouter", None)
+            entangled_mpo_router_op = getattr(
+                _quantum_moe_module, "EntangledMPORouter", None
+            )
 
         # Born Rule
         born_rule_sampling_op = getattr(_quantum_moe_module, "born_rule_sampling", None)
         if born_rule_sampling_op is None:
-            born_rule_sampling_op = getattr(_quantum_moe_module, "BornRuleSampling", None)
+            born_rule_sampling_op = getattr(
+                _quantum_moe_module, "BornRuleSampling", None
+            )
 
         loaded_ops = sum(
             [
@@ -82,7 +88,9 @@ try:
                 born_rule_sampling_op is not None,
             ]
         )
-        logger.debug(f"Loaded {loaded_ops}/4 quantum MoE operators from consolidated binary.")
+        logger.debug(
+            f"Loaded {loaded_ops}/4 quantum MoE operators from consolidated binary."
+        )
 
 except Exception as e:
     logger.warning(f"Could not load quantum MoE ops: {e}")
@@ -164,7 +172,8 @@ def hamiltonian_expert_dynamics(
     """
     if hamiltonian_expert_dynamics_op is None:
         raise NotImplementedError(
-            "The C++ HamiltonianExpertDynamics operator could not be loaded. " "NO PYTHON FALLBACK."
+            "The C++ HamiltonianExpertDynamics operator could not be loaded. "
+            "NO PYTHON FALLBACK."
         )
 
     expert_output = tf.cast(expert_output, tf.float64)
@@ -204,7 +213,8 @@ def entangled_mpo_router(
     """
     if entangled_mpo_router_op is None:
         raise NotImplementedError(
-            "The C++ EntangledMPORouter operator could not be loaded. " "NO PYTHON FALLBACK."
+            "The C++ EntangledMPORouter operator could not be loaded. "
+            "NO PYTHON FALLBACK."
         )
 
     tokens = tf.cast(tokens, tf.float64)
@@ -248,7 +258,7 @@ def born_rule_sampling(
     """
     if born_rule_sampling_op is None:
         raise NotImplementedError(
-            "The C++ BornRuleSampling operator could not be loaded. " "NO PYTHON FALLBACK."
+            "The C++ BornRuleSampling operator could not be loaded. NO PYTHON FALLBACK."
         )
 
     amplitudes = tf.cast(amplitudes, tf.float64)

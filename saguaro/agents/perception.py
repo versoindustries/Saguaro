@@ -6,6 +6,7 @@ from typing import Dict, Any, List
 
 logger = logging.getLogger(__name__)
 
+
 class SkeletonGenerator:
     """Generates a Skeleton view of code files."""
 
@@ -15,7 +16,7 @@ class SkeletonGenerator:
             raise FileNotFoundError(f"File not found: {file_path}")
 
         file_path = os.path.abspath(file_path)
-        
+
         with open(file_path, "r", encoding="utf-8") as f:
             content = f.read()
 
@@ -25,15 +26,17 @@ class SkeletonGenerator:
             "language": self._detect_language(file_path),
             "loc": len(content.splitlines()),
             "symbols": [],
-            "imports": []
+            "imports": [],
         }
 
         if skeleton["language"] == "python":
             self._parse_python(content, skeleton)
         else:
             # Fallback or Todo for other languages
-            skeleton["note"] = "Skeleton generation only supported for Python in this version."
-        
+            skeleton["note"] = (
+                "Skeleton generation only supported for Python in this version."
+            )
+
         return skeleton
 
     def _detect_language(self, path: str) -> str:
@@ -80,7 +83,7 @@ class SkeletonGenerator:
 
     def _visit_function(self, node: ast.FunctionDef) -> Dict[str, Any]:
         docstring = ast.get_docstring(node)
-        
+
         # Reconstruct signature (simplified)
         args = []
         for arg in node.args.args:
@@ -92,14 +95,14 @@ class SkeletonGenerator:
                         ann = ast.unparse(arg.annotation)
                         arg_str += f": {ann}"
                     else:
-                         arg_str += ": <type>"
+                        arg_str += ": <type>"
                 except Exception:
                     pass
             args.append(arg_str)
-        
+
         prefix = "async def" if isinstance(node, ast.AsyncFunctionDef) else "def"
         sig = f"{prefix} {node.name}({', '.join(args)})"
-        
+
         if node.returns:
             try:
                 if hasattr(ast, "unparse"):
@@ -109,14 +112,14 @@ class SkeletonGenerator:
                     sig += " -> <type>"
             except Exception:
                 pass
-        
+
         return {
             "name": node.name,
             "type": "function",
             "signature": sig,
             "line_start": node.lineno,
             "line_end": node.end_lineno,
-            "docstring": docstring
+            "docstring": docstring,
         }
 
     def _visit_class(self, node: ast.ClassDef) -> Dict[str, Any]:
@@ -126,49 +129,50 @@ class SkeletonGenerator:
             child = self._visit_node(item)
             if child:
                 if child["type"] == "function":
-                    child["type"] = "method" 
+                    child["type"] = "method"
                 children.append(child)
-        
+
         return {
             "name": node.name,
             "type": "class",
             "line_start": node.lineno,
             "line_end": node.end_lineno,
             "docstring": docstring,
-            "children": children
+            "children": children,
         }
-
 
 
 class SliceGenerator:
     """Generates a contextual slice of the codebase."""
-    
+
     def __init__(self, repo_path: str):
         self.repo_path = repo_path
-        self.metadata_path = os.path.join(repo_path, ".saguaro", "vectors", "metadata.json")
+        self.metadata_path = os.path.join(
+            repo_path, ".saguaro", "vectors", "metadata.json"
+        )
         self.metadata = []
         self._load_metadata()
 
     def _load_metadata(self):
         if os.path.exists(self.metadata_path):
-            with open(self.metadata_path, 'r') as f:
+            with open(self.metadata_path, "r") as f:
                 self.metadata = json.load(f)
 
-    def generate(self, symbol_name: str, depth: int=1) -> Dict[str, Any]:
+    def generate(self, symbol_name: str, depth: int = 1) -> Dict[str, Any]:
         matches = [m for m in self.metadata if m.get("name") == symbol_name]
-        
+
         if not matches:
-             if "." in symbol_name:
-                 parts = symbol_name.split(".")
-                 c_matches = [m for m in self.metadata if m.get("name") == parts[-1]]
-                 if c_matches:
-                     matches = c_matches
-        
+            if "." in symbol_name:
+                parts = symbol_name.split(".")
+                c_matches = [m for m in self.metadata if m.get("name") == parts[-1]]
+                if c_matches:
+                    matches = c_matches
+
         if not matches:
             # Return actionable error response (Phase 2: AI Adoption)
             # This guides AI models to use the correct Saguaro workflow
             is_file_path = "/" in symbol_name or symbol_name.endswith(".py")
-            
+
             if is_file_path:
                 suggestion = f"""This looks like a file path. For file exploration, use:
   saguaro agent skeleton {symbol_name}
@@ -185,7 +189,7 @@ Try these alternatives:
   - Semantic search: saguaro query "{symbol_name}" --k 5
   - List file symbols: saguaro agent skeleton <file_path>
   - Rebuild index: saguaro index --path ."""
-            
+
             return {
                 "error": "Symbol not found",
                 "type": "INDEX_MISS",
@@ -193,67 +197,75 @@ Try these alternatives:
                 "suggestion": suggestion,
                 "fallback_allowed": True,
                 "recovery_steps": [
-                    f"saguaro query \"{symbol_name}\" --k 5",
+                    f'saguaro query "{symbol_name}" --k 5',
                     "saguaro health",
-                    "saguaro index --path ."
-                ]
+                    "saguaro index --path .",
+                ],
             }
-        
+
         target = matches[0]
-        
+
         result = {
             "type": "slice",
             "focus_symbol": symbol_name,
             "depth": depth,
-            "content": []
+            "content": [],
         }
-        
+
         focus_code = self._get_code(target)
-        result["content"].append({
-            "role": "focus",
-            "name": target.get("name"),
-            "file": target.get("file"),
-            "type": target.get("type"),
-            "code": focus_code
-        })
-        
+        result["content"].append(
+            {
+                "role": "focus",
+                "name": target.get("name"),
+                "file": target.get("file"),
+                "type": target.get("type"),
+                "code": focus_code,
+            }
+        )
+
         imports = self._get_imports(target.get("file"))
         for imp in imports:
-             result["content"].append({
-                 "role": "dependency",
-                 "relation": "import",
-                 "name": imp,
-                 "file": target.get("file"), 
-                 "signature": f"import {imp}"
-             })
-             
+            result["content"].append(
+                {
+                    "role": "dependency",
+                    "relation": "import",
+                    "name": imp,
+                    "file": target.get("file"),
+                    "signature": f"import {imp}",
+                }
+            )
+
         return result
 
     def _get_code(self, meta: Dict[str, Any]) -> str:
         path = meta.get("file")
         start = meta.get("line", 1)
         end = meta.get("end_line", 10000)
-        
+
         full_path = path if os.path.isabs(path) else os.path.join(self.repo_path, path)
-        
+
         if not os.path.exists(full_path):
             return "<File not found>"
-            
-        with open(full_path, 'r') as f:
+
+        with open(full_path, "r") as f:
             lines = f.readlines()
-            
-        return "".join(lines[start-1:end])
+
+        return "".join(lines[start - 1 : end])
 
     def _get_imports(self, file_path: str) -> List[str]:
-        full_path = file_path if os.path.isabs(file_path) else os.path.join(self.repo_path, file_path)
-        if not os.path.exists(full_path) or not full_path.endswith('.py'):
-             return []
-        
+        full_path = (
+            file_path
+            if os.path.isabs(file_path)
+            else os.path.join(self.repo_path, file_path)
+        )
+        if not os.path.exists(full_path) or not full_path.endswith(".py"):
+            return []
+
         try:
-             with open(full_path, 'r') as f:
-                 tree = ast.parse(f.read())
-             imports = []
-             for node in ast.walk(tree):
+            with open(full_path, "r") as f:
+                tree = ast.parse(f.read())
+            imports = []
+            for node in ast.walk(tree):
                 if isinstance(node, ast.Import):
                     for alias in node.names:
                         imports.append(alias.name)
@@ -261,6 +273,6 @@ Try these alternatives:
                     module = node.module if node.module else ""
                     for alias in node.names:
                         imports.append(f"{module}.{alias.name}")
-             return imports
+            return imports
         except Exception:
-             return []
+            return []

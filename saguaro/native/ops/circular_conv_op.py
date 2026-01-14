@@ -41,6 +41,7 @@ def _get_circular_conv_op():
     global _circular_conv_op
     if _circular_conv_op is None:
         from saguaro._native import get_op
+
         _circular_conv_op = get_op("circular_conv")
     return _circular_conv_op
 
@@ -118,15 +119,9 @@ def _circular_conv_forward_grad(op, grad_output):
     return grad_tokens, grad_positions
 
 
-
-
-
 # =============================================================================
 # TensorFlow-only fallback (for testing without C++ compilation)
 # =============================================================================
-
-
-
 
 
 # =============================================================================

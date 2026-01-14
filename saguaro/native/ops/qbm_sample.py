@@ -190,7 +190,9 @@ def qbm_sample(
 # ==================== Utility Functions ====================
 
 
-def compute_expert_entropy(expert_assignments: tf.Tensor, num_experts: int) -> tf.Tensor:
+def compute_expert_entropy(
+    expert_assignments: tf.Tensor, num_experts: int
+) -> tf.Tensor:
     """
     Compute Shannon entropy of expert distribution for monitoring exploration.
 
@@ -207,7 +209,9 @@ def compute_expert_entropy(expert_assignments: tf.Tensor, num_experts: int) -> t
         entropy: Scalar entropy value.
     """
     # Compute empirical distribution
-    counts = tf.cast(tf.math.bincount(expert_assignments, minlength=num_experts), tf.float32)
+    counts = tf.cast(
+        tf.math.bincount(expert_assignments, minlength=num_experts), tf.float32
+    )
     probs = counts / tf.reduce_sum(counts)
 
     # Entropy: -sum p * log(p)
@@ -218,7 +222,9 @@ def compute_expert_entropy(expert_assignments: tf.Tensor, num_experts: int) -> t
     return entropy
 
 
-def compute_exploration_ratio(expert_assignments: tf.Tensor, num_experts: int) -> tf.Tensor:
+def compute_exploration_ratio(
+    expert_assignments: tf.Tensor, num_experts: int
+) -> tf.Tensor:
     """
     Compute the fraction of experts that receive at least one token.
 
