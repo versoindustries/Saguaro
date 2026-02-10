@@ -23,6 +23,17 @@ from saguaro.tokenization.vocab import CoherenceManager
 logger = logging.getLogger(__name__)
 
 
+def make_shm_name(repo_path: str, version: str = "v1") -> str:
+    """Generate a repo-specific POSIX shared memory name.
+    
+    Prevents collisions when indexing multiple repos concurrently.
+    POSIX shm names must be <= 255 chars and contain no slashes.
+    """
+    import hashlib
+    path_hash = hashlib.md5(os.path.abspath(repo_path).encode()).hexdigest()[:12]
+    return f"saguaro_proj_{version}_{path_hash}"
+
+
 # --- Shared Memory Projection Manager ---
 class SharedProjectionManager:
     """
@@ -32,6 +43,9 @@ class SharedProjectionManager:
     With 15 workers, this saves ~60GB of RAM.
     """
     
+    # Default name — static for compatibility with spawn-based multiprocessing.
+    # Workers reference this class constant directly, so it cannot be overridden
+    # per-instance (spawned processes import the module fresh).
     SHM_NAME = "saguaro_projection_v1"
     
     def __init__(self):
@@ -338,6 +352,10 @@ class IndexEngine:
         self.current_bundle = tf.zeros([self.active_dim], dtype=tf.float32)
         self.bundle_count = 0
         logger.info("Holographic Crystallization Complete.")
+
+    def get_state(self) -> tf.Tensor:
+        """Returns the current holographic bundle state."""
+        return self.current_bundle
 
     def commit(self):
         if self.bundle_count > 0:

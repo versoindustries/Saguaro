@@ -10,9 +10,15 @@ from .base import BaseEngine
 logger = logging.getLogger(__name__)
 
 
+class EngineError(Exception):
+    """Raised when an external engine fails catastrophically."""
+
+    pass
+
+
 class ExternalUtil:
     @staticmethod
-    def run_subproc(cmd: List[str], cwd: str) -> str:
+    def run_subproc(cmd: List[str], cwd: str, check: bool = False) -> str:
         # Update PATH to include the directory where the current python executable lives
         # This ensures we find tools installed in the same venv
         env = os.environ.copy()
@@ -25,10 +31,18 @@ class ExternalUtil:
             result = subprocess.run(
                 cmd, cwd=cwd, capture_output=True, text=True, env=env
             )
-            # We don't check return code because linters often return non-zero on violations
+            if check and result.returncode != 0:
+                raise EngineError(
+                    f"Command {' '.join(cmd)} failed with exit code {result.returncode}\n"
+                    f"STDOUT: {result.stdout}\nSTDERR: {result.stderr}"
+                )
             return result.stdout + "\n" + result.stderr
+        except EngineError:
+            raise
         except Exception as e:
             logger.error(f"Failed to run command {' '.join(cmd)}: {e}")
+            if check:
+                raise EngineError(f"Subprocess execution failed: {e}")
             return ""
 
 

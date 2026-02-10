@@ -1,0 +1,64 @@
+2026-01-20 12:55:24,166 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 3907 vectors, capacity=10000, dim=16384
+2026-01-20 12:55:24,171 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 3907 vectors, capacity=10000, dim=16384
+2026-01-20 12:55:24,172 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-20 12:55:24,172 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-20 12:55:24,409 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (26868 superwords, native_trie=True)
+2026-01-20 12:55:24,411 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 26868 superwords, effective_vocab=27230
+2026-01-20 12:55:24,415 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-20 12:57:29,163 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5827 vectors, capacity=10000, dim=16384
+2026-01-20 12:57:29,170 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5827 vectors, capacity=10000, dim=16384
+2026-01-20 12:57:29,171 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-20 12:57:29,171 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-20 12:57:29,398 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (26868 superwords, native_trie=True)
+2026-01-20 12:57:29,401 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 26868 superwords, effective_vocab=27230
+2026-01-20 12:57:29,405 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-20 12:57:35,644 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5827 vectors, capacity=10000, dim=16384
+2026-01-20 12:57:35,651 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5827 vectors, capacity=10000, dim=16384
+2026-01-20 12:57:35,651 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-20 12:57:35,651 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-20 12:57:35,911 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (26868 superwords, native_trie=True)
+2026-01-20 12:57:35,913 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 26868 superwords, effective_vocab=27230
+2026-01-20 12:57:35,917 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-20 12:57:58,962 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5827 vectors, capacity=10000, dim=16384
+2026-01-20 12:57:58,969 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5827 vectors, capacity=10000, dim=16384
+2026-01-20 12:57:58,970 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-20 12:57:58,970 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-20 12:57:59,175 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (26868 superwords, native_trie=True)
+2026-01-20 12:57:59,176 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 26868 superwords, effective_vocab=27230
+2026-01-20 12:57:59,180 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-20 12:58:05,271 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5827 vectors, capacity=10000, dim=16384
+2026-01-20 12:58:05,278 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5827 vectors, capacity=10000, dim=16384
+2026-01-20 12:58:05,279 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-20 12:58:05,279 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-20 12:58:05,508 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (26868 superwords, native_trie=True)
+2026-01-20 12:58:05,510 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 26868 superwords, effective_vocab=27230
+2026-01-20 12:58:05,514 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-20 13:21:56,293 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5828 vectors, capacity=10000, dim=16384
+2026-01-20 13:21:56,300 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5828 vectors, capacity=10000, dim=16384
+2026-01-20 13:21:56,301 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-20 13:21:56,301 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-20 13:21:56,532 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (26868 superwords, native_trie=True)
+2026-01-20 13:21:56,534 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 26868 superwords, effective_vocab=27230
+2026-01-20 13:21:56,538 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-20 13:55:04,917 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5828 vectors, capacity=10000, dim=16384, lookup_size=1894
+2026-01-20 13:55:04,926 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5828 vectors, capacity=10000, dim=16384, lookup_size=1894
+2026-01-20 13:55:04,927 - saguaro.indexing.tracker - INFO - Upgrading IndexTracker state to new format.
+2026-01-20 13:55:04,927 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-20 13:55:04,927 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-20 13:55:05,133 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (26868 superwords, native_trie=True)
+2026-01-20 13:55:05,135 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 26868 superwords, effective_vocab=27230
+2026-01-20 13:55:05,139 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-20 13:55:51,848 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5865 vectors, capacity=10000, dim=16384, lookup_size=1931
+2026-01-20 13:55:51,856 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5865 vectors, capacity=10000, dim=16384, lookup_size=1931
+2026-01-20 13:55:51,857 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-20 13:55:51,857 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-20 13:55:52,077 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (26868 superwords, native_trie=True)
+2026-01-20 13:55:52,080 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 26868 superwords, effective_vocab=27230
+2026-01-20 13:55:52,084 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)
+2026-01-20 15:08:04,872 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5865 vectors, capacity=10000, dim=16384, lookup_size=1931
+2026-01-20 15:08:04,882 - saguaro.storage.memmap_vector_store - INFO - Loaded MemoryMappedVectorStore: 5865 vectors, capacity=10000, dim=16384, lookup_size=1931
+2026-01-20 15:08:04,883 - saguaro.tokenization.adaptive_qwt_tokenizer - INFO - [AdaptiveQWT] Initialized: base_vocab=362, target=128000, codebook_capacity=127638
+2026-01-20 15:08:04,884 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Initialized: max_length=4096, base_vocab=362
+2026-01-20 15:08:05,120 - saguaro.tokenization.superword_merger - INFO - SuperwordMerger loaded from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json (26868 superwords, native_trie=True)
+2026-01-20 15:08:05,123 - saguaro.tokenization.intelligent_controller - INFO - [VocabController] Loaded codebook from /home/mike/Documents/Github/Saguaro/saguaro/artifacts/codebooks/verso_baseline.json: 26868 superwords, effective_vocab=27230
+2026-01-20 15:08:05,126 - saguaro.ops.quantum_ops - INFO - SAGUARO Core loaded (or re-verified)

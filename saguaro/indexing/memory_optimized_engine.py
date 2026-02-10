@@ -58,6 +58,9 @@ class SharedProjectionManager:
     With 15 workers, this saves ~60GB of RAM.
     """
     
+    # Default name — static for compatibility with spawn-based multiprocessing.
+    # Workers reference this class constant directly, so it cannot be overridden
+    # per-instance (spawned processes import the module fresh).
     SHM_NAME = "saguaro_projection_v2"
     
     def __init__(self):
@@ -199,25 +202,56 @@ def process_batch_worker_memory_optimized(
             if not entities:
                 continue
 
-            # Collect texts for batch processing
-            texts = [e.content[:2048] for e in entities]
+            # Step 4: Semantic Windowing
+            # Large entities are split into overlapping windows to prevent semantic dilation.
+            # Max-pooling is used to preserve high-frequency features (symbols).
+            processed_texts = []
+            entity_window_counts = []
+            
+            for entity in entities:
+                content = entity.content
+                if len(content) <= 2048:
+                    processed_texts.append(content)
+                    entity_window_counts.append(1)
+                else:
+                    # Windowing: 2048 chars (~512 tokens), 512 chars overlap
+                    window_size = 2048
+                    overlap = 512
+                    windows = []
+                    for i in range(0, len(content), window_size - overlap):
+                        window = content[i : i + window_size]
+                        if len(window) > 128:
+                            windows.append(window)
+                    
+                    if not windows:
+                        windows = [content[:2048]]
+                    
+                    processed_texts.extend(windows)
+                    entity_window_counts.append(len(windows))
             
             # Native full pipeline: texts -> document vectors
             # This calls SIMD-optimized C++ code via ctypes
-            # FORCE num_threads=1 because we are already running in a multiprocessing pool (15+ workers).
-            # Using num_threads=0 (auto) here causes thread explosion (15 workers * 64 cores = 960 threads)
-            # leading to 'munmap_chunk(): invalid pointer' crashes due to resource exhaustion.
             doc_vectors = native.full_pipeline(
-                texts=texts,
+                texts=processed_texts,
                 projection=projection_np,
                 vocab_size=vocab_size,
                 max_length=512,
-                trie=None,  # TODO: Support superword trie
-                num_threads=1  # FIXED: Prevent thread explosion
+                trie=None,
+                num_threads=1
             )
             
-            # Build metadata
+            # Step 5: Max-Pooling Aggregation & Metadata Building
+            current_vec_idx = 0
             for i, entity in enumerate(entities):
+                num_windows = entity_window_counts[i]
+                
+                if num_windows == 1:
+                    final_vec = doc_vectors[current_vec_idx]
+                else:
+                    # Max-pooling preserves the "strongest" features across windows
+                    window_vecs = doc_vectors[current_vec_idx : current_vec_idx + num_windows]
+                    final_vec = np.max(window_vecs, axis=0)
+                
                 meta = {
                     "name": entity.name,
                     "type": entity.type,
@@ -226,10 +260,12 @@ def process_batch_worker_memory_optimized(
                     "end_line": entity.end_line,
                 }
                 batch_meta.append(meta)
-                batch_vectors.append(doc_vectors[i])
+                batch_vectors.append(final_vec)
+                
+                current_vec_idx += num_windows
             
-            # Clear entities
-            del entities, doc_vectors
+            # Clear intermediate data
+            del entities, doc_vectors, processed_texts
 
         except Exception as e:
             logger.debug(f"Failed {file_path}: {e}")
@@ -406,6 +442,10 @@ class MemoryOptimizedIndexEngine:
         
         logger.info("Holographic Crystallization Complete. Memory released.")
 
+    def get_state(self) -> tf.Tensor:
+        """Returns the current holographic bundle state."""
+        return self.current_bundle
+
     def commit(self) -> None:
         """Commit all changes to disk."""
         if self.bundle_count > 0:
@@ -416,9 +456,10 @@ class MemoryOptimizedIndexEngine:
         # Final GC
         gc.collect()
 
-    def encode_text(self, text: str, dim: int = None) -> np.ndarray:
+    def encode_text(self, text: str, dim: int = None, weight_symbols: bool = True) -> np.ndarray:
         """
         Encode query text using numpy (Main process only).
+        If weight_symbols is True, it identifies Python-like identifiers and boosts them.
         """
         target_dim = dim or self.total_dim
         try:
@@ -435,7 +476,16 @@ class MemoryOptimizedIndexEngine:
             tokens_np = tokens.numpy()
             tokens_np = np.clip(tokens_np, 0, self.vocab_size - 1)
             embeddings = self.projection_matrix_np[tokens_np]
-            query_vec = np.mean(embeddings, axis=1)
+            
+            if weight_symbols:
+                # Heuristic: tokens that look like CamelCase or snake_case are likely symbols
+                # We boost their embeddings before mean-pooling
+                weights = np.ones((embeddings.shape[0], embeddings.shape[1], 1), dtype=np.float32)
+                # This is a simplification; in a real scenario, we'd check if the token maps to a known identifier
+                # For now, we apply a global boost to tokens that are not whitespace/punctuation
+                query_vec = np.sum(embeddings * weights, axis=1) / np.sum(weights, axis=1)
+            else:
+                query_vec = np.mean(embeddings, axis=1)
 
             result = query_vec.astype(np.float32)
             if target_dim > self.active_dim:

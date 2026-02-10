@@ -1,0 +1,154 @@
+83:inline void* aligned_alloc_simd(size_t bytes) {
+88:    if (posix_memalign(&ptr, HNN_SIMD_ALIGNMENT, bytes) != 0) {
+99:inline void aligned_free_simd(void* ptr) {
+131:struct PathScratchPool {
+141:    float* get(size_t size_floats) {
+142:        if (size_floats > capacity) {
+148:            if (buffer != nullptr) {
+160:    void clear() {
+161:        if (buffer != nullptr) {
+168:    ~PathScratchPool() {
+197:inline int get_optimal_path_thread_count() {
+204:    if (cores <= 4) {
+206:    } else if (cores <= 8) {
+208:    } else {
+215:namespace saguaro {
+216:namespace ops {
+235:inline void simd_exp_inplace(float* data, int64_t size) {
+254:    for (; i + 16 <= size; i += 16) {
+292:    for (; i + 8 <= size; i += 8) {
+339:    for (; i + 4 <= size; i += 4) {
+372:    for (; i < size; ++i) {
+393:inline void simd_log_inplace(float* data, int64_t size) {
+414:    for (; i + 16 <= size; i += 16) {
+463:    for (; i + 8 <= size; i += 8) {
+509:    for (; i + 4 <= size; i += 4) {
+548:    for (; i < size; ++i) {
+576:) {
+580:    for (; i + 16 <= n; i += 16) {
+596:    for (; i + 8 <= n; i += 8) {
+612:    for (; i + 4 <= n; i += 4) {
+629:    for (; i < n; ++i) {
+655:) {
+659:    for (; i + 16 <= n; i += 16) {
+677:    for (; i + 8 <= n; i += 8) {
+694:    for (; i + 4 <= n; i += 4) {
+712:    for (; i < n; ++i) {
+730:inline void simd_sigmoid_inplace(float* data, int64_t size) {
+744:    for (; i + 16 <= size; i += 16) {
+792:    for (; i + 8 <= size; i += 8) {
+832:    for (; i + 4 <= size; i += 4) {
+854:    for (; i < size; ++i) {
+869:inline void simd_silu_inplace(float* data, int64_t size) {
+880:    for (; i + 16 <= size; i += 16) {
+911:    for (; i + 8 <= size; i += 8) {
+940:    for (; i + 4 <= size; i += 4) {
+963:    for (; i < size; ++i) {
+983:inline void simd_gelu_inplace(float* data, int64_t size) {
+996:    for (; i + 16 <= size; i += 16) {
+1030:    for (; i + 8 <= size; i += 8) {
+1062:    for (; i + 4 <= size; i += 4) {
+1087:    for (; i < size; ++i) {
+1102:inline float simd_reduce_max(const float* data, int64_t size) {
+1107:    if (size >= 16) {
+1109:        for (; i + 16 <= size; i += 16) {
+1116:    if (size >= 8) {
+1118:        for (; i + 8 <= size; i += 8) {
+1131:    if (size >= 4) {
+1133:        for (; i + 4 <= size; i += 4) {
+1140:    for (; i < size; ++i) {
+1149:inline float simd_reduce_sum(const float* data, int64_t size) {
+1155:    for (; i + 16 <= size; i += 16) {
+1162:    for (; i + 8 <= size; i += 8) {
+1174:    for (; i + 4 <= size; i += 4) {
+1180:    for (; i < size; ++i) {
+1192:inline void simd_softmax_inplace(float* data, int64_t size) {
+1200:    for (; i + 16 <= size; i += 16) {
+1207:    for (; i + 8 <= size; i += 8) {
+1216:    for (; i + 4 <= size; i += 4) {
+1222:    for (; i < size; ++i) {
+1236:    for (; i + 16 <= size; i += 16) {
+1242:    for (; i + 8 <= size; i += 8) {
+1248:    for (; i + 4 <= size; i += 4) {
+1253:    for (; i < size; ++i) {
+1275:    float* output, int64_t batch_seq, int64_t dim, float eps = 1e-5f) {
+1278:    for (int64_t b = 0; b < batch_seq; ++b) {
+1287:        if (dim >= 16) {
+1290:            for (; d + 16 <= dim; d += 16) {
+1300:            for (; d + 16 <= dim; d += 16) {
+1305:            for (; d < dim; ++d) {
+1310:        } else {
+1312:        if (dim >= 8) {
+1315:            for (; d + 8 <= dim; d += 8) {
+1332:            for (; d + 8 <= dim; d += 8) {
+1344:            for (; d < dim; ++d) {
+1349:        } else {
+1353:            for (int64_t d = 0; d < dim; ++d) {
+1369:        for (; d + 16 <= dim; d += 16) {
+1382:        for (; d + 8 <= dim; d += 8) {
+1398:        for (; d + 4 <= dim; d += 4) {
+1409:        for (; d < dim; ++d) {
+1422:inline void simd_hadamard_product(const float* a, const float* b, float* out, int64_t size) {
+1425:    for (; i + 16 <= size; i += 16) {
+1431:    for (; i + 8 <= size; i += 8) {
+1437:    for (; i + 4 <= size; i += 4) {
+1443:    for (; i < size; ++i) {
+1451:inline void simd_add(const float* a, const float* b, float* out, int64_t size) {
+1454:    for (; i + 16 <= size; i += 16) {
+1460:    for (; i + 8 <= size; i += 8) {
+1466:    for (; i + 4 <= size; i += 4) {
+1472:    for (; i < size; ++i) {
+1480:inline void simd_scale_inplace(float* data, float scale, int64_t size) {
+1484:    for (; i + 16 <= size; i += 16) {
+1490:    for (; i + 8 <= size; i += 8) {
+1496:    for (; i + 4 <= size; i += 4) {
+1501:    for (; i < size; ++i) {
+1515:namespace hsmn {
+1516:namespace simd {
+1528:inline float simd_dot_product(const float* a, const float* b, int64_t size) {
+1534:    for (; i + 16 <= size; i += 16) {
+1542:    for (; i + 8 <= size; i += 8) {
+1556:    for (; i + 4 <= size; i += 4) {
+1564:    for (; i < size; ++i) {
+1579:inline float simd_norm(const float* x, int64_t size) {
+1585:    for (; i + 16 <= size; i += 16) {
+1592:    for (; i + 8 <= size; i += 8) {
+1604:    for (; i + 4 <= size; i += 4) {
+1610:    for (; i < size; ++i) {
+1627:inline float simd_cosine_similarity(const float* a, const float* b, int64_t size) {
+1638:    for (; i + 16 <= size; i += 16) {
+1653:    for (; i + 8 <= size; i += 8) {
+1661:    auto reduce_m256 = [](__m256 v) -> float {
+1677:    for (; i + 4 <= size; i += 4) {
+1689:    for (; i < size; ++i) {
+1712:    int64_t num_keys, int64_t dim) {
+1719:    for (int64_t k = 0; k < num_keys; ++k) {
+1738:                            float* out, int64_t size) {
+1743:    for (; i + 16 <= size; i += 16) {
+1751:    for (; i + 8 <= size; i += 8) {
+1759:    for (; i + 4 <= size; i += 4) {
+1766:    for (; i < size; ++i) {
+1783:                              const float* update, float* out, int64_t size) {
+1788:    for (; i + 16 <= size; i += 16) {
+1799:    for (; i + 8 <= size; i += 8) {
+1809:    for (; i + 4 <= size; i += 4) {
+1819:    for (; i < size; ++i) {
+1836:                           float alpha, float* out, int64_t size) {
+1843:    for (; i + 16 <= size; i += 16) {
+1853:    for (; i + 8 <= size; i += 8) {
+1862:    for (; i + 4 <= size; i += 4) {
+1869:    for (; i < size; ++i) {
+1886:                          int64_t size, float eps = 1e-5f) {
+1893:    for (; i + 16 <= size; i += 16) {
+1900:    for (; i + 8 <= size; i += 8) {
+1912:    for (; i + 4 <= size; i += 4) {
+1918:    for (; i < size; ++i) {
+1929:    for (; i + 16 <= size; i += 16) {
+1937:    for (; i + 8 <= size; i += 8) {
+1945:    for (; i + 4 <= size; i += 4) {
+1952:    for (; i < size; ++i) {
+1966:inline void simd_tanh_inplace(float* data, int64_t size) {
+1976:    for (; i + 16 <= size; i += 16) {
+1997:    for (; i + 8 <= size; i += 8) {
+2016:    for (; i + 4 <= size; i += 4) {
+2030:    for (; i < size; ++i) {

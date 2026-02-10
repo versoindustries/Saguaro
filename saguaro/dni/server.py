@@ -12,10 +12,18 @@ import os
 
 from saguaro.indexing.engine import IndexEngine
 from saguaro.storage.vector_store import VectorStore
+from saguaro.orchestration.determinism import get_ollama_options
 
 # Configure logging to file so we don't pollute stdout (which is for JSON-RPC)
+# Log into the .saguaro/ project directory when available, fallback to CWD
+_saguaro_log_dir = os.path.join(os.getcwd(), ".saguaro")
+if os.path.isdir(_saguaro_log_dir):
+    _log_path = os.path.join(_saguaro_log_dir, "saguaro_dni.log")
+else:
+    _log_path = "saguaro_dni.log"
+
 logging.basicConfig(
-    filename="saguaro_dni.log",
+    filename=_log_path,
     level=logging.INFO,
     format="%(asctime)s - %(name)s - %(levelname)s - %(message)s",
 )
@@ -50,6 +58,10 @@ class DNIServer:
                 result = self.status(params)
             elif method == "read_node":
                 result = self.read_node(params)
+            elif method == "get_deterministic_config":
+                result = self.get_deterministic_config(params)
+            elif method == "get_import_graph":
+                result = self.get_import_graph(params)
             else:
                 self.send_error(req_id, -32601, "Method not found")
                 return
@@ -142,7 +154,7 @@ class DNIServer:
         query_vec = tf.reduce_mean(tokens, axis=0).numpy()
 
         # 2. Search
-        results = self.store.query(query_vec, k=k)
+        results = self.store.query(query_vec, k=k, query_text=text)
 
         # 3. Memory
         if self.session:
@@ -185,6 +197,26 @@ class DNIServer:
             "content": content,
             "loc": len(lines),
         }
+
+    def get_deterministic_config(self, params):
+        model = params.get("model", "granite4")
+        return {
+            "model": model,
+            "options": get_ollama_options()
+        }
+
+    def get_import_graph(self, params):
+        file_path = params.get("file")
+        if not file_path or not os.path.exists(file_path):
+             return {"imports": []}
+             
+        from saguaro.parsing.parser import SAGUAROParser
+        parser = SAGUAROParser()
+        entities = parser.parse_file(file_path)
+        for e in entities:
+             if e.type == "dependency_graph":
+                  return {"file": file_path, "imports": json.loads(e.content)}
+        return {"file": file_path, "imports": []}
 
     def status(self, params):
         return {

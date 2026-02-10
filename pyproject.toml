@@ -1,0 +1,111 @@
+# =============================================================================
+# SAGUARO - Quantum Codebase Operating System (Q-COS)
+# Enterprise-grade packaging with CMake native extension support
+# =============================================================================
+
+[build-system]
+requires = [
+    "setuptools>=68.0",
+    "wheel",
+]
+build-backend = "setuptools.build_meta"
+
+# =============================================================================
+# Project Metadata (PEP 621)
+# =============================================================================
+[project]
+name = "saguaro-core"
+version = "5.0.0"
+description = "Quantum Codebase Operating System (Q-COS) — Semantic intelligence for codebases"
+readme = "README.md"
+license = {text = "Proprietary"}
+requires-python = ">=3.10"
+authors = [
+    {name = "Verso Industries"},
+]
+classifiers = [
+    "Development Status :: 4 - Beta",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Programming Language :: C++",
+    "Topic :: Software Development :: Quality Assurance",
+    "Operating System :: POSIX :: Linux",
+    "Operating System :: MacOS",
+]
+
+# Core dependencies — minimal for the indexing/query/verify pipeline
+dependencies = [
+    "numpy>=1.24",
+    "pyyaml>=6.0",
+    "ruff>=0.4",
+]
+
+# Optional dependency groups for enterprise features
+[project.optional-dependencies]
+# TensorFlow-backed quantum ops (training, full embedding pipeline)
+tf = [
+    "tensorflow>=2.15",
+]
+# Development and testing
+dev = [
+    "pytest>=7.0",
+    "mypy",
+    "vulture",
+]
+# Full enterprise stack (all optional deps)
+enterprise = [
+    "tensorflow>=2.15",
+    "pytest>=7.0",
+    "mypy",
+    "vulture",
+    "psutil",
+]
+
+# =============================================================================
+# CLI Entry Points
+# =============================================================================
+[project.scripts]
+saguaro = "saguaro.cli:main"
+
+# =============================================================================
+# scikit-build-core Configuration (for explicit CMake wheel builds)
+# Use via: pip install . --config-settings=cmake.build-type=Release
+# Or via: scripts/build_wheel.sh
+# =============================================================================
+# [tool.scikit-build]
+# cmake.build-type = "Release"
+# wheel.install-dir = "saguaro"
+# cmake.minimum-version = "3.18"
+# cmake.targets = ["saguaro_core", "saguaro_native"]
+
+# =============================================================================
+# Setuptools Fallback (for pip install -e . editable installs)
+# =============================================================================
+[tool.setuptools]
+packages = {find = {include = ["saguaro*"]}}
+
+[tool.setuptools.package-data]
+saguaro = [
+    "*.so",
+    "*.dylib",
+    "data/**/*",
+    "artifacts/**/*",
+]
+
+# =============================================================================
+# Tool Configuration
+# =============================================================================
+[tool.ruff]
+target-version = "py310"
+line-length = 100
+
+[tool.ruff.lint]
+select = ["E", "F", "W", "I"]
+ignore = ["E501"]  # Line length handled by formatter
+
+[tool.pytest.ini_options]
+testpaths = ["tests"]
+python_files = ["test_*.py"]

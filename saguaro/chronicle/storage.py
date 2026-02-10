@@ -8,7 +8,7 @@ import json
 import logging
 import os
 from contextlib import contextmanager
-from typing import Optional, Dict, Any
+from typing import Optional, Dict, Any, List
 
 logger = logging.getLogger("saguaro.chronicle.storage")
 
@@ -116,6 +116,13 @@ class ChronicleStorage:
             if row:
                 return dict(row)
             return None
+
+    def list_snapshots(self) -> List[Dict[str, Any]]:
+        with self.get_connection() as conn:
+            conn.row_factory = sqlite3.Row
+            cursor = conn.cursor()
+            cursor.execute("SELECT id, timestamp, commit_hash, description FROM snapshots ORDER BY timestamp DESC")
+            return [dict(row) for row in cursor.fetchall()]
 
     def log_drift(
         self,

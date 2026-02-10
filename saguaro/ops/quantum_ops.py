@@ -66,28 +66,13 @@ def load_saguaro_core():
         if _module is not None:
             mod = _module
         else:
-            # Load logic
-            current_dir = os.path.dirname(os.path.abspath(__file__))
-            proposal_dir = os.path.dirname(os.path.dirname(current_dir))
+            # Load logic — use centralized resolver
+            from saguaro.lib_resolver import find_core_library
 
-            search_paths = [
-                os.path.join(proposal_dir, "build", "_saguaro_core.so"),
-                os.path.join(proposal_dir, "_saguaro_core.so"),
-                os.path.join(current_dir, "_saguaro_core.so"),
-                os.path.join(
-                    os.path.dirname(current_dir), "_saguaro_core.so"
-                ),  # saguaro/ dir
-                "_saguaro_core.so",
-            ]
-
-            lib_path = None
-            for path in search_paths:
-                if os.path.exists(path):
-                    lib_path = path
-                    break
-
-            if not lib_path:
-                lib_path = "_saguaro_core.so"
+            try:
+                lib_path = find_core_library()
+            except FileNotFoundError:
+                lib_path = "_saguaro_core.so"  # Last-ditch fallback
 
             print(f"DEBUG: Loading SAGUARO Core from: {lib_path}")
 
@@ -112,7 +97,7 @@ def load_saguaro_core():
                 print(f"DEBUG: Could not promote framework lib to RTLD_GLOBAL: {e}")
 
             try:
-                mod = tf.load_op_library(lib_path)
+                mod = tf.load_op_library(str(lib_path))
                 print(f"DEBUG: Loaded module attributes: {dir(mod)}")
             except tf.errors.AlreadyExistsError:
                 print("DEBUG: SAGUARO Core already loaded (AlreadyExistsError).")

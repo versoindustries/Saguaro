@@ -67,32 +67,10 @@ class NativeIndexer:
         logger.info(f"Native indexer initialized (version: {self.version()})")
     
     def _find_library(self) -> str:
-        """Find _saguaro_core.so in various locations."""
-        # Current file is in saguaro/ops/
-        current_dir = os.path.dirname(os.path.abspath(__file__))
-        saguaro_dir = os.path.dirname(current_dir)
-        repo_dir = os.path.dirname(saguaro_dir)
-        
-        search_paths = [
-            # PRIORITY: TF-free native lib (for worker processes)
-            os.path.join(repo_dir, "build", "_saguaro_native.so"),
-            os.path.join(saguaro_dir, "_saguaro_native.so"),
-            os.path.join(repo_dir, "_saguaro_native.so"),
-            "_saguaro_native.so",
-            # FALLBACK: Full core lib (requires TF runtime)
-            os.path.join(repo_dir, "build", "_saguaro_core.so"),
-            os.path.join(saguaro_dir, "_saguaro_core.so"),
-            os.path.join(repo_dir, "_saguaro_core.so"),
-            "_saguaro_core.so",
-        ]
-        
-        for path in search_paths:
-            if os.path.exists(path):
-                return path
-        
-        raise NativeIndexerError(
-            f"Could not find _saguaro_core.so. Searched: {search_paths}"
-        )
+        """Find native .so library using centralized resolver."""
+        from saguaro.lib_resolver import find_native_only_library
+
+        return str(find_native_only_library())
     
     def _load_library(self):
         """Load the shared library."""

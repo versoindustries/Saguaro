@@ -106,7 +106,7 @@ class EscalationLadder:
         self.resolver = DependencyResolver(root_path)
 
     def search(
-        self, query_vec: Any, seed_file: str, level: int = 3, k: int = 5
+        self, query_vec: Any, seed_file: str, level: int = 3, k: int = 5, query_text: str = None
     ) -> List[Dict[str, Any]]:
         """
         Executes a search at the specified escalation level.
@@ -140,12 +140,12 @@ class EscalationLadder:
 
         # If Level 3, just query normal
         if allow_list is None:
-            return self.store.query(query_vec, k=k)
+            return self.store.query(query_vec, k=k, query_text=query_text)
 
         # If filtering, we need to fetch enough candidates to satisfy k after filtering.
         # This is a limitation of the current naive store.
         # Strategy: Fetch 10*k, filter, if not enough, sad.
-        raw_results = self.store.query(query_vec, k=k * 20)
+        raw_results = self.store.query(query_vec, k=k * 20, query_text=query_text)
 
         filtered = []
         for res in raw_results:

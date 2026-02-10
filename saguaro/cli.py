@@ -204,7 +204,7 @@ def main():
         "--curriculum", help="Name of curriculum preset (e.g. verso-baseline)"
     )
     tb_parser.add_argument(
-        "--output", default="saguaro/artifacts/codebooks/verso_baseline.json"
+        "--output", default=os.path.join(".saguaro", "codebooks", "verso_baseline.json")
     )
     tb_parser.add_argument("--fast", action="store_true")
 
@@ -385,6 +385,12 @@ Example:
     mem_parser.add_argument("--read", help="Read fact by key")
     mem_parser.add_argument(
         "--write", nargs=2, metavar=("KEY", "VALUE"), help="Write fact (Key Value)"
+    )
+    mem_parser.add_argument(
+        "--tier",
+        choices=["working", "episodic", "semantic", "preference"],
+        default="working",
+        help="Memory tier (namespace)",
     )
 
     # --- Phase 5: Simulation ---
@@ -646,7 +652,7 @@ Example:
                 # Search
                 ladder = EscalationLadder(engine.store, target_path)
                 results = ladder.search(
-                    query_vec[0], args.file, level=args.level, k=args.k
+                    query_vec[0], args.file, level=args.level, k=args.k, query_text=args.text
                 )
 
             if args.profile:
@@ -1100,34 +1106,70 @@ Example:
 
     elif args.command == "chronicle":
         from saguaro.chronicle.storage import ChronicleStorage
+        from saguaro.ops import holographic
 
         storage = ChronicleStorage()
 
         if args.chronicle_op == "snapshot":
-            # For prototype, we save a dummy blob or current index state
-            # In validation, we'll verify this flow.
             print("Creating semantic snapshot...")
+
+            # Load stats and engine to get active bundle state
+            from saguaro.indexing.auto_scaler import get_repo_stats_and_config
+            from saguaro.indexing.memory_optimized_engine import MemoryOptimizedIndexEngine
+
+            target_path = os.getcwd()
+            saguaro_dir = os.path.join(target_path, ".saguaro")
+            stats = get_repo_stats_and_config(target_path)
+            engine = MemoryOptimizedIndexEngine(target_path, saguaro_dir, stats)
+
             snapshot_id = storage.save_snapshot(
-                hd_state_blob=b"DUMMY_HD_STATE", description="Manual CLI Snapshot"
+                hd_state_blob=holographic.serialize_bundle(engine.get_state()),
+                description="Manual CLI Snapshot"
             )
             print(f"Snapshot #{snapshot_id} created.")
 
         elif args.chronicle_op == "list":
-            # TODO: Implement listing
-            print("Snapshot listing not yet implemented.")
+            snapshots = storage.list_snapshots()
+            if not snapshots:
+                print("No snapshots found.")
+            else:
+                print(f"{'ID':<4} | {'Timestamp':<20} | {'Description':<30} | {'Hash':<10}")
+                print("-" * 75)
+                for s in snapshots:
+                    ts = time.strftime('%Y-%m-%d %H:%M:%S', time.localtime(s['timestamp']))
+                    desc = s['description'] or ""
+                    commit = (s['commit_hash'] or "")[:8]
+                    print(f"{s['id']:<4} | {ts:<20} | {desc:<30} | {commit:<10}")
 
         elif args.chronicle_op == "diff":
             from saguaro.chronicle.diff import SemanticDiff
 
             print("Calculating semantic drift...")
-            # Mock diff for cli response
+
+            # 1. Get current state
+            from saguaro.indexing.auto_scaler import get_repo_stats_and_config
+            from saguaro.indexing.memory_optimized_engine import MemoryOptimizedIndexEngine
+
+            target_path = os.getcwd()
+            saguaro_dir = os.path.join(target_path, ".saguaro")
+            stats = get_repo_stats_and_config(target_path)
+            engine = MemoryOptimizedIndexEngine(target_path, saguaro_dir, stats)
+            current_state = engine.get_state()
+            current_blob = holographic.serialize_bundle(current_state)
+
+            # 2. Get latest snapshot
+            latest = storage.get_latest_snapshot()
+            if not latest:
+                print("Error: No baseline snapshot found. Create one with 'saguaro chronicle snapshot'.")
+                sys.exit(1)
+
             drift, details = SemanticDiff.calculate_drift(
-                b"\x00" * 10,
-                b"\x00" * 10,  # Identity
+                latest["hd_state_blob"], current_blob
             )
-            print(
-                f"Drift Score: {drift:.4f} ({SemanticDiff.human_readable_report(drift)})"
-            )
+            print(f"Comparison: Snapshot #{latest['id']} vs Current Working Directory")
+            print(f"Drift Score: {drift:.4f} ({SemanticDiff.human_readable_report(drift)})")
+            if drift > 0.1:
+                print(f"Details: {details}")
 
     elif args.command == "legislation":
         if args.draft:
@@ -1459,16 +1501,20 @@ Example:
         mem = SharedMemory()
 
         if args.list:
-            facts = mem.list_facts()
-            for k, v in facts.items():
-                print(f"{k}: {v['value']} (Source: {v.get('source', '?')})")
+            facts = mem.list_facts(tier=args.tier)
+            if not facts:
+                print(f"No facts found in tier '{args.tier}'.")
+            else:
+                print(f"--- Tier: {args.tier} ---")
+                for k, v in facts.items():
+                    print(f"{k}: {v['value']} (Source: {v.get('source', '?')})")
         elif args.read:
-            val = mem.read_fact(args.read)
-            print(f"{args.read}: {val}")
+            val = mem.read_fact(args.read, tier=args.tier)
+            print(f"[{args.tier}] {args.read}: {val}")
         elif args.write:
             key, val = args.write
-            mem.write_fact(key, val, agent_id="CLI_USER")
-            print(f"Fact '{key}' written.")
+            mem.write_fact(key, val, agent_id="CLI_USER", tier=args.tier)
+            print(f"Fact '{key}' written to tier '{args.tier}'.")
 
     # --- Phase 5 Handlers ---
     elif args.command == "simulate":

@@ -66,6 +66,7 @@ set(SAGUARO_SOURCES
     src/ops/saguaro_memory_ops.cc
     # Native C API for Python ctypes (NO TensorFlow dependency in callers)
     src/ops/native_indexer_api.cc
+    src/sentinel/native_sentinel.cc
 )
 
 # =============================================================================
@@ -127,6 +128,7 @@ set_target_properties(saguaro_core PROPERTIES
 # =============================================================================
 add_library(saguaro_native SHARED 
     src/ops/native_indexer_api.cc
+    src/sentinel/native_sentinel.cc
 )
 
 target_include_directories(saguaro_native PRIVATE
@@ -159,4 +161,21 @@ set_target_properties(saguaro_native PROPERTIES
     CXX_VISIBILITY_PRESET hidden
 )
 
+# =============================================================================
+# Install Targets (for pip install / scikit-build-core integration)
+# =============================================================================
+# Install both .so files into the saguaro package directory.
+# When used with scikit-build-core, wheel.install-dir controls the final path.
+# When used standalone, CMAKE_INSTALL_PREFIX controls the destination.
+install(TARGETS saguaro_core saguaro_native
+    LIBRARY DESTINATION saguaro
+    RUNTIME DESTINATION saguaro
+)
 
+# Also install into the source tree for development convenience
+# (so `pip install -e .` picks up freshly built .so files)
+install(CODE "
+    file(COPY $<TARGET_FILE:saguaro_core> DESTINATION ${CMAKE_SOURCE_DIR}/saguaro/)
+    file(COPY $<TARGET_FILE:saguaro_native> DESTINATION ${CMAKE_SOURCE_DIR}/saguaro/)
+    message(STATUS \"Copied .so files to ${CMAKE_SOURCE_DIR}/saguaro/ for development\")
+")

@@ -60,10 +60,9 @@ class MemoryMappedVectorStore:
         self.metadata_path = os.path.join(storage_path, "metadata.json")
         self.index_meta_path = os.path.join(storage_path, "index_meta.json")
         
-        self._vectors: Optional[np.memmap] = None
-        self._metadata: List[Dict[str, Any]] = []
         self._count: int = 0
         self._capacity: int = 0
+        self._lookup: Dict[Tuple[str, str], int] = {}  # (file, name) -> index
         
         self._write_lock = threading.Lock()
         
@@ -106,12 +105,22 @@ class MemoryMappedVectorStore:
                 if os.path.exists(self.metadata_path):
                     with open(self.metadata_path, 'r') as f:
                         self._metadata = json.load(f)
+                    
+                    # Build lookup for upsert
+                    self._lookup = {}
+                    for i, meta in enumerate(self._metadata):
+                        file = meta.get("file")
+                        name = meta.get("name")
+                        if file and name:
+                            self._lookup[(file, name)] = i
                 else:
                     self._metadata = []
+                    self._lookup = {}
                 
                 logger.info(
                     f"Loaded MemoryMappedVectorStore: {self._count} vectors, "
-                    f"capacity={self._capacity}, dim={self.dim}"
+                    f"capacity={self._capacity}, dim={self.dim}, "
+                    f"lookup_size={len(self._lookup)}"
                 )
                 
             except Exception as e:
@@ -201,9 +210,10 @@ class MemoryMappedVectorStore:
             raise RuntimeError("Cannot add vectors in read-only mode")
         
         with self._write_lock:
-            # Ensure capacity
-            if self._count >= self._capacity:
-                self._grow_capacity()
+            # Upsert Logic: Check if entity already exists
+            file = meta.get("file")
+            name = meta.get("name")
+            key = (file, name) if (file and name) else None
             
             # Normalize vector shape
             vec = vector.flatten().astype(np.float32)
@@ -212,11 +222,24 @@ class MemoryMappedVectorStore:
                     vec = np.pad(vec, (0, self.dim - vec.shape[0]))
                 else:
                     vec = vec[:self.dim]
+
+            if key and key in self._lookup:
+                idx = self._lookup[key]
+                self._vectors[idx] = vec
+                self._metadata[idx] = meta
+                logger.debug(f"Upserted vector for {name} in {file}")
+                return idx
+            
+            # Ensure capacity
+            if self._count >= self._capacity:
+                self._grow_capacity()
             
             # Add to memmap
             idx = self._count
             self._vectors[idx] = vec
             self._metadata.append(meta)
+            if key:
+                self._lookup[key] = idx
             self._count += 1
             
             return idx
@@ -240,29 +263,36 @@ class MemoryMappedVectorStore:
             return 0
         
         with self._write_lock:
-            # Ensure capacity
-            while self._count + n > self._capacity:
-                self._grow_capacity()
+            added_count = 0
+            for i in range(n):
+                meta = metas[i]
+                vec = vectors[i].astype(np.float32)
+                
+                # Check for upsert
+                file = meta.get("file")
+                name = meta.get("name")
+                key = (file, name) if (file and name) else None
+                
+                if key and key in self._lookup:
+                    idx = self._lookup[key]
+                    self._vectors[idx] = vec
+                    self._metadata[idx] = meta
+                    continue
+                
+                # Ensure capacity
+                if self._count >= self._capacity:
+                    self._grow_capacity()
+                
+                # Append
+                idx = self._count
+                self._vectors[idx] = vec
+                self._metadata.append(meta)
+                if key:
+                    self._lookup[key] = idx
+                self._count += 1
+                added_count += 1
             
-            # Add all vectors
-            vecs = vectors.astype(np.float32)
-            if vecs.ndim == 1:
-                vecs = vecs.reshape(1, -1)
-            
-            # Handle dimension mismatch
-            if vecs.shape[1] != self.dim:
-                if vecs.shape[1] < self.dim:
-                    pad_width = ((0, 0), (0, self.dim - vecs.shape[1]))
-                    vecs = np.pad(vecs, pad_width)
-                else:
-                    vecs = vecs[:, :self.dim]
-            
-            start_idx = self._count
-            self._vectors[start_idx:start_idx + n] = vecs[:n]
-            self._metadata.extend(metas)
-            self._count += n
-            
-            return n
+            return added_count
     
     def save(self) -> None:
         """Flush vectors to disk and save metadata."""
@@ -294,7 +324,8 @@ class MemoryMappedVectorStore:
         self, 
         query_vec: np.ndarray, 
         k: int = 5, 
-        boost_map: Optional[Dict[str, float]] = None
+        boost_map: Optional[Dict[str, float]] = None,
+        query_text: Optional[str] = None
     ) -> List[Dict[str, Any]]:
         """
         Find top-K most similar vectors using cosine similarity.
@@ -346,6 +377,30 @@ class MemoryMappedVectorStore:
                 name = meta.get("name")
                 if name and name in boost_map:
                     all_scores[i] += boost_map[name] * 0.2
+
+        # Step 3: Refutation Layer (Literal Boosting)
+        # If query contains high-entropy exact match tokens, boost results containing them.
+        if query_text and len(query_text) > 3:
+            # Extract potential symbols (camelCase, snake_case, etc.)
+            import re
+            literal_tokens = set(re.findall(r'[A-Za-z0-9_]{4,}', query_text))
+            
+            if literal_tokens:
+                for i, meta in enumerate(self._metadata[:self._count]):
+                    name = meta.get("name", "")
+                    file = meta.get("file", "")
+                    
+                    # Check for literal matches in name or file path
+                    match_score = 0
+                    for token in literal_tokens:
+                        if token in name:
+                            match_score += 0.5
+                        elif token in file:
+                            match_score += 0.2
+                    
+                    if match_score > 0:
+                        # Cap boost to prevent completely overriding semantic signal
+                        all_scores[i] *= (1.0 + min(match_score, 1.0))
         
         # Top-K
         k = min(k, self._count)

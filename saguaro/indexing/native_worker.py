@@ -92,6 +92,8 @@ def _load_codebook_manual(path: str):
         return None
 
 # Standard shared memory name - must match memory_optimized_engine.py
+# When used standalone, defaults to "saguaro_projection_v2".
+# The engine passes the repo-specific name via the shm_name parameter.
 SHM_NAME = "saguaro_projection_v2"
 
 def process_batch_worker_native(

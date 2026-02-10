@@ -52,3 +52,13 @@ def crystallize_memory(
         crystal: [batch, D] crystallized memory.
     """
     return quantum_ops.crystallize_memory(knowledge, importance, threshold)
+
+
+def serialize_bundle(tensor: tf.Tensor) -> bytes:
+    """Serializes a holographic bundle tensor to bytes."""
+    return tf.io.serialize_tensor(tensor).numpy()
+
+
+def deserialize_bundle(blob: bytes) -> tf.Tensor:
+    """Deserializes a holographic bundle from bytes."""
+    return tf.io.parse_tensor(blob, out_type=tf.float32)

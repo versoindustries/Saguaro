@@ -1,13 +1,13 @@
 # Core framework
-tensorflow==2.19.1
+tensorflow>=2.20.0
 
 # Data loading and preprocessing
 datasets==3.6.0
 transformers
-tf-models-official==2.19.1
+tf-models-official>=2.20.0
 tensorflow-model-optimization==0.8.0
 keras-tuner
-numpy==1.26.4
+numpy>=1.24
 scipy
 h5py
 psutil

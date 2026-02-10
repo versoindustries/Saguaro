@@ -132,17 +132,30 @@ class SAGUAROParser:
 
         # If entities found via TS, return them + file entity
         if entities:
-            entities.append(
-                CodeEntity(
-                    name=os.path.basename(file_path),
-                    type="file",
-                    content=content,
-                    start_line=1,
-                    end_line=content.count("\n") + 1,
-                    file_path=file_path,
-                )
-            )
-            return entities
+                    entities.append(
+                        CodeEntity(
+                            name=os.path.basename(file_path),
+                            type="file",
+                            content=content,
+                            start_line=1,
+                            end_line=content.count("\n") + 1,
+                            file_path=file_path,
+                        )
+                    )
+                    # Extract Imports
+                    imports = self._extract_imports(tree.root_node, content, lang_name)
+                    if imports:
+                        entities.append(
+                            CodeEntity(
+                                name="imports",
+                                type="dependency_graph",
+                                content=json.dumps(imports),
+                                start_line=1,
+                                end_line=1,
+                                file_path=file_path
+                            )
+                        )
+                    return entities
 
         # Fallback / Simple Parser for prototype (if TS failed or file type not supported)
         lines = content.splitlines()
@@ -181,3 +194,15 @@ class SAGUAROParser:
         )
 
         return entities
+
+    def _extract_imports(self, root_node, content: str, lang_name: str) -> List[str]:
+        imports = []
+        if lang_name == "python":
+            query = self.get_language("python").query("""
+            (import_from_statement module_name: (dotted_name) @mod)
+            (import_statement name: (dotted_name) @mod)
+            """)
+            for node, _ in query.captures(root_node):
+                imports.append(content[node.start_byte : node.end_byte])
+        return sorted(list(set(imports)))
+import json
